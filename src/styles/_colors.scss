@@ -1,0 +1,143 @@
+$colors: (
+  //[color-alias]: (
+  //  value: {hex} - color value,
+  //  static: {bool} - Optional. Skip interactive colors generation
+  //),
+  'navy':
+    (
+      value: #1696b3,
+    ),
+  'teal': (
+    value: #23b5af,
+  ),
+  'sky-blue': (
+    value: #6ed9e3,
+  ),
+  'yellow': (
+    value: #f8b655,
+  ),
+  'purple': (
+    value: #a09df1,
+  ),
+  'bronze': (
+    value: #cc8535,
+  ),
+  'peach': (
+    value: #ce9489,
+  ),
+  'dark-navy': (
+    value: #08566b,
+  ),
+  'light-teal': (
+    value: #a9ded9,
+  ),
+  'light-sky-blue': (
+    value: #a4dae3,
+  ),
+  'light-yellow': (
+    value: #fae0a1,
+  ),
+  'light-purple': (
+    value: #c3c0e7,
+  ),
+  'light-bronze': (
+    value: #e8b984,
+  ),
+  'light-peach': (
+    value: #d8b4ab,
+  ),
+  'black': (
+    value: #0b2f39,
+    static: true,
+  ),
+  'white': (
+    value: #ffffff,
+    static: true,
+  ),
+  'dark-grey': (
+    value: #717171,
+    static: true,
+  ),
+  'grey': (
+    value: #dbdbdb,
+    static: true,
+  ),
+  'placeholder': (
+    value: #83abb5,
+    static: true,
+  ),
+  'darker-navy': (
+    value: #053d4d,
+    static: true,
+  ),
+  'darker-teal': (
+    value: #032d39,
+    static: true,
+  ),
+  'off-navy': (
+    value: #006a82,
+    static: true,
+  ),
+  'footer': (
+    value: #143b46,
+    static: true,
+  ),
+  'error': (
+    value: #ca500b,
+    static: true,
+  ),
+  'success': (
+    value: #4bb543,
+    static: true,
+  )
+);
+
+$_modifiers: (
+  hover: h,
+  active: a,
+);
+// For generating the tag itself
+@function css-var($color, $modifier: null) {
+  $var: --c_#{$color};
+  @if $modifier and map-has-key($_modifiers, $modifier) {
+    $var: $var + '-' + map-get($_modifiers, $modifier);
+  }
+  @return $var;
+}
+
+// Convert hex to raw
+@function _hex-to-raw($color) {
+  @return #{red($color)}, #{green($color)}, #{blue($color)};
+}
+
+// Getting css variable based on params
+@function css-color($color, $modifier: null, $alpha: 1, $raw: false) {
+  @if $raw {
+    @return rgba(var(#{$color}), $alpha);
+  } @else {
+    @return rgba(var(#{css-var($color, $modifier)}), $alpha);
+  }
+}
+
+// For creating core css color variables
+@mixin init {
+  :root {
+    @each $color, $config in $colors {
+      $value: map-get($config, value);
+      #{css-var($color)}: _hex-to-raw($value);
+    }
+  }
+}
+
+// For creating deferred css
+@mixin deferInit {
+  :root {
+    @each $color, $config in $colors {
+      @if not map-get($config, static) {
+        $value: map-get($config, value);
+        #{css-var($color, hover)}: _hex-to-raw(darken($value, 4%));
+        #{css-var($color, active)}: _hex-to-raw(darken($value, 8%));
+      }
+    }
+  }
+}

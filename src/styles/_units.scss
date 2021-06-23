@@ -1,0 +1,71 @@
+@function spacing($scale) {
+  @return $scale * 0.25rem;
+}
+
+$speeds: (
+  snail: 500ms,
+  slow: 250ms,
+  normal: 150ms,
+  fast: 100ms,
+);
+
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+$media: (
+  phone: 525px,
+  tablet: 768px,
+  laptop: 1080px,
+);
+
+$font: 'Open Sans', sans-serif;
+
+$font-config: (
+  heading1: (
+    font-weight: 700,
+    font-size: spacing(17),
+    line-height: spacing(18),
+  ),
+  heading2: (
+    font-weight: 700,
+    font-size: spacing(10.5),
+    line-height: spacing(12),
+    letter-spacing: 2%,
+  ),
+  heading3: (
+    font-weight: 700,
+    font-size: spacing(6.5),
+    line-height: spacing(10),
+  ),
+  heading4: (
+    font-weight: 700,
+    font-size: spacing(4),
+    line-height: spacing(6),
+  ),
+  paragraph: (
+    font-weight: 400,
+    font-size: spacing(4),
+    line-height: spacing(6),
+  ),
+  monospace: (
+    font-family: (
+      'Courier New',
+      monospace,
+    ),
+    font-weight: 700,
+    font-size: spacing(3.25),
+    line-height: spacing(10),
+  ),
+  small: (
+    font-weight: 400,
+    font-size: spacing(3.5),
+    line-height: spacing(6),
+  ),
+  xsmall: (
+    font-weight: 400,
+    font-size: spacing(3),
+    line-height: spacing(6),
+  ),
+);
+
+$page-width: 1280px;
+$nav-width: 1440px;
