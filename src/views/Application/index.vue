@@ -25,10 +25,10 @@
       </Typography>
     </nav>
     <form class='home__form'>
-      <TeamFormation v-if='selected === "team-formation"'/>
-      <AboutYou v-if='selected === "about-you"'/>
-      <YourExperience v-if='selected === "your-experience"'/>
-      <AtHT6 v-if='selected === "at-ht6"'/>
+      <TeamFormation v-if='selected === "team-formation"' v-model:form='team'/>
+      <AboutYou v-if='selected === "about-you"' v-model:form='about_you'/>
+      <YourExperience v-if='selected === "your-experience"' v-model:form='your_experience'/>
+      <AtHT6 v-if='selected === "at-ht6"' v-model:form='at_ht6'/>
     </form>
   </Layout>
 </template>
@@ -55,12 +55,23 @@ export default {
   data() {
     return {
       selected: 'team-formation',
+      your_experience: {},
+      about_you: {},
+      at_ht6: {},
+      team: {},
     };
   },
+  watch: {
+    form(newVal) {
+      console.log(newVal);
+    },
+  },
   beforeMount() {
-    const exists = this.tabs.some(tab => window.location.hash === `#${tab}`);
+    const exists = this.tabs.some(tab => window.location.hash === `#${tab.id}`);
     if (!exists) {
       window.location.hash = `#team-formation`;
+    } else {
+      this.selected = window.location.hash.slice(1);
     }
   },
   computed: {
