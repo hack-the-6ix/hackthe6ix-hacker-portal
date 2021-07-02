@@ -62,7 +62,7 @@
       required
     />
     <Checkbox
-      label='I live in Canada and I want to receive Hack the 6ix swag.'
+      label='I live in Canada <strong>and</strong> I want to receive Hack the 6ix swag.'
       class='about-you__full'
       v-model='in_canada'
       name='in_canada'
@@ -125,7 +125,7 @@
 <script>
 import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
-import Checkbox from '@/components/temp/Checkbox';
+import Checkbox from '@/components/Checkbox';
 import Typography from '@/components/Typography';
 import Select from '@/components/temp/Select';
 import Input from '@/components/temp/Input';

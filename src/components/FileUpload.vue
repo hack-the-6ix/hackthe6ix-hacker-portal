@@ -1,29 +1,36 @@
 <template>
   <div class='file-upload'>
-    <input
-      :accept='serializedAccept'
-      class='file-upload__field'
-      @input='upload'
-      type='file' 
-    />
-    <div class='file-upload__content'>
-      <FileIcon width='50' class='file-upload__icon'/>
-      <div>
-        <Typography v-if='!this.modelValue' type='heading4' as='p' color='dark-navy'>
-          Drop Files here or <Typography
-            type='heading4'
-            color='teal'
-            as='span'
-          >
-            Browse
+    <Typography class='file-upload__label' type='heading4' color='dark-navy' as='label' :for='id'>
+      {{label}}{{required ? '*' : ''}}
+    </Typography>
+    <div class='file-upload__body'>
+      <input
+        :accept='serializedAccept'
+        class='file-upload__field'
+        :required='required'
+        @input='upload'
+        type='file'
+        :id='id'
+      />
+      <div class='file-upload__content'>
+        <FileIcon width='50' class='file-upload__icon'/>
+        <div>
+          <Typography v-if='!this.modelValue' type='heading4' as='p' color='dark-navy'>
+            Drop Files here or <Typography
+              type='heading4'
+              color='teal'
+              as='span'
+            >
+              Browse
+            </Typography>
           </Typography>
-        </Typography>
-        <Typography v-else type='heading4' as='p' color='teal'>
-          {{this.modelValue.name}}
-        </Typography>
-        <Typography type='small' as='p' color='black'>
-          Accepted file format: {{accept.join(', ') || 'All'}}
-        </Typography>
+          <Typography v-else type='heading4' as='p' color='teal'>
+            {{this.modelValue.name}}
+          </Typography>
+          <Typography type='small' as='p' color='black'>
+            Accepted file format: {{accept.join(', ') || 'All'}}
+          </Typography>
+        </div>
       </div>
     </div>
   </div>
@@ -43,8 +50,6 @@ export default {
     async upload(event) {
       const file = event.target.files[0];
 
-      console.log(file);
-
       // TODO: Upload file
       file.url = URL.createObjectURL(file);
       if (this.modelValue) {
@@ -61,9 +66,15 @@ export default {
   },
   props: {
     modelValue: Object,
+    required: Boolean,
+    label: String,
     accept: {
       type: Array,
       default: () => [],
+    },
+    id: {
+      type: String,
+      default: () => Math.random().toString().slice(-8),
     },
   },
   emits: [
@@ -86,13 +97,25 @@ export default {
 @use '@/styles/units';
 
 .file-upload {
-  border-radius: units.spacing(5);
-  position: relative;
-  overflow: hidden;
   $self: &;
 
-  &:hover, &:active {
-    background-color: colors.css-color(grey, hover);
+  &__label {
+    margin-bottom: units.spacing(1.5);
+    display: block;
+  }
+
+  &__body {
+    border-radius: units.spacing(5);
+    position: relative;
+    overflow: hidden;
+
+    &:hover, &:focus {
+      background-color: colors.css-color(grey, hover);
+    }
+
+    &:active {
+      background-color: colors.css-color(grey, active);
+    }
   }
 
   &__content {
