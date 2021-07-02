@@ -19,6 +19,11 @@ import Logo from '@/assets/icon.svg';
 
 export default {
   name: 'App',
+  mounted() {
+    window.requestAnimationFrame(() => {
+      document.body.classList.add('animate');
+    });
+  },
   components: {
     Typography,
     Logo,
@@ -45,4 +50,6 @@ html {
     margin-right: units.spacing(4);
   }
 }
+
+@include colors.deferInit();
 </style>

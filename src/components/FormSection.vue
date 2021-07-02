@@ -27,7 +27,7 @@ export default {
 @use '@/styles/units';
 
 .form-section {
-  padding: units.spacing(18) units.spacing(6);
+  padding: units.spacing(18) units.spacing(12);
   box-sizing: border-box;
 
   &__content {
@@ -35,6 +35,7 @@ export default {
     margin: 0 auto;
     border: none;
     width: 100%;
+    padding: 0;
   }
 
   &__legend {

@@ -3,10 +3,9 @@ $colors: (
   //  value: {hex} - color value,
   //  static: {bool} - Optional. Skip interactive colors generation
   //),
-  'navy':
-    (
-      value: #1696b3,
-    ),
+  'navy': (
+    value: #1696b3,
+  ),
   'teal': (
     value: #23b5af,
   ),
@@ -60,36 +59,19 @@ $colors: (
   ),
   'grey': (
     value: #dbdbdb,
+  ),
+  'dark-disabled': (
+    value: #4f4f4f,
     static: true,
   ),
-  'placeholder': (
-    value: #83abb5,
-    static: true,
-  ),
-  'darker-navy': (
-    value: #053d4d,
-    static: true,
-  ),
-  'darker-teal': (
-    value: #032d39,
-    static: true,
-  ),
-  'off-navy': (
-    value: #006a82,
-    static: true,
-  ),
-  'footer': (
-    value: #143b46,
+  'disabled': (
+    value: #828282,
     static: true,
   ),
   'error': (
     value: #ca500b,
     static: true,
   ),
-  'success': (
-    value: #4bb543,
-    static: true,
-  )
 );
 
 $_modifiers: (

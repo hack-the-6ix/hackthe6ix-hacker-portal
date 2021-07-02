@@ -85,8 +85,8 @@
 <script>
 import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
-import FileUpload from '@/components/temp/FileUpload';
-import Checkbox from '@/components/temp/Checkbox';
+import FileUpload from '@/components/FileUpload';
+import Checkbox from '@/components/Checkbox';
 import Textarea from '@/components/temp/Textarea';
 import Select from '@/components/temp/Select';
 import Input from '@/components/temp/Input';
@@ -146,7 +146,7 @@ export default {
         program: '',
         year_of_study: '',
         hackathons: '',
-        resume: '',
+        resume: null,
         share_resume: false,
         github: '',
         portfolio: '',
@@ -180,6 +180,7 @@ export default {
   &__file {
     grid-template-columns: 1fr;
     grid-gap: units.spacing(3);
+    grid-column: span 2;
     display: grid;
   }
 }
