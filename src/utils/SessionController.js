@@ -73,3 +73,4 @@ export const initRefreshService = () => {
 };
 
 export const isAuthenticated = () => !!getToken();
+
