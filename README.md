@@ -1,5 +1,7 @@
 # hackthe6ix-hacker-portal
 
+Remember to setup environmental variables from `.env.template` before starting.
+
 ## Project setup
 ```
 npm install

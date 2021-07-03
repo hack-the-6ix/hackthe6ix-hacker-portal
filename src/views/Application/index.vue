@@ -41,6 +41,7 @@ import AtHT6 from '@/views/Application/AtHT6';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
 import config from '@/config.js';
+import { getProfile } from "../../utils/api";
 
 export default {
   name: 'Application',
@@ -73,6 +74,10 @@ export default {
     } else {
       this.selected = window.location.hash.slice(1);
     }
+
+    getProfile().then((data) => {
+      console.log(data);
+    });
   },
   computed: {
     dueDate() {
