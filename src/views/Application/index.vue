@@ -40,7 +40,6 @@ import YourExperience from '@/views/Application/YourExperience';
 import AtHT6 from '@/views/Application/AtHT6';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
-import config from '@/config.js';
 import { getApplicationEnums, getProfile, getTeam } from "../../utils/api";
 
 export default {
@@ -100,12 +99,15 @@ export default {
   },
   computed: {
     dueDate() {
-      return config.application.dueDate.toLocaleDateString(
+      return new Date(this.user.computedApplicationDeadline || 0).toLocaleDateString(
         'en-US',
         {
           year: 'numeric',
           day: 'numeric',
           month: 'long',
+          hour: 'numeric',
+          minute: 'numeric',
+          timeZoneName: 'short'
         }
       );
     },
