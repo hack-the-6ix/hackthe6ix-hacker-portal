@@ -4,17 +4,17 @@
       label='First Name'
       placeholder='Enter first name'
       autocomplete="given-name"
-      v-model='first_name'
+      v-model='firstName'
       name='first_name'
-      required
+      disabled="true"
     />
     <Input
       label='Last Name'
       placeholder='Enter last name'
       autocomplete="family-name"
-      v-model='last_name'
+      v-model='lastName'
       name='last_name'
-      required
+      disabled="true"
     />
     <Input
       label='Email'
@@ -23,7 +23,7 @@
       v-model='email'
       name='email'
       type='email'
-      required
+      disabled="true"
     />
     <Input
       label='Phone Number'
@@ -86,7 +86,7 @@
         </Typography>
         <Typography type='paragraphy' color='black'>
           We will ship your Hack The 6ix swag to this address if you
-          live in Canada and submit a project on Devpost at the event. 
+          live in Canada and submit a project on Devpost at the event.
         </Typography>
       </div>
       <Input
@@ -157,55 +157,46 @@ export default {
   },
   computed: {
     genders() {
-      return [
-        {
-          label: 'Banana',
-          value: 'BANANA',
-        },
-      ];
+      return (this.enums?.gender || []).map(x => ({
+        label: x,
+        value: x,
+      }));
     },
     pronouns() {
-      return [
-        {
-          label: 'House Plant',
-          value: 'HOUSE_PLANT',
-        },
-      ];
+      return (this.enums?.pronouns || []).map(x => ({
+        label: x,
+        value: x,
+      }));
     },
     ethnicities() {
-      return [
-        {
-          label: 'Frost Giant',
-          value: 'FROST_GIANT',
-        },
-      ];
+      return (this.enums?.ethnicity || []).map(x => ({
+        label: x,
+        value: x,
+      }));
     },
     timezones() {
-      return [
-        {
-          label: 'OWO TIMES',
-          value: 'OWO_TIMES',
-        },
-      ];
+      return (this.enums?.timezone || []).map(x => ({
+        label: x,
+        value: x,
+      }));
     },
     provinces() {
-      return [
-        {
-          label: 'Ontario',
-          value: 'ONTARIO',
-        },
-      ];
+      return (this.enums?.province || []).map(x => ({
+        label: x,
+        value: x,
+      }));
     },
   },
   props: {
     form: Object,
+    enums: Object
   },
   emits: ['update:form'],
   setup(props) {
     return {
       ...useFormSection(props, {
-        first_name: '',
-        last_name: '',
+        firstName: '',
+        lastName: '',
         phone: '',
         email: '',
         allow_email: false,

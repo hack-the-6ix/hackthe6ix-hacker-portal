@@ -13,7 +13,7 @@
       </Typography>
       <br />
       <Typography type='heading3' as='h3' align='center' color='dark-navy'>
-        Members
+        Members ({{(memberNames || []).length}}/4)
       </Typography>
       <Typography type='heading4' as='h4' align='center' color='black' v-for="member in memberNames" :key="member">
         {{member}}
@@ -26,7 +26,7 @@
           Leave Team
         </Button>
 
-        <Button>
+        <Button as='a' @click="tabSelected = 'about-you'" href="#about-you">
           Continue
         </Button>
       </div>
@@ -79,13 +79,13 @@
             Join Team
           </Button>
         </div>
-
       </div>
     </div>
   </FormSection>
 </template>
 
 <script>
+import { computed } from 'vue';
 import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import Typography from '@/components/Typography';
@@ -103,19 +103,24 @@ export default {
   },
   props: {
     form: Object,
+    modelSelected: String
   },
-  emits: ['update:form'],
+  emits: ['update:form', 'update:modelSelected'],
   data() {
     return {
       joinTeamPage: false,
       temporaryCode: ''
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     return {
       ...useFormSection(props, {
         code: '',
         memberNames: [],
+      }),
+      tabSelected: computed({
+        set: value => emit('update:modelSelected', value),
+        get: () => props.modelSelected,
       }),
     };
   },
