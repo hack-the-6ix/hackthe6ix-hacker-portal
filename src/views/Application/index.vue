@@ -41,7 +41,7 @@ import AtHT6 from '@/views/Application/AtHT6';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
 import config from '@/config.js';
-import { getApplicationEnums, getProfile } from "../../utils/api";
+import { getApplicationEnums, getProfile, getTeam } from "../../utils/api";
 
 export default {
   name: 'Application',
@@ -77,8 +77,16 @@ export default {
       this.selected = window.location.hash.slice(1);
     }
 
-    getProfile().then((data) => {
-      this.user = data.data;
+    getProfile().then((user) => {
+      this.user = user.data;
+
+      // TODO: Add error checking
+
+      if (this.user.hackerApplication.teamCode) {
+        getTeam().then((team) => {
+          this.team = team.data;
+        });
+      }
     });
 
     getApplicationEnums().then((data) => {

@@ -66,6 +66,7 @@ const sendRequest = async (endpoint, type, data = {}) => {
 };
 
 export const getLoginRedirectURL = (nextPage) => `${trimmedBaseURL}/auth/${authProvider}/login?redirectTo=${nextPage}`;
+
 export const getProfile = async () => sendRequest('/api/action/profile', 'GET');
 export const getApplicationEnums = async () => sendRequest(
     '/api/action/applicationEnums', 'GET');
@@ -76,3 +77,8 @@ export const updateApplication = async (application, submit) => sendRequest(
       submit: submit,
       application: application
     });
+
+export const getTeam = async () => sendRequest('/api/action/getTeam', 'GET');
+export const joinTeam = async (teamCode) => sendRequest('/api/action/joinTeam', 'POST', { teamCode: teamCode });
+export const leaveTeam = async () => sendRequest('/api/action/leaveTeam', 'POST');
+export const createTeam = async () => sendRequest('/api/action/createTeam', 'POST');

@@ -9,7 +9,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "Application" */ './views/Application'),
   },
   {
-    path: '*',
+    path: "/:catchAll(.*)",
     redirect: '/'
   }
 ];
