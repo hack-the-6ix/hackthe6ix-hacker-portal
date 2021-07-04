@@ -1,29 +1,33 @@
 <template>
-  <div class="input">
+  <div class="textArea">
     <label
-      class="input__label"
-      :v-show="showLabel"
+      class='textArea__label'
       :for="id"
     >
-    <Typography v-if='!this.modelValue' type='heading4' as='p' color='dark-navy'>
-      {{ label }}
-    </Typography>
+      <Typography type='heading4' as='p' color='dark-navy'>
+        {{ label }}{{required ? '*' : ''}}
+      </Typography>
     </label>
-    <input
-      :class="[
-        success && 'input__el--success',
-        error && 'input__el--error',
-        'input__el',
-      ]"
+    <textarea
       v-model='value'
-      :type='text'
-      :placeholder="placeholder"
+      :class="[
+        success && 'textArea__el--success',
+        error && 'textArea__el--error',
+        'textArea__el',
+      ]"
       :disabled="disabled"
-      :readonly="readOnly"
       :name="name"
       :required="required"
       :id="id"
     />
+    <label
+      class='textArea__label'
+      :for="id"
+    >
+      <Typography type='paragraph' as='p' color='dark-grey'>
+        Minimum 50 Words
+      </Typography>
+    </label>
   </div>
 </template>
 
@@ -46,19 +50,12 @@ export default {
       type: String,
       required: true,
     },
-    type: {
-      type: String,
-      default: () => 'text',
-    },
     id: {
       type: String,
       default: () => uuid().slice(-8),
     },
-    placeholder: String,
-    showLabel: Boolean,
     required: Boolean,
     disabled: Boolean,
-    readOnly: Boolean,
     success: Boolean,
     error: Boolean,
   },
@@ -79,7 +76,7 @@ export default {
 @use '@/styles/colors';
 @use '@/styles/units';
 
-.input {
+.textArea {
   display: flex;
   flex-direction: column;
 
@@ -99,12 +96,12 @@ export default {
     }
 
     &--error {
-      border: 1px solid colors.css-color(error, $alpha: 0.3);
+      border: 1px solid colors.css-color(error);
       background-color: colors.css-color(error, $alpha: 0.3);
     }
 
     &--success {
-      border: 1px solid colors.css-color(success, $alpha: 0.3);
+      border: 1px solid colors.css-color(success);
       background-color: colors.css-color(success, $alpha: 0.3);
     }
 

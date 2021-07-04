@@ -3,6 +3,7 @@
     <Input
       label='First Name'
       placeholder='Enter first name'
+      autocomplete="given-name"
       v-model='first_name'
       name='first_name'
       required
@@ -10,6 +11,7 @@
     <Input
       label='Last Name'
       placeholder='Enter last name'
+      autocomplete="family-name"
       v-model='last_name'
       name='last_name'
       required
@@ -17,9 +19,19 @@
     <Input
       label='Email'
       placeholder='name@gmail.com'
+      autocomplete="email"
       v-model='email'
       name='email'
       type='email'
+      required
+    />
+    <Input
+      label='Phone Number'
+      placeholder='12345678901'
+      autocomplete="tel"
+      v-model='phone'
+      name='phone'
+      type='tel'
       required
     />
     <Checkbox
@@ -80,6 +92,7 @@
       <Input
         label='Address Line 1'
         placeholder='Enter street number and street name'
+        autocomplete="address-line1"
         v-model='address_line_1'
         name='address_line_1'
         required
@@ -87,12 +100,14 @@
       <Input
         label='Address Line 2'
         placeholder='Apartment, suite number, etc.'
+        autocomplete="address-line2"
         v-model='address_line_2'
         name='address_line_2'
       />
       <Input
         label='City'
         placeholder='Enter city name'
+        autocomplete="address-level2"
         v-model='city'
         name='city'
         required
@@ -107,6 +122,7 @@
       />
       <Input
         label='Postal Code'
+        autocomplete="postal-code"
         placeholder='Ex: V4Q3H9'
         v-model='postal_code'
         name='postal_code'
@@ -127,8 +143,8 @@ import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import Checkbox from '@/components/Checkbox';
 import Typography from '@/components/Typography';
-import Select from '@/components/temp/Select';
-import Input from '@/components/temp/Input';
+import Select from '@/components/Select';
+import Input from '@/components/Input';
 
 export default {
   name: 'AboutYou',
@@ -190,6 +206,7 @@ export default {
       ...useFormSection(props, {
         first_name: '',
         last_name: '',
+        phone: '',
         email: '',
         allow_email: false,
         gender: '',
@@ -209,6 +226,7 @@ export default {
 </script>
 
 <style lang="scss">
+@use '@/styles/mixins';
 @use '@/styles/units';
 
 .about-you {
@@ -216,8 +234,16 @@ export default {
   grid-gap: units.spacing(6);
   display: grid;
 
+  @include mixins.media(tablet) {
+    grid-template-columns: 1fr;
+  }
+
   &__full {
     grid-column: span 2;
+
+    @include mixins.media(tablet) {
+      grid-column: span 1;
+    }
   }
 }
 </style>

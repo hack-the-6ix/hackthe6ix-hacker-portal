@@ -8,6 +8,7 @@
       `text--type--${type}`,
       'text',
     ]"
+    :type='htmlType'
     v-bind="$attrs"
     :is="as"
   >
@@ -23,6 +24,7 @@ export default {
       default: () => 'span',
       type: String,
     },
+    htmlType: String,
     type: {
       type: String,
       required: true,

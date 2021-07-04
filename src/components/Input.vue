@@ -1,37 +1,31 @@
 <template>
-  <div class="textArea">
-    <label
-      class='textArea__label'
-      v-show="showLabel"
+  <div :class="[
+      disabled && 'input--disabled',
+      error && 'input--error',
+      'input',
+    ]">
+    <Typography
+      class="input__label"
+      color='dark-navy'
+      type='heading4'
+      as='label'
       :for="id"
     >
-    <Typography type='heading4' as='p' color='dark-navy'>
-      {{ label }}
+      <span v-html='label'/>{{required ? '*' : ''}}
     </Typography>
-    </label>
-    <textarea
+    <input
+      class="input__el"
       v-model='value'
-      :class="[
-        success && 'textArea__el--success',
-        error && 'textArea__el--error',
-        'textArea__el',
-      ]"
-      :type='text'
+      :autocomplete="autocomplete"
+      :placeholder="placeholder"
       :disabled="disabled"
-      :readonly="readOnly"
       :name="name"
       :required="required"
       :id="id"
     />
-    <label
-      class='textArea__label'
-      v-show="showLabel"
-      :for="id"
-    >
-    <Typography type='paragraph' as='p' color='dark-grey'>
-      Minimum 50 Words
+    <Typography v-if='error' type='small' as='p' color='error' class='input__error'>
+      {{ error }}
     </Typography>
-    </label>
   </div>
 </template>
 
@@ -45,6 +39,7 @@ export default {
     Typography,
   },
   props: {
+    autocomplete: String,
     modelValue: String,
     label: {
       type: String,
@@ -54,20 +49,14 @@ export default {
       type: String,
       required: true,
     },
-    type: {
-      type: String,
-      default: () => 'text',
-    },
     id: {
       type: String,
       default: () => uuid().slice(-8),
     },
-    showLabel: Boolean,
+    placeholder: String,
     required: Boolean,
     disabled: Boolean,
-    readOnly: Boolean,
-    success: Boolean,
-    error: Boolean,
+    error: String,
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
@@ -86,16 +75,26 @@ export default {
 @use '@/styles/colors';
 @use '@/styles/units';
 
-.textArea {
-  display: flex;
+.input {
+  --input-background: transparent;
+  --input-color: #{colors.css-color(dark-navy)};
   flex-direction: column;
+  display: flex;
+
+  &--disabled {
+    --input-background: #{colors.css-color(disabled, $alpha: 0.15)};
+    --input-color: #{colors.css-color(disabled)};
+  }
+
+  &--error {
+    --input-background: #{colors.css-color(error, $alpha: 0.15)};
+    --input-color: #{colors.css-color(error)};
+  }
 
   &__label {
-    @each $t, $v in map-get(units.$font-config, small) {
-      #{$t}: $v;
-    }
-    font-weight: 700;
     margin-bottom: units.spacing(1);
+    color: var(--input-color);
+    display: block;
   }
 
   &__el {
@@ -105,26 +104,24 @@ export default {
       #{$tag}: $val;
     }
 
-    &--error {
-      border: 1px solid colors.css-color(error);
-      background-color: colors.css-color(error, $alpha: 0.3);
+    &:disabled {
+      color: var(--input-color);
+      cursor: not-allowed;
     }
 
-    &--success {
-      border: 1px solid colors.css-color(success);
-      background-color: colors.css-color(success, $alpha: 0.3);
-    }
-
-    background-color: colors.css-color(white);
-    padding: units.spacing(2) units.spacing(2);
+    background-color: var(--input-background);
+    padding: units.spacing(2) units.spacing(3);
+    border: 1px solid var(--input-color);
     border-radius: units.spacing(0.5);
     color: colors.css-color(black);
     font-family: units.$font;
     box-sizing: border-box;
-    resize: vertical;
-    border: 1px solid colors.css-color('dark-navy');
     width: 100%;
     margin: 0;
+  }
+
+  &__error {
+    margin-top: units.spacing(1);
   }
 }
 </style>

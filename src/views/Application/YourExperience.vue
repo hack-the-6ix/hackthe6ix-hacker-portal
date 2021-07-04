@@ -87,9 +87,9 @@ import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import FileUpload from '@/components/FileUpload';
 import Checkbox from '@/components/Checkbox';
-import Textarea from '@/components/temp/Textarea';
+import Textarea from '@/components/Textarea';
 import Select from '@/components/temp/Select';
-import Input from '@/components/temp/Input';
+import Input from '@/components/Input';
 
 export default {
   name: 'YourExperience',
@@ -159,6 +159,7 @@ export default {
 </script>
 
 <style lang="scss">
+@use '@/styles/mixins';
 @use '@/styles/units';
 
 .your-experience {
@@ -166,8 +167,16 @@ export default {
   grid-gap: units.spacing(6);
   display: grid;
 
+  @include mixins.media(tablet) {
+    grid-template-columns: 1fr;
+  }
+
   &__full {
     grid-column: span 2;
+
+    @include mixins.media(tablet) {
+      grid-column: span 1;
+    }
   }
 
   &__gap {
@@ -175,6 +184,11 @@ export default {
     grid-gap: units.spacing(6);
     grid-column: span 2;
     display: grid;
+
+    @include mixins.media(tablet) {
+      grid-template-columns: 1fr;
+      grid-column: span 1;
+    }
   }
 
   &__file {
@@ -182,6 +196,10 @@ export default {
     grid-gap: units.spacing(3);
     grid-column: span 2;
     display: grid;
+
+    @include mixins.media(tablet) {
+      grid-column: span 1;
+    }
   }
 }
 </style>

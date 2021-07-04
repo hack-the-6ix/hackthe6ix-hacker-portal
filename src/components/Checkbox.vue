@@ -79,10 +79,10 @@ export default {
   &__el {
     position: absolute;
     cursor: pointer;
+    appearance: none;
     height: 100%;
     margin: auto;
     width: 100%;
-    opacity: 0;
     z-index: 1;
     inset: 0;
 

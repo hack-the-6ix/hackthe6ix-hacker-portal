@@ -21,7 +21,7 @@
         :key='tab.id'
         as='a'
       >
-        {{index + 1}}. {{tab.label}}
+        {{index + 1}}<span class='home__nav-text'>. {{tab.label}}</span>
       </Typography>
     </nav>
     <form class='home__form'>
@@ -115,10 +115,13 @@ export default {
 </script>
 
 <style lang="scss">
+@use '@/styles/mixins';
 @use '@/styles/colors';
 @use '@/styles/units';
 
 .home {
+  $self: &;
+
   &__nav {
     margin-bottom: units.spacing(-2);
     display: flex;
@@ -132,9 +135,24 @@ export default {
     flex-basis: 1px;
     flex-grow: 1;
 
+    @include mixins.media(tablet) {
+      flex-shrink: 1;
+    }
+
     &--active {
       color: colors.css-color(black);
       background-color: white;
+      flex-basis: unset;
+
+      & #{$self}__nav-text {
+        display: unset;
+      }
+    }
+  }
+
+  &__nav-text {
+    @include mixins.media(tablet) {
+      display: none;
     }
   }
 

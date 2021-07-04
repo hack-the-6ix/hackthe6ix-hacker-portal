@@ -32,6 +32,7 @@ export default {
 </script>
 
 <style lang="scss">
+@use '@/styles/mixins';
 @use '@/styles/colors';
 @use '@/styles/units';
 
@@ -39,6 +40,14 @@ export default {
 
 html {
   background: linear-gradient(88.96deg, #002C37 1.77%, #004D57 95.9%);
+
+  @include mixins.media(tablet) {
+    font-size: 14px;
+  }
+
+  @include mixins.media(phone) {
+    font-size: 12px;
+  }
 }
 
 .app {

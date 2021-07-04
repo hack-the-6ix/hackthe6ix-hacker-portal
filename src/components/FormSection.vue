@@ -14,6 +14,7 @@
 <script>
 export default {
   name: 'FormSection',
+  inheritAttrs: false,
   props: {
     label: {
       type: String,
@@ -24,11 +25,16 @@ export default {
 </script>
 
 <style lang="scss">
+@use '@/styles/mixins';
 @use '@/styles/units';
 
 .form-section {
   padding: units.spacing(18) units.spacing(12);
   box-sizing: border-box;
+
+  @include mixins.media(phone) {
+    padding: units.spacing(12) units.spacing(8);
+  }
 
   &__content {
     max-width: units.spacing(180);

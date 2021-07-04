@@ -97,6 +97,7 @@ export default {
 @use '@/styles/units';
 
 .file-upload {
+  max-width: units.spacing(116);
   $self: &;
 
   &__label {
