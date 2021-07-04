@@ -77,20 +77,25 @@ export default {
       this.selected = window.location.hash.slice(1);
     }
 
-    getProfile().then((user) => {
+    const promises = [];
+
+    promises.push((async () => {
+      const user = await getProfile();
       this.user = user.data;
 
-      // TODO: Add error checking
-
       if (this.user.hackerApplication.teamCode) {
-        getTeam().then((team) => {
-          this.team = team.data;
-        });
+        const team = await getTeam();
+        this.team = team.data;
       }
-    });
+    })());
 
-    getApplicationEnums().then((data) => {
-      this.enums = data.data;
+    promises.push((async () => {
+      const enums = await getApplicationEnums();
+      this.enums = enums.data;
+    })());
+
+    Promise.all(promises).then(() => {
+      console.log('Okay we\'re all loaded!');
     });
   },
   computed: {

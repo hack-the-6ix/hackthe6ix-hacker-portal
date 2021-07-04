@@ -1,5 +1,5 @@
 <template>
-  <FormSection label='Team Formation'>
+  <FormSection class="team-formation" label='Team Formation'>
     <div v-if="code">
 
       <Typography type='heading3' as='h3' align='center' color='dark-navy'>
@@ -19,6 +19,10 @@
       <Typography type='heading4' as='h4' align='center' color='black' v-for="member in memberNames" :key="member">
         {{member}}
       </Typography>
+
+      <hr class="team-formation__hr">
+
+
     </div>
     <div v-else>
       <Typography type='heading2' align='center' color='dark-navy'>
@@ -56,3 +60,14 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+  @use '@/styles/units';
+
+  .team-formation {
+    &__hr {
+      margin-top: units.spacing(6);
+      margin-bottom: units.spacing(6);
+    }
+  }
+</style>
