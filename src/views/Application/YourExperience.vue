@@ -103,40 +103,33 @@ export default {
   },
   computed: {
     schools() {
-      return [
-        {
-          label: 'University of Yeet',
-          value: 'UNIVERSITY_OF_YEET',
-        },
-      ];
+      return (this.enums?.school || []).map(x => ({
+        label: x,
+        value: x,
+      }));
     },
     programs() {
-      return [
-        {
-          label: 'Somethingology',
-          value: 'SOMETHINGOLOGY',
-        },
-      ];
+      return (this.enums?.programOfStudy || []).map(x => ({
+        label: x,
+        value: x,
+      }));
     },
     years() {
-      return [
-        {
-          label: 'First Year',
-          value: 'FIRST_YEAR',
-        },
-      ];
+      return (this.enums?.yearsOfStudy || []).map(x => ({
+        label: x,
+        value: x,
+      }));
     },
     hackathonsOptions() {
-      return [
-        {
-          label: 'Too Many',
-          value: 'TOO_MANY',
-        },
-      ];
+      return (this.enums?.hackathonsAttended || []).map(x => ({
+        label: x,
+        value: x,
+      }));
     },
   },
   props: {
     form: Object,
+    enums: Object
   },
   emits: ['update:form'],
   setup(props) {

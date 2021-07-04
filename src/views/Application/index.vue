@@ -27,7 +27,7 @@
     <form class='home__form'>
       <TeamFormation v-if='selected === "team-formation"' v-model:form='team'/>
       <AboutYou v-if='selected === "about-you"' v-model:form='about_you'/>
-      <YourExperience v-if='selected === "your-experience"' v-model:form='your_experience'/>
+      <YourExperience v-if='selected === "your-experience"' v-model:form='your_experience' v-model:enums='enums'/>
       <AtHT6 v-if='selected === "at-ht6"' v-model:form='at_ht6'/>
     </form>
   </Layout>
