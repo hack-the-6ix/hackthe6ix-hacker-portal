@@ -8,6 +8,10 @@ const routes = [
     path: '/',
     component: () => import(/* webpackChunkName: "Application" */ './views/Application'),
   },
+  {
+    path: '*',
+    redirect: '/'
+  }
 ];
 
 const router = createRouter({
@@ -33,7 +37,6 @@ const stripTokenFromAddress = () => {
 router.beforeEach(async (to, from, next) => {
   const toHref = window.location.origin + to.fullPath;
 
-  // TODO: Delete token from query string
   // TODO: Check if the token is expired
 
   if (!isAuthenticated() && !await login()) {
