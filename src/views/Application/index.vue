@@ -41,7 +41,7 @@ import AtHT6 from '@/views/Application/AtHT6';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
 import config from '@/config.js';
-import { getProfile } from "../../utils/api";
+import { getApplicationEnums, getProfile } from "../../utils/api";
 
 export default {
   name: 'Application',
@@ -60,6 +60,8 @@ export default {
       about_you: {},
       at_ht6: {},
       team: {},
+      user: {},
+      enums: {}
     };
   },
   watch: {
@@ -76,7 +78,11 @@ export default {
     }
 
     getProfile().then((data) => {
-      console.log(data);
+      this.user = data.data;
+    });
+
+    getApplicationEnums().then((data) => {
+      this.enums = data.data;
     });
   },
   computed: {

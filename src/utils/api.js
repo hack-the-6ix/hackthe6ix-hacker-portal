@@ -1,6 +1,6 @@
 import axios from 'axios';
 import queryString from 'query-string';
-import { getToken, isAuthenticated } from "./SessionController";
+import { getToken, isAuthenticated, logout } from "./SessionController";
 
 const trimmedBaseURL = (process.env.VUE_APP_API_ADDRESS || '').replace(/\/$/,
     '');
@@ -42,6 +42,11 @@ const sendRequest = async (endpoint, type, data = {}) => {
   } catch (e) {
     if (e.response) {
       const responseData = e.response.data;
+
+      // We don't want an infinite recursive loop, so we'll only logout the user if they aren't already trying to do so
+      if (e.response.status === 401 && isAuthenticated() && !endpoint.includes('logout')) {
+         await logout();
+      }
 
       return {
         success: false,
