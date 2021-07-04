@@ -1,4 +1,5 @@
 import queryString from 'query-string';
+import { getLoginRedirectURL } from "./api";
 
 export const getToken = () => {
   return localStorage.token
@@ -27,6 +28,7 @@ export const clearTokens = () => {
 export const logout = async () => {
   // TODO: Implement this
   clearTokens();
+  window.location.href = getLoginRedirectURL(location.origin);
 };
 
 /**
@@ -43,7 +45,6 @@ export const login = async () => {
     setToken(params.token);
     setRefreshToken(params.refreshToken);
 
-    console.log('Tokens saved');
     return true;
   }
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import queryString from 'query-string';
-import { getToken, isAuthenticated } from "./SessionController";
+import { getToken, isAuthenticated, logout } from "./SessionController";
 
 const trimmedBaseURL = (process.env.VUE_APP_API_ADDRESS || '').replace(/\/$/,
     '');
@@ -43,6 +43,11 @@ const sendRequest = async (endpoint, type, data = {}) => {
     if (e.response) {
       const responseData = e.response.data;
 
+      // We don't want an infinite recursive loop, so we'll only logout the user if they aren't already trying to do so
+      if (e.response.status === 401 && isAuthenticated() && !endpoint.includes('logout')) {
+         await logout();
+      }
+
       return {
         success: false,
         status: e.response.status,
@@ -61,6 +66,7 @@ const sendRequest = async (endpoint, type, data = {}) => {
 };
 
 export const getLoginRedirectURL = (nextPage) => `${trimmedBaseURL}/auth/${authProvider}/login?redirectTo=${nextPage}`;
+
 export const getProfile = async () => sendRequest('/api/action/profile', 'GET');
 export const getApplicationEnums = async () => sendRequest(
     '/api/action/applicationEnums', 'GET');
@@ -71,3 +77,8 @@ export const updateApplication = async (application, submit) => sendRequest(
       submit: submit,
       application: application
     });
+
+export const getTeam = async () => sendRequest('/api/action/getTeam', 'GET');
+export const joinTeam = async (teamCode) => sendRequest('/api/action/joinTeam', 'POST', { teamCode: teamCode });
+export const leaveTeam = async () => sendRequest('/api/action/leaveTeam', 'POST');
+export const createTeam = async () => sendRequest('/api/action/createTeam', 'POST');

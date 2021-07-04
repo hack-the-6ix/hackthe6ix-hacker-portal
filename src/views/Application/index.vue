@@ -40,8 +40,7 @@ import YourExperience from '@/views/Application/YourExperience';
 import AtHT6 from '@/views/Application/AtHT6';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
-import config from '@/config.js';
-import { getProfile } from "../../utils/api";
+import { getApplicationEnums, getProfile, getTeam } from "../../utils/api";
 
 export default {
   name: 'Application',
@@ -60,6 +59,8 @@ export default {
       about_you: {},
       at_ht6: {},
       team: {},
+      user: {},
+      enums: {}
     };
   },
   watch: {
@@ -75,18 +76,38 @@ export default {
       this.selected = window.location.hash.slice(1);
     }
 
-    getProfile().then((data) => {
-      console.log(data);
+    const promises = [];
+
+    promises.push((async () => {
+      const user = await getProfile();
+      this.user = user.data;
+
+      if (this.user.hackerApplication.teamCode) {
+        const team = await getTeam();
+        this.team = team.data;
+      }
+    })());
+
+    promises.push((async () => {
+      const enums = await getApplicationEnums();
+      this.enums = enums.data;
+    })());
+
+    Promise.all(promises).then(() => {
+      console.log('Okay we\'re all loaded!');
     });
   },
   computed: {
     dueDate() {
-      return config.application.dueDate.toLocaleDateString(
+      return new Date(this.user.computedApplicationDeadline || 0).toLocaleDateString(
         'en-US',
         {
           year: 'numeric',
           day: 'numeric',
           month: 'long',
+          hour: 'numeric',
+          minute: 'numeric',
+          timeZoneName: 'short'
         }
       );
     },
