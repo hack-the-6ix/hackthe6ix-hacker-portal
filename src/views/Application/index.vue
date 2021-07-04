@@ -24,9 +24,9 @@
         {{index + 1}}<span class='home__nav-text'>. {{tab.label}}</span>
       </Typography>
     </nav>
-    <form class='home__form'>
-      <TeamFormation v-if='selected === "team-formation"' v-model:form='team'/>
-      <AboutYou v-if='selected === "about-you"' v-model:form='about_you'/>
+    <form class='home__form' v-on:submit.prevent="">
+      <TeamFormation v-if='selected === "team-formation"' v-model:form='team' v-model:modelSelected='selected'/>
+      <AboutYou v-if='selected === "about-you"' v-model:form='about_you' v-model:enums='enums'/>
       <YourExperience v-if='selected === "your-experience"' v-model:form='your_experience' v-model:enums='enums'/>
       <AtHT6 v-if='selected === "at-ht6"' v-model:form='at_ht6'/>
     </form>
@@ -81,6 +81,11 @@ export default {
     promises.push((async () => {
       const user = await getProfile();
       this.user = user.data;
+
+      // Load immutable data in about you
+      this.about_you.firstName = user.data.firstName;
+      this.about_you.lastName = user.data.lastName;
+      this.about_you.email = user.data.email;
 
       if (this.user.hackerApplication.teamCode) {
         const team = await getTeam();

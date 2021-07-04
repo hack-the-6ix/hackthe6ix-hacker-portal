@@ -48,7 +48,7 @@
     <!-- shameless plugs btw -->
     <div class='your-experience__gap'>
       <Input
-        label='Github Link'
+        label='GitHub Link'
         placeholder='Ex: https://github.com/fpunny'
         v-model='github'
         name='github'
@@ -88,7 +88,7 @@ import FormSection from '@/components/FormSection';
 import FileUpload from '@/components/FileUpload';
 import Checkbox from '@/components/Checkbox';
 import Textarea from '@/components/Textarea';
-import Select from '@/components/temp/Select';
+import Select from '@/components/Select';
 import Input from '@/components/Input';
 
 export default {
