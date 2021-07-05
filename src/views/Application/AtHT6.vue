@@ -31,7 +31,6 @@
       v-model='mlhEmail'
       name='mlhEmail'
       :disabled="!canEdit"
-      required
     />
     <Checkbox
       label='I authorize Hack the 6ix to share my application/registration
@@ -46,7 +45,6 @@
       v-model='mlhData'
       name='mlhData'
       :disabled="!canEdit"
-      required
     />
 
     <div class="at-ht6__full">
