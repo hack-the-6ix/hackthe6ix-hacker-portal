@@ -1,7 +1,11 @@
 import queryString from "query-string";
 import { createRouter, createWebHistory } from 'vue-router';
 import { getLoginRedirectURL } from "./utils/api";
-import { isAuthenticated, login } from "./utils/SessionController";
+import {
+  initRefreshService,
+  isAuthenticated,
+  login
+} from "./utils/SessionController";
 
 const routes = [
   {
@@ -42,6 +46,10 @@ router.beforeEach(async (to, from, next) => {
   if (!isAuthenticated() && !await login()) {
     // oops we need to go to SSO page to get our tokens
     window.location.href = getLoginRedirectURL(toHref);
+  }
+
+  if (isAuthenticated()) {
+    await initRefreshService();
   }
 
   stripTokenFromAddress();

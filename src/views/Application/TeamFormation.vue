@@ -21,12 +21,12 @@
 
       <hr class="team-formation__hr">
 
-      <div class="team-formation__buttons">
-        <Button @click="triggerLeaveTeam">
+      <div class="team-formation__buttons-spread">
+        <Button @click="triggerLeaveTeam" :disabled="!canEdit">
           Leave Team
         </Button>
 
-        <Button as='a' @click="tabSelected = 'about-you'" href="#about-you">
+        <Button as='a' @click="tabSelected = 'about-you'" href="#about-you" style="text-decoration: none">
           Continue
         </Button>
       </div>
@@ -50,35 +50,47 @@
               name='code'
               required
           />
-          <Button @click="triggerJoinTeam">
+          <Button @click="triggerJoinTeam" style="margin-top: auto" :disabled="!canEdit">
             Join
           </Button>
         </div>
 
         <hr class="team-formation__hr">
 
-        <Button @click="joinTeamPage = false">
-          Back
-        </Button>
+        <div class="team-formation__buttons-spread">
+          <Button @click="joinTeamPage = false" :disabled="!canEdit">
+            Back
+          </Button>
+        </div>
       </div>
       <div v-else>
         <Typography type='heading2' align='center' color='dark-navy'>
           You are currently not on a team.
         </Typography>
         <Typography type='heading4' as='p' align='center' color='black'>
-          Registering as a team helps speed up the review process.
+          Don't have a team? No worries! You can go solo or decide after submitting your application.
+          Just remember to do so before {{dueDate}}.
         </Typography>
 
-        <hr class="team-formation__hr">
+        <br/>
 
-        <div class="team-formation__buttons">
-          <Button @click="triggerCreateTeam">
+        <div class="team-formation__buttons-together">
+          <Button @click="triggerCreateTeam" :disabled="!canEdit">
             Create Team
           </Button>
-          <Button @click="joinTeamPage = true">
+          <Button @click="joinTeamPage = true" :disabled="!canEdit">
             Join Team
           </Button>
         </div>
+
+        <hr class="team-formation__hr">
+
+        <div class="team-formation__buttons-spread">
+          <Button as='a' @click="tabSelected = 'about-you'" href="#about-you" class="team-formation__buttons-right" style="text-decoration: none">
+            Continue
+          </Button>
+        </div>
+
       </div>
     </div>
   </FormSection>
@@ -103,7 +115,9 @@ export default {
   },
   props: {
     form: Object,
-    modelSelected: String
+    modelSelected: String,
+    dueDate: String,
+    canEdit: Boolean
   },
   emits: ['update:form', 'update:modelSelected'],
   data() {
@@ -161,19 +175,39 @@ export default {
       margin-bottom: units.spacing(6);
     }
 
-    &__buttons {
-      grid-template-columns: 1fr 1fr;
-      grid-gap: units.spacing(6);
-      display: grid;
+    &__buttons-right {
+      margin-left: auto;
 
       @include mixins.media(tablet) {
+        margin-left: 0;
+      }
+    }
+
+    &__buttons-spread {
+      display: flex;
+      justify-content: space-between;
+
+      @include mixins.media(tablet) {
+        display: grid;
+        grid-gap: units.spacing(3);
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &__buttons-together {
+      display: flex;
+      justify-content: center;
+      grid-gap: units.spacing(3);
+
+      @include mixins.media(tablet) {
+        display: grid;
         grid-template-columns: 1fr;
       }
     }
 
     &__join-box {
       grid-template-columns: 8fr 2fr;
-      grid-gap: units.spacing(6);
+      grid-gap: units.spacing(3);
       display: grid;
 
       @include mixins.media(tablet) {
