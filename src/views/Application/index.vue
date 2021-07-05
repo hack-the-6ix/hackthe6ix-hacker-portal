@@ -92,6 +92,70 @@ export default {
       console.log(newVal);
     },
   },
+  methods: {
+    saveApplication(submit) {
+
+      console.log(submit)
+
+    },
+    loadApplication(hackerApplication) {
+      const fields = {
+        'about_you': [
+            'emailConsent',
+            'phoneNumber',
+            'gender',
+            'pronouns',
+            'ethnicity',
+            'timezone',
+            'wantSwag',
+            'addressLine1',
+            'addressLine2',
+            'city',
+            'province',
+            'postalCode'
+        ],
+        'your_experience': [
+            'school',
+            'program',
+            'yearOfStudy',
+            'hackathonsAttended',
+            'resumeFileName',
+            'resumeSharePermission',
+            'githubLink',
+            'portfolioLink',
+            'linkedinLink',
+            'projectEssay'
+        ],
+        'at_ht6': [
+            'requestedWorkshops',
+            'accomplishEssay',
+            'mlhCOC',
+            'mlhEmail',
+            'mlhData'
+        ]
+      };
+
+      for (const section in fields) {
+        for (const field of fields[section]) {
+          if (hackerApplication[field] !== undefined) {
+            this[section][field] = hackerApplication[field];
+          }
+        }
+      }
+    },
+    async loadTeam(teamCode) {
+      if (teamCode) {
+        const teamResult = await getTeam();
+
+        if (teamResult) {
+          this.team = teamResult.data;
+        } else {
+          // TODO: Replace with message that's always on screen
+          swal('Unable to fetch team', teamResult.data, 'error');
+        }
+      }
+    }
+  },
   beforeMount() {
     const exists = this.tabs.some(tab => window.location.hash === `#${tab.id}`);
     if (!exists) {
@@ -113,16 +177,8 @@ export default {
         this.about_you.lastName = result.data.lastName;
         this.about_you.email = result.data.email;
 
-        if (this.user.hackerApplication.teamCode) {
-          const teamResult = await getTeam();
-
-          if (teamResult) {
-            this.team = teamResult.data;
-          } else {
-            // TODO: Replace with message that's always on screen
-            swal('Unable to fetch team', teamResult.data, 'error');
-          }
-        }
+        this.loadApplication(result.data.hackerApplication || {});
+        await this.loadTeam(result.data.hackerApplication?.teamCode)
       } else {
         // TODO: Replace with message that's always on screen
         swal('Unable to fetch user', result.data, 'error');

@@ -86,7 +86,7 @@
         <Button as='a' @click="tabSelected = 'about-you'" href="#about-you" class="your-experience__button">
           Back
         </Button>
-        <Button as='a' @click="tabSelected = 'at-ht6'" href="#at-ht6" class="your-experience__button">
+        <Button as='a' @click="next" href="#at-ht6" class="your-experience__button">
           Save & Continue
         </Button>
       </div>
@@ -169,6 +169,12 @@ export default {
       }),
     };
   },
+  methods: {
+    async next() {
+      // TODO: API Call to update app
+      this.tabSelected = 'at-ht6';
+    }
+  }
 }
 </script>
 
