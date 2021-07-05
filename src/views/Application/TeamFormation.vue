@@ -103,6 +103,7 @@ import FormSection from '@/components/FormSection';
 import Typography from '@/components/Typography';
 import Button from "@/components/Button";
 import Input from '@/components/Input';
+import swal from 'sweetalert';
 import { createTeam, joinTeam, leaveTeam } from "../../utils/api";
 
 export default {
@@ -140,10 +141,21 @@ export default {
   },
   methods: {
     async triggerLeaveTeam() {
-      await leaveTeam();
+      swal({
+        title: "Confirm Leave Team",
+        text: "Are you sure you want to leave this team?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then(async (confirm) => {
+        if (confirm) {
+          await leaveTeam();
 
-      this.code = '';
-      this.memberNames = [];
+          this.code = '';
+          this.memberNames = [];
+        }
+      });
     },
     async triggerCreateTeam() {
       const newTeam = await createTeam();

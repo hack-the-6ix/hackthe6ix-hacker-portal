@@ -41,8 +41,8 @@ export default {
         buttons: true,
         dangerMode: true,
       })
-      .then(async (willDelete) => {
-        if (willDelete) {
+      .then(async (confirm) => {
+        if (confirm) {
           await runLogout();
         }
       });
