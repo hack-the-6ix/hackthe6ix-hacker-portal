@@ -19,16 +19,16 @@
     <Select
       label='Year of Study'
       placeholder='Select'
-      v-model='year_of_study'
-      name='year_of_study'
+      v-model='yearsOfStudy'
+      name='yearsOfStudy'
       :options='years'
       required
     />
     <Select
       label='Number of Hackathons Attended'
       placeholder='Select'
-      v-model='hackathons'
-      name='hackathons'
+      v-model='hackathonsAttended'
+      name='hackathonsAttended'
       :options='hackathonsOptions'
       required
     />
@@ -41,8 +41,8 @@
       />
       <Checkbox
         label='I allow Hack the 6ix to distribute my resume to its event sponsors.'
-        v-model='share_resume'
-        name='share_resume'
+        v-model='resumeSharePermission'
+        name='resumeSharePermission'
       />
     </div>
     <!-- shameless plugs btw -->
@@ -50,8 +50,8 @@
       <Input
         label='GitHub Link'
         placeholder='Ex: https://github.com/fpunny'
-        v-model='github'
-        name='github'
+        v-model='githubLink'
+        name='githubLink'
         type='url'
       />
     </div>
@@ -59,8 +59,8 @@
       <Input
         label='Personal Website or Portfolio'
         placeholder='Ex: https://fpunny.xyz'
-        v-model='portfolio'
-        name='portfolio'
+        v-model='portfolioLink'
+        name='portfolioLink'
         type='url'
       />
     </div>
@@ -68,16 +68,16 @@
       <Input
         label='Linkedin'
         placeholder='Ex: https://www.linkedin.com/company/hackthe6ixofficial'
-        v-model='linkedin'
-        name='linkedin'
+        v-model='linkedinLink'
+        name='linkedinLink'
         type='url'
       />
     </div>
     <Textarea
       label='Tell us about a project that you are proud of. What tools did you use and what was the outcome?'
       class='your-experience__full'
-      v-model='experience'
-      name='experience'
+      v-model='projectEssay'
+      name='projectEssay'
     />
 
     <div class="your-experience__full">
@@ -154,14 +154,14 @@ export default {
       ...useFormSection(props, {
         school: '',
         program: '',
-        year_of_study: '',
-        hackathons: '',
+        yearsOfStudy: '',
+        hackathonsAttended: '',
         resume: null,
-        share_resume: false,
-        github: '',
-        portfolio: '',
-        linkedin: '',
-        experience: '',
+        resumeSharePermission: false,
+        githubLink: '',
+        portfolioLink: '',
+        linkedinLink: '',
+        projectEssay: '',
       }),
       tabSelected: computed({
         set: value => emit('update:modelTabSelected', value),
