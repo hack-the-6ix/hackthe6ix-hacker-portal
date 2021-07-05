@@ -43,14 +43,29 @@
       name='share_mlh'
       required
     />
+
+    <div class="at-ht6__full">
+      <hr class="at-ht6__hr">
+      <div class="at-ht6__buttons-spread">
+        <Button as='a' @click="tabSelected = 'your-experience'" href="#your-experience" class="at-ht6__button">
+          Back
+        </Button>
+        <Button class="at-ht6__button">
+          Submit
+        </Button>
+      </div>
+    </div>
+
   </FormSection>
 </template>
 
 <script>
+import { computed } from 'vue';
 import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import Checkbox from '@/components/Checkbox';
 import Textarea from '@/components/Textarea';
+import Button from '@/components/Button';
 
 export default {
   name: 'AtHT6',
@@ -58,12 +73,14 @@ export default {
     FormSection,
     Checkbox,
     Textarea,
+    Button
   },
   props: {
     form: Object,
+    canEdit: Boolean
   },
-  emits: ['update:form'],
-  setup(props) {
+  emits: ['update:form', 'update:modelTabSelected'],
+  setup(props, { emit }) {
     return {
       ...useFormSection(props, {
         interests: '',
@@ -71,6 +88,10 @@ export default {
         code_of_conduct: false,
         mlh_email: false,
         share_mlh: false,
+      }),
+      tabSelected: computed({
+        set: value => emit('update:modelTabSelected', value),
+        get: () => props.modelTabSelected,
       }),
     };
   },
@@ -117,6 +138,25 @@ export default {
 
     &:active {
       color: colors.css-color(teal, active);
+    }
+  }
+
+  &__hr {
+    margin-bottom: units.spacing(6);
+  }
+
+  &__button {
+    text-decoration: none;
+  }
+
+  &__buttons-spread {
+    display: flex;
+    justify-content: space-between;
+
+    @include mixins.media(tablet) {
+      display: grid;
+      grid-gap: units.spacing(3);
+      grid-template-columns: 1fr;
     }
   }
 }

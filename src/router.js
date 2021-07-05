@@ -35,24 +35,26 @@ const stripTokenFromAddress = () => {
     url.search = queryString.stringify(params);
 
     location.replace(url.href);
+
+    return false;
   }
+
+  return true;
 };
 
 router.beforeEach(async (to, from, next) => {
   const toHref = window.location.origin + to.fullPath;
-
-  // TODO: Check if the token is expired
 
   if (!isAuthenticated() && !await login()) {
     // oops we need to go to SSO page to get our tokens
     window.location.href = getLoginRedirectURL(toHref);
   }
 
-  if (isAuthenticated()) {
-    await initRefreshService();
+  if (stripTokenFromAddress()) {
+    if (isAuthenticated()) {
+      await initRefreshService();
+    }
   }
-
-  stripTokenFromAddress();
 
   next();
 });

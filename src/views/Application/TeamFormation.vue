@@ -58,7 +58,7 @@
         <hr class="team-formation__hr">
 
         <div class="team-formation__buttons-spread">
-          <Button @click="joinTeamPage = false" :disabled="!canEdit">
+          <Button @click="joinTeamPage = false">
             Back
           </Button>
         </div>
@@ -115,11 +115,11 @@ export default {
   },
   props: {
     form: Object,
-    modelSelected: String,
+    modelTabSelected: String,
     dueDate: String,
     canEdit: Boolean
   },
-  emits: ['update:form', 'update:modelSelected'],
+  emits: ['update:form', 'update:modelTabSelected'],
   data() {
     return {
       joinTeamPage: false,
@@ -133,8 +133,8 @@ export default {
         memberNames: [],
       }),
       tabSelected: computed({
-        set: value => emit('update:modelSelected', value),
-        get: () => props.modelSelected,
+        set: value => emit('update:modelTabSelected', value),
+        get: () => props.modelTabSelected,
       }),
     };
   },
