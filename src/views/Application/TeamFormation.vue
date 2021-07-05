@@ -21,7 +21,7 @@
 
       <hr class="team-formation__hr">
 
-      <div class="team-formation__buttons">
+      <div class="team-formation__buttons-spread">
         <Button @click="triggerLeaveTeam">
           Leave Team
         </Button>
@@ -50,16 +50,18 @@
               name='code'
               required
           />
-          <Button @click="triggerJoinTeam">
+          <Button @click="triggerJoinTeam" style="margin-top: auto">
             Join
           </Button>
         </div>
 
         <hr class="team-formation__hr">
 
-        <Button @click="joinTeamPage = false">
-          Back
-        </Button>
+        <div class="team-formation__buttons-spread">
+          <Button @click="joinTeamPage = false">
+            Back
+          </Button>
+        </div>
       </div>
       <div v-else>
         <Typography type='heading2' align='center' color='dark-navy'>
@@ -72,7 +74,7 @@
 
         <br/>
 
-        <div class="team-formation__buttons">
+        <div class="team-formation__buttons-together">
           <Button @click="triggerCreateTeam">
             Create Team
           </Button>
@@ -163,19 +165,30 @@ export default {
       margin-bottom: units.spacing(6);
     }
 
-    &__buttons {
-      grid-template-columns: 1fr 1fr;
-      grid-gap: units.spacing(6);
-      display: grid;
+    &__buttons-spread {
+      display: flex;
+      justify-content: space-between;
 
       @include mixins.media(tablet) {
+        display: grid;
+        grid-gap: units.spacing(3);
+        grid-template-columns: 1fr;
+      }
+    }
+    &__buttons-together {
+      display: flex;
+      justify-content: center;
+      grid-gap: units.spacing(3);
+
+      @include mixins.media(tablet) {
+        display: grid;
         grid-template-columns: 1fr;
       }
     }
 
     &__join-box {
       grid-template-columns: 8fr 2fr;
-      grid-gap: units.spacing(6);
+      grid-gap: units.spacing(3);
       display: grid;
 
       @include mixins.media(tablet) {
