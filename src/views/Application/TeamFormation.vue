@@ -26,7 +26,7 @@
           Leave Team
         </Button>
 
-        <Button as='a' @click="tabSelected = 'about-you'" href="#about-you">
+        <Button as='a' @click="tabSelected = 'about-you'" href="#about-you" style="text-decoration: none">
           Continue
         </Button>
       </div>
@@ -66,10 +66,11 @@
           You are currently not on a team.
         </Typography>
         <Typography type='heading4' as='p' align='center' color='black'>
-          Registering as a team helps speed up the review process.
+          Don't have a team? No worries! You can go solo or decide after submitting your application.
+          Just remember to do so before {{dueDate}}.
         </Typography>
 
-        <hr class="team-formation__hr">
+        <br/>
 
         <div class="team-formation__buttons">
           <Button @click="triggerCreateTeam">
@@ -103,7 +104,8 @@ export default {
   },
   props: {
     form: Object,
-    modelSelected: String
+    modelSelected: String,
+    dueDate: String
   },
   emits: ['update:form', 'update:modelSelected'],
   data() {
