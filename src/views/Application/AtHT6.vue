@@ -3,31 +3,34 @@
     <Textarea
       label='Which panels or workshops are you most interested in at Hackthe6ix?'
       class='at-ht6__full'
-      v-model='interests'
-      name='interests'
+      v-model='requestedWorkshops'
+      name='requestedWorkshops'
+      :disabled="!canEdit"
     />
     <Textarea
       label='What do you hope to accomplish by attending Hack the 6ix?'
       class='at-ht6__full'
-      v-model='goals'
-      name='goals'
+      v-model='accomplishEssay'
+      name='accomplishEssay'
+      :disabled="!canEdit"
       required
     />
     <Checkbox
       label='I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
       target="_blank" rel="noreferrer noopener" class="at-ht6__link">MLH Code of Conduct</a>.'
-      v-model='code_of_conduct'
-      name='code_of_conduct'
+      v-model='mlhCOC'
+      name='mlhCOC'
       class='at-ht6__full'
+      :disabled="!canEdit"
       required
     />
     <Checkbox
       label='I authorize MLH to send me pre- and post-event informational
       emails, which contain free credit and opportunities from their partners.'
       class='at-ht6__full'
-      v-model='mlh_email'
-      name='mlh_email'
-      required
+      v-model='mlhEmail'
+      name='mlhEmail'
+      :disabled="!canEdit"
     />
     <Checkbox
       label='I authorize Hack the 6ix to share my application/registration
@@ -39,9 +42,9 @@
       href="https://mlh.io/privacy" target="_blank" rel="noreferrer noopener" class="at-ht6__link">
       MLH Privacy Policy</a>.'
       class='at-ht6__full'
-      v-model='share_mlh'
-      name='share_mlh'
-      required
+      v-model='mlhData'
+      name='mlhData'
+      :disabled="!canEdit"
     />
 
     <div class="at-ht6__full">
@@ -50,9 +53,14 @@
         <Button as='a' @click="tabSelected = 'your-experience'" href="#your-experience" class="at-ht6__button">
           Back
         </Button>
-        <Button class="at-ht6__button">
-          Submit
-        </Button>
+        <div class="at-ht6__buttons-together">
+          <Button class="at-ht6__button" @click="save">
+            Save
+          </Button>
+          <Button class="at-ht6__button" @click="submit">
+            Submit
+          </Button>
+        </div>
       </div>
     </div>
 
@@ -79,15 +87,23 @@ export default {
     form: Object,
     canEdit: Boolean
   },
+  methods: {
+    save() {
+        this.$emit('updateApplication', false);
+    },
+    submit() {
+      this.$emit('updateApplication', true);
+    }
+  },
   emits: ['update:form', 'update:modelTabSelected'],
   setup(props, { emit }) {
     return {
       ...useFormSection(props, {
-        interests: '',
-        goals: '',
-        code_of_conduct: false,
-        mlh_email: false,
-        share_mlh: false,
+        requestedWorkshops: '',
+        accomplishEssay: '',
+        mlhCOC: false,
+        mlhEmail: false,
+        mlhData: false,
       }),
       tabSelected: computed({
         set: value => emit('update:modelTabSelected', value),
@@ -147,6 +163,17 @@ export default {
 
   &__button {
     text-decoration: none;
+  }
+
+  &__buttons-together {
+    display: flex;
+    justify-content: center;
+    grid-gap: units.spacing(3);
+
+    @include mixins.media(tablet) {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
   }
 
   &__buttons-spread {

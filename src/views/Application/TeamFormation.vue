@@ -22,7 +22,7 @@
       <hr class="team-formation__hr">
 
       <div class="team-formation__buttons-spread">
-        <Button @click="triggerLeaveTeam" :disabled="!canEdit">
+        <Button @click="triggerLeaveTeam" :disabled="!canAmendTeam">
           Leave Team
         </Button>
 
@@ -50,7 +50,7 @@
               name='code'
               required
           />
-          <Button @click="triggerJoinTeam" style="margin-top: auto" :disabled="!canEdit">
+          <Button @click="triggerJoinTeam" style="margin-top: auto" :disabled="!canAmendTeam">
             Join
           </Button>
         </div>
@@ -75,10 +75,10 @@
         <br/>
 
         <div class="team-formation__buttons-together">
-          <Button @click="triggerCreateTeam" :disabled="!canEdit">
+          <Button @click="triggerCreateTeam" :disabled="!canAmendTeam">
             Create Team
           </Button>
-          <Button @click="joinTeamPage = true" :disabled="!canEdit">
+          <Button @click="joinTeamPage = true" :disabled="!canAmendTeam">
             Join Team
           </Button>
         </div>
@@ -103,6 +103,7 @@ import FormSection from '@/components/FormSection';
 import Typography from '@/components/Typography';
 import Button from "@/components/Button";
 import Input from '@/components/Input';
+import swal from 'sweetalert';
 import { createTeam, joinTeam, leaveTeam } from "../../utils/api";
 
 export default {
@@ -117,7 +118,7 @@ export default {
     form: Object,
     modelTabSelected: String,
     dueDate: String,
-    canEdit: Boolean
+    canAmendTeam: Boolean
   },
   emits: ['update:form', 'update:modelTabSelected'],
   data() {
@@ -140,25 +141,41 @@ export default {
   },
   methods: {
     async triggerLeaveTeam() {
-      await leaveTeam();
+      swal({
+        title: "Confirm Leave Team",
+        text: "Are you sure you want to leave this team?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then(async (confirm) => {
+        if (confirm) {
+          const result = await leaveTeam();
 
-      this.code = '';
-      this.memberNames = [];
+          if (result.success) {
+            this.$emit('updateTeam', '', []);
+          } else {
+            swal('Unable to leave team', result.data, 'error');
+          }
+        }
+      });
     },
     async triggerCreateTeam() {
-      const newTeam = await createTeam();
+      const result = await createTeam();
 
-      this.code = newTeam.data.code;
-      this.memberNames = newTeam.data.memberNames;
+      if (result.success) {
+        this.$emit('updateTeam', result.data.code, result.data.memberNames);
+      } else {
+        swal('Unable to create team', result.data, 'error');
+      }
     },
     async triggerJoinTeam() {
-      const newTeam = await joinTeam(this.temporaryCode);
+      const result = await joinTeam(this.temporaryCode);
 
-      if (newTeam.success) {
-        this.code = newTeam.data.code;
-        this.memberNames = newTeam.data.memberNames;
+      if (result.success) {
+        this.$emit('updateTeam', result.data.code, result.data.memberNames);
       } else {
-        alert(newTeam.data);
+        swal('Unable to join team', result.data, 'error');
       }
     }
   }

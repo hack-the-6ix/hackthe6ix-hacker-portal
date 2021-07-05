@@ -10,6 +10,10 @@ import {
 const routes = [
   {
     path: '/',
+    redirect: '/application'
+  },
+  {
+    path: '/application',
     component: () => import(/* webpackChunkName: "Application" */ './views/Application'),
   },
   {
@@ -36,10 +40,10 @@ const stripTokenFromAddress = () => {
 
     location.replace(url.href);
 
-    return false;
+    return true;
   }
 
-  return true;
+  return false;
 };
 
 router.beforeEach(async (to, from, next) => {
@@ -48,14 +52,18 @@ router.beforeEach(async (to, from, next) => {
   if (!isAuthenticated() && !await login()) {
     // oops we need to go to SSO page to get our tokens
     window.location.href = getLoginRedirectURL(toHref);
+    return next(false);
   }
 
   if (stripTokenFromAddress()) {
-    if (isAuthenticated()) {
-      await initRefreshService();
-    }
+    return next(false);
+  }
+
+  if (isAuthenticated()) {
+    await initRefreshService();
   }
 
   next();
 });
+
 export default router
