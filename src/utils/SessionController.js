@@ -18,10 +18,15 @@ export const clearTokens = () => {
   localStorage.clear();
 };
 
-export const runLogout = async () => {
-  console.log('hi')
+/**
+ * @param noRevokeToken - if true, we won't communicate with the server that the client has signed out
+ * @return {Promise<void>}
+ */
+export const runLogout = async (noRevokeToken) => {
   // We don't really care about the outcome of this, as long as we tried
-  logout(getRefreshToken());
+  if (!noRevokeToken) {
+    await logout(getRefreshToken());
+  }
 
   clearTokens();
   window.location.href = getLoginRedirectURL(location.origin);
@@ -67,7 +72,7 @@ export const initRefreshService = async () => {
 
     refreshServiceStarted = true;
 
-    const runRefreshToken = async () => {
+    const runRefreshToken = async (initialLoad) => {
       const response = await refreshToken(getRefreshToken());
 
       if (response.success && response.data.token && response.data.refreshToken) {
@@ -82,12 +87,19 @@ export const initRefreshService = async () => {
 
         setTimeout(runRefreshToken, timeRemaining);
       } else {
-        // TODO: Display a proper message
-        alert('Unable to refresh token automatically. Please save your work and reload the page, or try to log out and back in again.');
+        if (initialLoad) {
+          // If we just loaded the page and are unable to update the token,
+          // just send the user back to the login page
+          await runLogout(true);
+        } else {
+          // TODO: Display a proper message
+          alert(
+              'Unable to refresh token automatically. Please save your work and reload the page, or try to log out and back in again.');
+        }
       }
     };
 
-    await runRefreshToken();
+    await runRefreshToken(true);
     console.log('Started token refresh service');
   }
 };

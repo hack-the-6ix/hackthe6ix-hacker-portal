@@ -6,7 +6,7 @@
       autocomplete="given-name"
       v-model='firstName'
       name='first_name'
-      disabled="true"
+      :disabled="true"
     />
     <Input
       label='Last Name'
@@ -14,7 +14,7 @@
       autocomplete="family-name"
       v-model='lastName'
       name='last_name'
-      disabled="true"
+      :disabled="true"
     />
     <Input
       label='Email'
@@ -23,7 +23,7 @@
       v-model='email'
       name='email'
       type='email'
-      disabled="true"
+      :disabled="true"
     />
     <Input
       label='Phone Number'
@@ -135,13 +135,28 @@
         disabled
       />
     </template>
+
+    <div class="about-you__full">
+      <hr class="about-you__hr">
+      <div class="about-you__buttons-spread">
+        <Button as='a' @click="tabSelected = 'team-formation'" href="#team-formation" class="about-you__button">
+          Back
+        </Button>
+        <Button as='a' @click="tabSelected = 'your-experience'" href="#your-experience" class="about-you__button">
+          Save & Continue
+        </Button>
+      </div>
+    </div>
+
   </FormSection>
 </template>
 
 <script>
+import { computed } from 'vue';
 import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import Checkbox from '@/components/Checkbox';
+import Button from '@/components/Button';
 import Typography from '@/components/Typography';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
@@ -154,6 +169,7 @@ export default {
     Checkbox,
     Select,
     Input,
+    Button
   },
   computed: {
     genders() {
@@ -188,11 +204,13 @@ export default {
     },
   },
   props: {
+    modelTabSelected: String,
     form: Object,
-    enums: Object
+    enums: Object,
+    canEdit: Boolean
   },
-  emits: ['update:form'],
-  setup(props) {
+  emits: ['update:form', 'update:modelTabSelected'],
+  setup(props, {emit}) {
     return {
       ...useFormSection(props, {
         firstName: '',
@@ -210,6 +228,10 @@ export default {
         city: '',
         province: '',
         postal_code: '',
+      }),
+      tabSelected: computed({
+        set: value => emit('update:modelTabSelected', value),
+        get: () => props.modelTabSelected,
       }),
     };
   },
@@ -234,6 +256,25 @@ export default {
 
     @include mixins.media(tablet) {
       grid-column: span 1;
+    }
+  }
+
+  &__hr {
+    margin-bottom: units.spacing(6);
+  }
+
+  &__button {
+    text-decoration: none;
+  }
+
+  &__buttons-spread {
+    display: flex;
+    justify-content: space-between;
+
+    @include mixins.media(tablet) {
+      display: grid;
+      grid-gap: units.spacing(3);
+      grid-template-columns: 1fr;
     }
   }
 }

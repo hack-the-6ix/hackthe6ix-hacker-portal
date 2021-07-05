@@ -25,10 +25,33 @@
       </Typography>
     </nav>
     <form class='home__form' v-on:submit.prevent="">
-      <TeamFormation v-if='selected === "team-formation"' v-model:form='team' v-model:modelSelected='selected' :dueDate="dueDate" :canEdit="user?.status?.canApply"/>
-      <AboutYou v-if='selected === "about-you"' v-model:form='about_you' v-model:enums='enums'/>
-      <YourExperience v-if='selected === "your-experience"' v-model:form='your_experience' v-model:enums='enums'/>
-      <AtHT6 v-if='selected === "at-ht6"' v-model:form='at_ht6'/>
+      <TeamFormation
+          v-if='selected === "team-formation"'
+          v-model:form='team'
+          v-model:modelTabSelected='selected'
+          :dueDate="dueDate"
+          :canEdit="user?.status?.canApply"
+      />
+      <AboutYou
+          v-if='selected === "about-you"'
+          v-model:form='about_you'
+          v-model:modelTabSelected='selected'
+          :enums='enums'
+          :canEdit="user?.status?.canApply"
+      />
+      <YourExperience
+          v-if='selected === "your-experience"'
+          v-model:form='your_experience'
+          v-model:modelTabSelected='selected'
+          :enums='enums'
+          :canEdit="user?.status?.canApply"
+      />
+      <AtHT6
+          v-if='selected === "at-ht6"'
+          v-model:form='at_ht6'
+          v-model:modelTabSelected='selected'
+          :canEdit="user?.status?.canApply"
+      />
     </form>
   </Layout>
 </template>

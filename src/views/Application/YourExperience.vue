@@ -79,10 +79,24 @@
       v-model='experience'
       name='experience'
     />
+
+    <div class="your-experience__full">
+      <hr class="your-experience__hr">
+      <div class="your-experience__buttons-spread">
+        <Button as='a' @click="tabSelected = 'about-you'" href="#about-you" class="your-experience__button">
+          Back
+        </Button>
+        <Button as='a' @click="tabSelected = 'at-ht6'" href="#at-ht6" class="your-experience__button">
+          Save & Continue
+        </Button>
+      </div>
+    </div>
+
   </FormSection>
 </template>
 
 <script>
+import { computed } from 'vue';
 import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import FileUpload from '@/components/FileUpload';
@@ -90,6 +104,7 @@ import Checkbox from '@/components/Checkbox';
 import Textarea from '@/components/Textarea';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
+import Button from '@/components/Button';
 
 export default {
   name: 'YourExperience',
@@ -100,6 +115,7 @@ export default {
     Textarea,
     Select,
     Input,
+    Button
   },
   computed: {
     schools() {
@@ -129,10 +145,11 @@ export default {
   },
   props: {
     form: Object,
-    enums: Object
+    enums: Object,
+    canEdit: Boolean
   },
-  emits: ['update:form'],
-  setup(props) {
+  emits: ['update:form', 'update:modelTabSelected'],
+  setup(props, { emit }) {
     return {
       ...useFormSection(props, {
         school: '',
@@ -145,6 +162,10 @@ export default {
         portfolio: '',
         linkedin: '',
         experience: '',
+      }),
+      tabSelected: computed({
+        set: value => emit('update:modelTabSelected', value),
+        get: () => props.modelTabSelected,
       }),
     };
   },
@@ -192,6 +213,25 @@ export default {
 
     @include mixins.media(tablet) {
       grid-column: span 1;
+    }
+  }
+
+  &__hr {
+    margin-bottom: units.spacing(6);
+  }
+
+  &__button {
+    text-decoration: none;
+  }
+
+  &__buttons-spread {
+    display: flex;
+    justify-content: space-between;
+
+    @include mixins.media(tablet) {
+      display: grid;
+      grid-gap: units.spacing(3);
+      grid-template-columns: 1fr;
     }
   }
 }
