@@ -48,7 +48,10 @@ router.beforeEach(async (to, from, next) => {
     window.location.href = getLoginRedirectURL(toHref);
   }
 
-  initRefreshService();
+  if (isAuthenticated()) {
+    initRefreshService();
+  }
+
   stripTokenFromAddress();
 
   next();

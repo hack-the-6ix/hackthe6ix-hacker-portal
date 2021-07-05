@@ -67,6 +67,8 @@ const sendRequest = async (endpoint, type, data = {}) => {
 
 export const getLoginRedirectURL = (nextPage) => `${trimmedBaseURL}/auth/${authProvider}/login?redirectTo=${nextPage}`;
 
+export const refreshToken = async (refreshToken) => sendRequest(`/auth/${authProvider}/refresh`, 'POST', { refreshToken: refreshToken });
+
 export const getProfile = async () => sendRequest('/api/action/profile', 'GET');
 export const getApplicationEnums = async () => sendRequest(
     '/api/action/applicationEnums', 'GET');

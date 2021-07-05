@@ -1,25 +1,17 @@
 import queryString from 'query-string';
-import { getLoginRedirectURL } from "./api";
+import { getLoginRedirectURL, refreshToken } from "./api";
 import jwt_decode from 'jwt-decode';
 
-export const getToken = () => {
-  return localStorage.token
-      ? jwt_decode(localStorage.token)
-      : null;
-};
+export const getToken = () => localStorage.token;
 
-export const getRefreshToken = () => {
-  return localStorage.token
-      ? jwt_decode(localStorage.token)
-      : null;
-};
+export const getRefreshToken = () => localStorage.refreshToken;
 
 export const setToken = (token) => {
-  localStorage.token = JSON.stringify(token);
+  localStorage.token = token;
 };
 
 export const setRefreshToken = (refreshToken) => {
-  localStorage.refreshToken = JSON.stringify(refreshToken);
+  localStorage.refreshToken = refreshToken;
 };
 
 export const clearTokens = () => {
@@ -69,19 +61,34 @@ var refreshServiceStarted = false;
 
 export const initRefreshService = () => {
   if (!refreshServiceStarted) {
+
     refreshServiceStarted = true;
 
-    console.log(getToken())
+    const runRefreshToken = async () => {
+      const response = await refreshToken(getRefreshToken());
 
-    const refreshToken = () => {
+      if (response.success && response.data.token && response.data.refreshToken) {
+        setToken(response.data.token);
+        setRefreshToken(response.data.refreshToken);
 
+        const parsedToken = jwt_decode(response.data.token);
+        let timeRemaining = parsedToken.exp * 1000 - new Date().getTime();
+        timeRemaining = Math.max(timeRemaining - 5 * 60 * 1000, 0);
+
+        console.log(`Next token refresh: ${ new Date(timeRemaining + new Date().getTime()) }`);
+
+        setTimeout(runRefreshToken, timeRemaining);
+      } else {
+        // TODO: Display a proper message
+        alert('Unable to refresh token automatically. Please save your work and reload the page, or try to log out and back in again.');
+      }
     };
 
-    refreshToken();
-    setTimeout(refreshToken, 10000);
-
+    runRefreshToken().then(() => {
+      console.log('Started token refresh service');
+    });
   }
 };
 
-export const isAuthenticated = () => true;// !!getToken();
+export const isAuthenticated = () => !!getToken();
 
