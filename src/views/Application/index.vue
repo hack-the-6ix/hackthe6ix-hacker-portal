@@ -51,6 +51,7 @@
           v-model:form='at_ht6'
           v-model:modelTabSelected='selected'
           :canEdit="user?.status?.canApply"
+          @updateApplication="runUpdateApplication"
       />
     </form>
   </Layout>
@@ -63,7 +64,7 @@ import YourExperience from '@/views/Application/YourExperience';
 import AtHT6 from '@/views/Application/AtHT6';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
-import { getApplicationEnums, getProfile, getTeam } from "../../utils/api";
+import { getApplicationEnums, getProfile, getTeam, updateApplication } from "../../utils/api";
 import swal from 'sweetalert';
 
 export default {
@@ -88,17 +89,42 @@ export default {
     };
   },
   watch: {
-    form(newVal) {
-      console.log(newVal);
-    },
+    async selected() {
+      await this.runUpdateApplication(false);
+    }
   },
   methods: {
-    saveApplication(submit) {
+    async runUpdateApplication(submit) {
+      const newApplication = {
+        ...this.your_experience,
+        ...this.about_you,
+        ...this.at_ht6
+      };
 
-      console.log(submit)
+      // These are values we injected into the form to display, but don't need to submit
+      delete newApplication.firstName;
+      delete newApplication.lastName;
+      delete newApplication.email;
+      delete newApplication.resumeFileName;
+      delete newApplication.resume;
 
+      // Delete address fields if they don't want swag
+      if (!newApplication.wantSwag) {
+        delete newApplication.addressLine1;
+        delete newApplication.addressLine2;
+        delete newApplication.city;
+        delete newApplication.province;
+        delete newApplication.postalCode;
+      }
+
+      return await updateApplication(
+          newApplication,
+          submit
+      )
     },
     loadApplication(hackerApplication) {
+      // The hacker application arrives as one big dictionary, so we have to split it up
+      // based on the tab
       const fields = {
         'about_you': [
             'emailConsent',
@@ -117,7 +143,7 @@ export default {
         'your_experience': [
             'school',
             'program',
-            'yearOfStudy',
+            'yearsOfStudy',
             'hackathonsAttended',
             'resumeFileName',
             'resumeSharePermission',

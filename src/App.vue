@@ -10,7 +10,7 @@
       </Typography>
     </span>
     <span style="margin-left: auto">
-      <Button color="black" @click="triggerLogout">
+      <Button color="black" @click="confirmRunLogout">
         Sign Out
       </Button>
     </span>
@@ -33,7 +33,7 @@ export default {
     });
   },
   methods: {
-    triggerLogout() {
+    confirmRunLogout() {
       swal({
         title: "Confirm Sign Out",
         text: "Are you sure you want to sign out?",

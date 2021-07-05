@@ -53,7 +53,7 @@
       placeholder='Select'
       v-model='pronouns'
       name='pronouns'
-      :options='pronouns'
+      :options='pronounOptions'
     />
     <div>
       <Select
@@ -178,7 +178,7 @@ export default {
         value: x,
       }));
     },
-    pronouns() {
+    pronounOptions() {
       return (this.enums?.pronouns || []).map(x => ({
         label: x,
         value: x,
