@@ -1,15 +1,16 @@
 import queryString from 'query-string';
 import { getLoginRedirectURL } from "./api";
+import jwt_decode from 'jwt-decode';
 
 export const getToken = () => {
   return localStorage.token
-      ? JSON.parse(localStorage.token)
+      ? jwt_decode(localStorage.token)
       : null;
 };
 
 export const getRefreshToken = () => {
   return localStorage.token
-      ? JSON.parse(localStorage.token)
+      ? jwt_decode(localStorage.token)
       : null;
 };
 
@@ -64,14 +65,23 @@ export const login = async () => {
  * 6. When the user signs out, destroy localStorage
  */
 
+var refreshServiceStarted = false;
+
 export const initRefreshService = () => {
+  if (!refreshServiceStarted) {
+    refreshServiceStarted = true;
 
-  //const refresh = () => {
-  //};
+    console.log(getToken())
 
-  // TODO: Set a timer here and refresh every so often
+    const refreshToken = () => {
 
+    };
+
+    refreshToken();
+    setTimeout(refreshToken, 10000);
+
+  }
 };
 
-export const isAuthenticated = () => !!getToken();
+export const isAuthenticated = () => true;// !!getToken();
 

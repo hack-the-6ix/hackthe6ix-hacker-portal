@@ -1,7 +1,11 @@
 import queryString from "query-string";
 import { createRouter, createWebHistory } from 'vue-router';
 import { getLoginRedirectURL } from "./utils/api";
-import { isAuthenticated, login } from "./utils/SessionController";
+import {
+  initRefreshService,
+  isAuthenticated,
+  login
+} from "./utils/SessionController";
 
 const routes = [
   {
@@ -44,6 +48,7 @@ router.beforeEach(async (to, from, next) => {
     window.location.href = getLoginRedirectURL(toHref);
   }
 
+  initRefreshService();
   stripTokenFromAddress();
 
   next();
