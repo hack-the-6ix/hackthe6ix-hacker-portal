@@ -22,7 +22,7 @@
       <hr class="team-formation__hr">
 
       <div class="team-formation__buttons-spread">
-        <Button @click="triggerLeaveTeam">
+        <Button @click="triggerLeaveTeam" :disabled="!canEdit">
           Leave Team
         </Button>
 
@@ -50,7 +50,7 @@
               name='code'
               required
           />
-          <Button @click="triggerJoinTeam" style="margin-top: auto">
+          <Button @click="triggerJoinTeam" style="margin-top: auto" :disabled="!canEdit">
             Join
           </Button>
         </div>
@@ -58,7 +58,7 @@
         <hr class="team-formation__hr">
 
         <div class="team-formation__buttons-spread">
-          <Button @click="joinTeamPage = false">
+          <Button @click="joinTeamPage = false" :disabled="!canEdit">
             Back
           </Button>
         </div>
@@ -75,13 +75,22 @@
         <br/>
 
         <div class="team-formation__buttons-together">
-          <Button @click="triggerCreateTeam">
+          <Button @click="triggerCreateTeam" :disabled="!canEdit">
             Create Team
           </Button>
-          <Button @click="joinTeamPage = true">
+          <Button @click="joinTeamPage = true" :disabled="!canEdit">
             Join Team
           </Button>
         </div>
+
+        <hr class="team-formation__hr">
+
+        <div class="team-formation__buttons-spread">
+          <Button as='a' @click="tabSelected = 'about-you'" href="#about-you" class="team-formation__buttons-right" style="text-decoration: none">
+            Continue
+          </Button>
+        </div>
+
       </div>
     </div>
   </FormSection>
@@ -107,7 +116,8 @@ export default {
   props: {
     form: Object,
     modelSelected: String,
-    dueDate: String
+    dueDate: String,
+    canEdit: Boolean
   },
   emits: ['update:form', 'update:modelSelected'],
   data() {
@@ -165,6 +175,14 @@ export default {
       margin-bottom: units.spacing(6);
     }
 
+    &__buttons-right {
+      margin-left: auto;
+
+      @include mixins.media(tablet) {
+        margin-left: 0;
+      }
+    }
+
     &__buttons-spread {
       display: flex;
       justify-content: space-between;
@@ -175,6 +193,7 @@ export default {
         grid-template-columns: 1fr;
       }
     }
+
     &__buttons-together {
       display: flex;
       justify-content: center;
