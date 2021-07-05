@@ -5,12 +5,14 @@
       class='at-ht6__full'
       v-model='requestedWorkshops'
       name='requestedWorkshops'
+      :disabled="!canEdit"
     />
     <Textarea
       label='What do you hope to accomplish by attending Hack the 6ix?'
       class='at-ht6__full'
       v-model='accomplishEssay'
       name='accomplishEssay'
+      :disabled="!canEdit"
       required
     />
     <Checkbox
@@ -19,6 +21,7 @@
       v-model='mlhCOC'
       name='mlhCOC'
       class='at-ht6__full'
+      :disabled="!canEdit"
       required
     />
     <Checkbox
@@ -27,6 +30,7 @@
       class='at-ht6__full'
       v-model='mlhEmail'
       name='mlhEmail'
+      :disabled="!canEdit"
       required
     />
     <Checkbox
@@ -41,6 +45,7 @@
       class='at-ht6__full'
       v-model='mlhData'
       name='mlhData'
+      :disabled="!canEdit"
       required
     />
 
@@ -50,9 +55,14 @@
         <Button as='a' @click="tabSelected = 'your-experience'" href="#your-experience" class="at-ht6__button">
           Back
         </Button>
-        <Button class="at-ht6__button">
-          Submit
-        </Button>
+        <div class="at-ht6__buttons-together">
+          <Button class="at-ht6__button" @click="save">
+            Save
+          </Button>
+          <Button class="at-ht6__button" @click="submit">
+            Submit
+          </Button>
+        </div>
       </div>
     </div>
 
@@ -78,6 +88,14 @@ export default {
   props: {
     form: Object,
     canEdit: Boolean
+  },
+  methods: {
+    save() {
+        this.$emit('updateApplication', false);
+    },
+    submit() {
+      this.$emit('updateApplication', true);
+    }
   },
   emits: ['update:form', 'update:modelTabSelected'],
   setup(props, { emit }) {
@@ -147,6 +165,17 @@ export default {
 
   &__button {
     text-decoration: none;
+  }
+
+  &__buttons-together {
+    display: flex;
+    justify-content: center;
+    grid-gap: units.spacing(3);
+
+    @include mixins.media(tablet) {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
   }
 
   &__buttons-spread {

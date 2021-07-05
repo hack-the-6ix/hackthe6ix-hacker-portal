@@ -53,7 +53,9 @@ const sendRequest = async (endpoint, type, data = {}) => {
         status: e.response.status,
         data: `Error ${e.response.status || 500}: ${responseData.message
         || responseData || 'Unknown Error Occurred'}${responseData.error ? ' - '
-            + responseData.error : ''}`
+            + responseData.error : ''}`,
+        error: responseData.error,
+        message: responseData.message,
       }
     }
 

@@ -22,7 +22,7 @@
       <hr class="team-formation__hr">
 
       <div class="team-formation__buttons-spread">
-        <Button @click="triggerLeaveTeam" :disabled="!canEdit">
+        <Button @click="triggerLeaveTeam" :disabled="!canAmendTeam">
           Leave Team
         </Button>
 
@@ -50,7 +50,7 @@
               name='code'
               required
           />
-          <Button @click="triggerJoinTeam" style="margin-top: auto" :disabled="!canEdit">
+          <Button @click="triggerJoinTeam" style="margin-top: auto" :disabled="!canAmendTeam">
             Join
           </Button>
         </div>
@@ -75,10 +75,10 @@
         <br/>
 
         <div class="team-formation__buttons-together">
-          <Button @click="triggerCreateTeam" :disabled="!canEdit">
+          <Button @click="triggerCreateTeam" :disabled="!canAmendTeam">
             Create Team
           </Button>
-          <Button @click="joinTeamPage = true" :disabled="!canEdit">
+          <Button @click="joinTeamPage = true" :disabled="!canAmendTeam">
             Join Team
           </Button>
         </div>
@@ -118,7 +118,7 @@ export default {
     form: Object,
     modelTabSelected: String,
     dueDate: String,
-    canEdit: Boolean
+    canAmendTeam: Boolean
   },
   emits: ['update:form', 'update:modelTabSelected'],
   data() {

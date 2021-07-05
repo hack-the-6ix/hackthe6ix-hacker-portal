@@ -32,12 +32,14 @@
       v-model='phoneNumber'
       name='phoneNumber'
       type='tel'
+      :disabled="!canEdit"
       required
     />
     <Checkbox
       label='I give permission to Hack the 6ix for sending me emails containing information from the event sponsors.'
       class='about-you__full'
       v-model='emailConsent'
+      :disabled="!canEdit"
       name='emailConsent'
     />
     <Select
@@ -46,6 +48,7 @@
       v-model='gender'
       name='gender'
       :options='genders'
+      :disabled="!canEdit"
       required
     />
     <Select
@@ -54,6 +57,7 @@
       v-model='pronouns'
       name='pronouns'
       :options='pronounOptions'
+      :disabled="!canEdit"
     />
     <div>
       <Select
@@ -62,6 +66,7 @@
         v-model='ethnicity'
         name='ethnicity'
         :options='ethnicities'
+        :disabled="!canEdit"
         required
       />
     </div>
@@ -71,6 +76,7 @@
       v-model='timezone'
       name='timezone'
       :options='timezones'
+      :disabled="!canEdit"
       required
     />
     <Checkbox
@@ -78,6 +84,7 @@
       class='about-you__full'
       v-model='wantSwag'
       name='wantSwag'
+      :disabled="!canEdit"
     />
     <template v-if='wantSwag'>
       <div class='about-you__full'>
@@ -95,6 +102,7 @@
         autocomplete="address-line1"
         v-model='addressLine1'
         name='addressLine1'
+        :disabled="!canEdit"
         required
       />
       <Input
@@ -103,6 +111,7 @@
         autocomplete="address-line2"
         v-model='addressLine2'
         name='addressLine2'
+        :disabled="!canEdit"
       />
       <Input
         label='City'
@@ -110,6 +119,7 @@
         autocomplete="address-level2"
         v-model='city'
         name='city'
+        :disabled="!canEdit"
         required
       />
       <Select
@@ -126,6 +136,7 @@
         placeholder='Ex: V4Q3H9'
         v-model='postalCode'
         name='postalCode'
+        :disabled="!canEdit"
         required
       />
       <Input
@@ -138,6 +149,7 @@
 
     <div class="about-you__full">
       <hr class="about-you__hr">
+
       <div class="about-you__buttons-spread">
         <Button as='a' @click="tabSelected = 'team-formation'" href="#team-formation" class="about-you__button">
           Back

@@ -6,6 +6,7 @@
       v-model='school'
       name='school'
       :options='schools'
+      :disabled="!canEdit"
       required
     />
     <Select
@@ -14,6 +15,7 @@
       v-model='program'
       name='program'
       :options='programs'
+      :disabled="!canEdit"
       required
     />
     <Select
@@ -22,6 +24,7 @@
       v-model='yearsOfStudy'
       name='yearsOfStudy'
       :options='years'
+      :disabled="!canEdit"
       required
     />
     <Select
@@ -30,6 +33,7 @@
       v-model='hackathonsAttended'
       name='hackathonsAttended'
       :options='hackathonsOptions'
+      :disabled="!canEdit"
       required
     />
     <div class='your-experience__file'>
@@ -37,12 +41,14 @@
         label='Your Resume'
         v-model='resume'
         name='resume'
+        :disabled="!canEdit"
         required
       />
       <Checkbox
         label='I allow Hack the 6ix to distribute my resume to its event sponsors.'
         v-model='resumeSharePermission'
         name='resumeSharePermission'
+        :disabled="!canEdit"
       />
     </div>
     <!-- shameless plugs btw -->
@@ -53,6 +59,7 @@
         v-model='githubLink'
         name='githubLink'
         type='url'
+        :disabled="!canEdit"
       />
     </div>
     <div class='your-experience__gap'>
@@ -62,6 +69,7 @@
         v-model='portfolioLink'
         name='portfolioLink'
         type='url'
+        :disabled="!canEdit"
       />
     </div>
     <div class='your-experience__gap'>
@@ -71,6 +79,7 @@
         v-model='linkedinLink'
         name='linkedinLink'
         type='url'
+        :disabled="!canEdit"
       />
     </div>
     <Textarea
@@ -78,6 +87,7 @@
       class='your-experience__full'
       v-model='projectEssay'
       name='projectEssay'
+      :disabled="!canEdit"
     />
 
     <div class="your-experience__full">

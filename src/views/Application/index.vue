@@ -30,7 +30,7 @@
           v-model:form='team'
           v-model:modelTabSelected='selected'
           :dueDate="dueDate"
-          :canEdit="user?.status?.canApply"
+          :canAmendTeam="user?.status?.canAmendTeam"
           @updateTeam="updateTeam"
       />
       <AboutYou
@@ -55,6 +55,10 @@
           @updateApplication="runUpdateApplication"
       />
     </form>
+
+    <Typography type='p' color='white' as='p' v-if="lastSaved" class="home__last-saved">
+      Last saved at {{lastSaved}}
+    </Typography>
   </Layout>
 </template>
 
@@ -86,7 +90,8 @@ export default {
       at_ht6: {},
       team: {},
       user: {},
-      enums: {}
+      enums: {},
+      lastSaved: ''
     };
   },
   watch: {
@@ -124,10 +129,37 @@ export default {
         delete newApplication.postalCode;
       }
 
-      return await updateApplication(
+      const result = await updateApplication(
           newApplication,
           submit
-      )
+      );
+
+      if (result.success) {
+        console.log('Application saved successfully');
+        this.lastSaved = new Date().toLocaleDateString(
+            'en-US',
+            {
+              year: 'numeric',
+              day: 'numeric',
+              month: 'long',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric',
+              timeZoneName: 'short'
+            }
+        );
+
+        // TODO: Add another state if the user requested a submission
+
+      } else {
+        if (result.error && result.message) {
+          swal('Unable to save application',
+              `${result.message}\n\nThe following fields failed validation:\n${(result.error.map(
+                  e => e[1])).join('\n')}`, 'error');
+        } else {
+          swal('Unable to save application', result.data, 'error');
+        }
+      }
     },
     loadApplication(hackerApplication) {
       // The hacker application arrives as one big dictionary, so we have to split it up
@@ -317,6 +349,11 @@ export default {
     background-color: colors.css-color(white);
     border-radius: units.spacing(3);
     overflow: hidden;
+  }
+
+  &__last-saved {
+    text-align: right;
+    margin-top: units.spacing(3);
   }
 }
 </style>
