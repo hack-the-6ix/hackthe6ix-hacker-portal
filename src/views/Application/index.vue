@@ -64,6 +64,7 @@ import AtHT6 from '@/views/Application/AtHT6';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
 import { getApplicationEnums, getProfile, getTeam } from "../../utils/api";
+import swal from 'sweetalert';
 
 export default {
   name: 'Application',
@@ -102,23 +103,41 @@ export default {
     const promises = [];
 
     promises.push((async () => {
-      const user = await getProfile();
-      this.user = user.data;
+      const result = await getProfile();
 
-      // Load immutable data in about you
-      this.about_you.firstName = user.data.firstName;
-      this.about_you.lastName = user.data.lastName;
-      this.about_you.email = user.data.email;
+      if (result.success) {
+        this.user = result.data;
 
-      if (this.user.hackerApplication.teamCode) {
-        const team = await getTeam();
-        this.team = team.data;
+        // Load immutable data in about you
+        this.about_you.firstName = result.data.firstName;
+        this.about_you.lastName = result.data.lastName;
+        this.about_you.email = result.data.email;
+
+        if (this.user.hackerApplication.teamCode) {
+          const teamResult = await getTeam();
+
+          if (teamResult) {
+            this.team = teamResult.data;
+          } else {
+            // TODO: Replace with message that's always on screen
+            swal('Unable to fetch team', teamResult.data, 'error');
+          }
+        }
+      } else {
+        // TODO: Replace with message that's always on screen
+        swal('Unable to fetch user', result.data, 'error');
       }
     })());
 
     promises.push((async () => {
-      const enums = await getApplicationEnums();
-      this.enums = enums.data;
+      const result = await getApplicationEnums();
+
+      if (result.success) {
+        this.enums = result.data;
+      } else {
+        // TODO: Replace with message that's always on screen
+        swal('Unable to fetch enums', result.data, 'error');
+      }
     })());
 
     Promise.all(promises).then(() => {

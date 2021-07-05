@@ -150,27 +150,35 @@ export default {
       })
       .then(async (confirm) => {
         if (confirm) {
-          await leaveTeam();
+          const result = await leaveTeam();
 
-          this.code = '';
-          this.memberNames = [];
+          if (result.success) {
+            this.code = '';
+            this.memberNames = [];
+          } else {
+            swal('Unable to leave team', result.data, 'error');
+          }
         }
       });
     },
     async triggerCreateTeam() {
-      const newTeam = await createTeam();
+      const result = await createTeam();
 
-      this.code = newTeam.data.code;
-      this.memberNames = newTeam.data.memberNames;
+      if (result.success) {
+        this.code = result.data.code;
+        this.memberNames = result.data.memberNames;
+      } else {
+        swal('Unable to create team', result.data, 'error');
+      }
     },
     async triggerJoinTeam() {
-      const newTeam = await joinTeam(this.temporaryCode);
+      const result = await joinTeam(this.temporaryCode);
 
-      if (newTeam.success) {
-        this.code = newTeam.data.code;
-        this.memberNames = newTeam.data.memberNames;
+      if (result.success) {
+        this.code = result.data.code;
+        this.memberNames = result.data.memberNames;
       } else {
-        alert(newTeam.data);
+        swal('Unable to join team', result.data, 'error');
       }
     }
   }

@@ -1,6 +1,7 @@
 import queryString from 'query-string';
 import { logout, getLoginRedirectURL, refreshToken } from "./api";
 import jwt_decode from 'jwt-decode';
+import swal from 'sweetalert';
 
 export const getToken = () => localStorage.token;
 
@@ -52,19 +53,6 @@ export const login = async () => {
   return false;
 };
 
-/**
- * 1. User goes to dash
- * 2. If user has a valid session, continue to 5
- *      else: redirect to login endpoint
- * 3. If the user is not logged in already, redirect to login endpoint
- * 4. After authentication, the server will inject the token
- *      If the user has a token + refreshToken, save it to localStorage
- *      and clear the query string.
- *        continue to 5
- * 5. Start token refresh service in the background w/ a timer
- * 6. When the user signs out, destroy localStorage
- */
-
 var refreshServiceStarted = false;
 
 export const initRefreshService = async () => {
@@ -94,9 +82,7 @@ export const initRefreshService = async () => {
           // just send the user back to the login page
           await runLogout(true);
         } else {
-          // TODO: Display a proper message
-          alert(
-              'Unable to refresh token automatically. Please save your work and reload the page, or try to log out and back in again.');
+          swal('Unable to refresh token', 'Please save your work and reload the page, or try to log out and back in again.', 'error');
         }
       }
     };
