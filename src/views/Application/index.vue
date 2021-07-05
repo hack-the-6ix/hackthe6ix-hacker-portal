@@ -31,6 +31,7 @@
           v-model:modelTabSelected='selected'
           :dueDate="dueDate"
           :canEdit="user?.status?.canApply"
+          @updateTeam="updateTeam"
       />
       <AboutYou
           v-if='selected === "about-you"'
@@ -94,6 +95,12 @@ export default {
     }
   },
   methods: {
+    updateTeam(teamCode, memberNames) {
+      this.team = {
+        code: teamCode,
+        memberNames: memberNames
+      }
+    },
     async runUpdateApplication(submit) {
       const newApplication = {
         ...this.your_experience,

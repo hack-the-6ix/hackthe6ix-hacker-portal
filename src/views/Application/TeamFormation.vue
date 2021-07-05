@@ -153,8 +153,7 @@ export default {
           const result = await leaveTeam();
 
           if (result.success) {
-            this.code = '';
-            this.memberNames = [];
+            this.$emit('updateTeam', '', []);
           } else {
             swal('Unable to leave team', result.data, 'error');
           }
@@ -165,8 +164,7 @@ export default {
       const result = await createTeam();
 
       if (result.success) {
-        this.code = result.data.code;
-        this.memberNames = result.data.memberNames;
+        this.$emit('updateTeam', result.data.code, result.data.memberNames);
       } else {
         swal('Unable to create team', result.data, 'error');
       }
@@ -175,8 +173,7 @@ export default {
       const result = await joinTeam(this.temporaryCode);
 
       if (result.success) {
-        this.code = result.data.code;
-        this.memberNames = result.data.memberNames;
+        this.$emit('updateTeam', result.data.code, result.data.memberNames);
       } else {
         swal('Unable to join team', result.data, 'error');
       }
