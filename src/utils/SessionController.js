@@ -1,5 +1,5 @@
 import queryString from 'query-string';
-import { getLoginRedirectURL, refreshToken } from "./api";
+import { logout, getLoginRedirectURL, refreshToken } from "./api";
 import jwt_decode from 'jwt-decode';
 
 export const getToken = () => localStorage.token;
@@ -18,8 +18,11 @@ export const clearTokens = () => {
   localStorage.clear();
 };
 
-export const logout = async () => {
-  // TODO: Implement this
+export const runLogout = async () => {
+  console.log('hi')
+  // We don't really care about the outcome of this, as long as we tried
+  logout(getRefreshToken());
+
   clearTokens();
   window.location.href = getLoginRedirectURL(location.origin);
 };
@@ -59,7 +62,7 @@ export const login = async () => {
 
 var refreshServiceStarted = false;
 
-export const initRefreshService = () => {
+export const initRefreshService = async () => {
   if (!refreshServiceStarted) {
 
     refreshServiceStarted = true;
@@ -84,9 +87,8 @@ export const initRefreshService = () => {
       }
     };
 
-    runRefreshToken().then(() => {
-      console.log('Started token refresh service');
-    });
+    await runRefreshToken();
+    console.log('Started token refresh service');
   }
 };
 

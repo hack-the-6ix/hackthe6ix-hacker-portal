@@ -9,13 +9,20 @@
         Digital
       </Typography>
     </span>
+    <span style="margin-left: auto">
+      <Button color="black" @click="runLogout">
+        Sign Out
+      </Button>
+    </span>
   </div>
   <router-view/>
 </template>
 
 <script>
 import Typography from '@/components/Typography';
+import Button from '@/components/Button';
 import Logo from '@/assets/icon.svg';
+import {runLogout} from "./utils/SessionController";
 
 export default {
   name: 'App',
@@ -24,9 +31,13 @@ export default {
       document.body.classList.add('animate');
     });
   },
+  methods: {
+    runLogout
+  },
   components: {
     Typography,
     Logo,
+    Button
   },
 }
 </script>
