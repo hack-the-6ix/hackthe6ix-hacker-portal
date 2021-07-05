@@ -122,11 +122,11 @@ export default {
 
       // Delete address fields if they don't want swag
       if (!newApplication.wantSwag) {
-        delete newApplication.addressLine1;
-        delete newApplication.addressLine2;
-        delete newApplication.city;
-        delete newApplication.province;
-        delete newApplication.postalCode;
+        newApplication.addressLine1 = '';
+        newApplication.addressLine2 = '';
+        newApplication.city = '';
+        newApplication.province = '';
+        newApplication.postalCode = '';
       }
 
       const result = await updateApplication(
