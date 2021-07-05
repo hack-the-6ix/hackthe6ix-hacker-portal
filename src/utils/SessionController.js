@@ -80,7 +80,9 @@ export const initRefreshService = async () => {
         setRefreshToken(response.data.refreshToken);
 
         const parsedToken = jwt_decode(response.data.token);
-        let timeRemaining = parsedToken.exp * 1000 - new Date().getTime();
+        const parsedRefreshToken = jwt_decode(response.data.refreshToken);
+
+        let timeRemaining = Math.min(parsedToken.exp, parsedRefreshToken.exp) * 1000 - new Date().getTime();
         timeRemaining = Math.max(timeRemaining - 5 * 60 * 1000, 0);
 
         console.log(`Next token refresh: ${ new Date(timeRemaining + new Date().getTime()) }`);
