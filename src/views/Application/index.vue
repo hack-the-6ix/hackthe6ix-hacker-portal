@@ -1,9 +1,7 @@
 <template>
   <Layout
-    title='Hacker Application'
-    :description='`Applications are due ${dueDate}. Once you’ve
-    submitted your application, keep an eye on your inbox
-    for your application results!`'
+    :title='title'
+    :description='description'
   >
     <nav class='home__nav'>
       <Typography
@@ -95,7 +93,9 @@ export default {
   },
   watch: {
     async selected() {
-      await this.runUpdateApplication(false);
+      if (this.user?.status?.canApply) {
+        await this.runUpdateApplication(false);
+      }
     }
   },
   methods: {
@@ -268,6 +268,27 @@ export default {
     });
   },
   computed: {
+    /**
+     * Possible states:
+     * - Did submit, application deadline passed
+     * - Did submit, application deadline not passed <- Application submitted state
+     * - Did not submit, application deadline passed
+     * - Did not submit, application deadline not passed <- Standard state
+     */
+    title() {
+      return this.user?.status?.applied
+              ? 'Application has been submitted!'
+              : 'Hacker Application'
+    },
+    description() {
+      return this.user?.status?.applied
+            ? `The HT6 team will review your application soon. Keep an eye on your inbox for your application results!\n\n
+               Updates can be made to your team list until ${this.dueDate}. While you aren't able to make any more edits,
+               you can still review your submission details below.`
+            : `Applications are due ${this.dueDate}. Once you’ve
+              submitted your application, keep an eye on your inbox
+              for your application results!`
+    },
     dueDate() {
       return new Date(this.user.computedApplicationDeadline || 0).toLocaleDateString(
         'en-US',

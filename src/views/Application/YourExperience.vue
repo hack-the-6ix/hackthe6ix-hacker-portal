@@ -98,7 +98,7 @@
           Back
         </Button>
         <Button as='a' @click="tabSelected = 'at-ht6'" href="#at-ht6" class="your-experience__button">
-          Save & Continue
+          {{ canEdit ? "Save & Continue" : "Continue" }}
         </Button>
       </div>
     </div>

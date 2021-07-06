@@ -56,10 +56,10 @@
           Back
         </Button>
         <div class="at-ht6__buttons-together">
-          <Button class="at-ht6__button" @click="save">
+          <Button class="at-ht6__button" @click="save" :disabled="!canEdit">
             Save
           </Button>
-          <Button class="at-ht6__button" @click="submit">
+          <Button class="at-ht6__button" @click="submit" :disabled="!canEdit">
             Submit
           </Button>
         </div>
