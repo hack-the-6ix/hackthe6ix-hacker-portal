@@ -1,7 +1,7 @@
 <template>
   <FormSection class='at-ht6' label='At HT6'>
     <Textarea
-      label='Which panels or workshops are you most interested in at Hackthe6ix?'
+      label='Which panels or workshops are you most interested in at Hack the 6ix?'
       class='at-ht6__full'
       v-model='requestedWorkshops'
       name='requestedWorkshops'
