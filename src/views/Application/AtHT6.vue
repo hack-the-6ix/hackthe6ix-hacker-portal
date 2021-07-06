@@ -97,7 +97,13 @@ export default {
       });
     },
     submit() {
-      this.$emit('updateApplication', true);
+      this.$emit('updateApplication', true, () => {
+        // TODO: Navigate the user to the post application card
+        swal('Application Submitted', 'Your application has been submitted successfully!',
+            'success').then(() => {
+            location.reload();
+        });
+      });
     }
   },
   emits: ['update:form', 'update:modelTabSelected', 'updateApplication'],

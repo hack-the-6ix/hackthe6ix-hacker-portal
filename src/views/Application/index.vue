@@ -134,7 +134,6 @@ export default {
       );
 
       if (result.success) {
-        console.log('Application saved successfully');
         this.lastSaved = new Date().toLocaleDateString(
             'en-US',
             {
@@ -147,8 +146,6 @@ export default {
               timeZoneName: 'short'
             }
         );
-
-        swal('Application Submitted', 'Your application has been submitted successfully!', 'success');
 
         if (callback) {
           callback();
