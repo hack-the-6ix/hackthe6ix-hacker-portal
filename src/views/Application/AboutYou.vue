@@ -128,6 +128,7 @@
         v-model='province'
         name='province'
         :options='provinces'
+        :disabled="!canEdit"
         required
       />
       <Input
@@ -155,7 +156,7 @@
           Back
         </Button>
         <Button as='a' @click="tabSelected = 'your-experience'" href="#your-experience" class="about-you__button">
-          Save & Continue
+          {{ canEdit ? "Save & Continue" : "Continue" }}
         </Button>
       </div>
     </div>

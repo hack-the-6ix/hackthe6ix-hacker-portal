@@ -6,6 +6,7 @@
       v-model='requestedWorkshops'
       name='requestedWorkshops'
       :disabled="!canEdit"
+      :rows="8"
     />
     <Textarea
       label='What do you hope to accomplish by attending Hack the 6ix?'
@@ -13,6 +14,7 @@
       v-model='accomplishEssay'
       name='accomplishEssay'
       :disabled="!canEdit"
+      :rows="8"
       required
     />
     <Checkbox
@@ -54,10 +56,10 @@
           Back
         </Button>
         <div class="at-ht6__buttons-together">
-          <Button class="at-ht6__button" @click="save">
+          <Button class="at-ht6__button" @click="save" :disabled="!canEdit">
             Save
           </Button>
-          <Button class="at-ht6__button" @click="submit">
+          <Button class="at-ht6__button" @click="submit" :disabled="!canEdit">
             Submit
           </Button>
         </div>
@@ -74,6 +76,7 @@ import FormSection from '@/components/FormSection';
 import Checkbox from '@/components/Checkbox';
 import Textarea from '@/components/Textarea';
 import Button from '@/components/Button';
+import swal from 'sweetalert';
 
 export default {
   name: 'AtHT6',
@@ -89,13 +92,21 @@ export default {
   },
   methods: {
     save() {
-        this.$emit('updateApplication', false);
+      this.$emit('updateApplication', false, () => {
+        swal('Application Saved', 'Your changes have been successfully saved', 'success')
+      });
     },
     submit() {
-      this.$emit('updateApplication', true);
+      this.$emit('updateApplication', true, () => {
+        // TODO: Navigate the user to the post application card
+        swal('Application Submitted', 'Your application has been submitted successfully!',
+            'success').then(() => {
+            location.reload();
+        });
+      });
     }
   },
-  emits: ['update:form', 'update:modelTabSelected'],
+  emits: ['update:form', 'update:modelTabSelected', 'updateApplication'],
   setup(props, { emit }) {
     return {
       ...useFormSection(props, {

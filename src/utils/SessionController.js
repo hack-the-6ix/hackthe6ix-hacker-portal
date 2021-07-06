@@ -25,7 +25,7 @@ export const clearTokens = () => {
  */
 export const runLogout = async (noRevokeToken) => {
   // We don't really care about the outcome of this, as long as we tried
-  if (!noRevokeToken) {
+  if (!noRevokeToken && !!getRefreshToken()) {
     await logout(getRefreshToken());
   }
 

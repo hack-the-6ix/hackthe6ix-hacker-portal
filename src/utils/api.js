@@ -6,9 +6,14 @@ const trimmedBaseURL = (process.env.VUE_APP_API_ADDRESS || '').replace(/\/$/,
     '');
 const authProvider = process.env.VUE_APP_AUTH_PROVIDER;
 
-const sendRequest = async (endpoint, type, data = {}) => {
+const sendRequest = async (endpoint, type, data = {}, headers) => {
   // Inject access token if available
-  const config = {headers: {}};
+  const config = {
+    headers: {
+      ...(headers || {})
+    }
+  };
+
   if (isAuthenticated()) {
     config.headers['x-access-token'] = getToken();
   }
@@ -44,8 +49,8 @@ const sendRequest = async (endpoint, type, data = {}) => {
       const responseData = e.response.data;
 
       // We don't want an infinite recursive loop, so we'll only logout the user if they aren't already trying to do so
-      if (e.response.status === 401 && isAuthenticated() && !endpoint.includes('logout')) {
-         await runLogout();
+      if (e.response.status === 401 && !endpoint.includes('logout')) {
+         await runLogout(true);
       }
 
       return {
@@ -75,8 +80,11 @@ export const logout = async (refreshToken) => sendRequest(`/auth/${authProvider}
 export const getProfile = async () => sendRequest('/api/action/profile', 'GET');
 export const getApplicationEnums = async () => sendRequest(
     '/api/action/applicationEnums', 'GET');
-export const uploadResume = async () => sendRequest('/api/action/updateResume',
-    'PUT'); // TODO: Implement this
+export const uploadResume = async (file) => {
+  const formData = new FormData();
+  formData.append('resume', file);
+  return sendRequest('/api/action/updateResume', 'PUT', formData, { 'Content-Type': 'multipart/form-data' });
+};
 export const updateApplication = async (application, submit) => sendRequest(
     '/api/action/updateapp', 'POST', {
       submit: submit,

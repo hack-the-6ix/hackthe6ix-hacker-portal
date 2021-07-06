@@ -120,7 +120,7 @@ export default {
     dueDate: String,
     canAmendTeam: Boolean
   },
-  emits: ['update:form', 'update:modelTabSelected'],
+  emits: ['update:form', 'update:modelTabSelected', 'updateTeam'],
   data() {
     return {
       joinTeamPage: false,

@@ -41,6 +41,7 @@
         label='Your Resume'
         v-model='resume'
         name='resume'
+        :accept="['pdf']"
         :disabled="!canEdit"
         required
       />
@@ -87,6 +88,7 @@
       class='your-experience__full'
       v-model='projectEssay'
       name='projectEssay'
+      :rows="8"
       :disabled="!canEdit"
     />
 
@@ -97,7 +99,7 @@
           Back
         </Button>
         <Button as='a' @click="tabSelected = 'at-ht6'" href="#at-ht6" class="your-experience__button">
-          Save & Continue
+          {{ canEdit ? "Save & Continue" : "Continue" }}
         </Button>
       </div>
     </div>
@@ -115,6 +117,8 @@ import Textarea from '@/components/Textarea';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
+import { uploadResume } from "../../utils/api";
+import swal from 'sweetalert';
 
 export default {
   name: 'YourExperience',
@@ -126,6 +130,19 @@ export default {
     Select,
     Input,
     Button
+  },
+  watch: {
+    async resume(file) {
+      if (file && !file.fakeFile) {
+        const result = await uploadResume(file);
+
+        if (result.success) {
+          swal('Success!', 'Your resume has been successfully uploaded', 'success');
+        } else {
+          swal('Uh oh', `Your resume could not be uploaded\n\n${result.data}`, 'error');
+        }
+      }
+    }
   },
   computed: {
     schools() {
