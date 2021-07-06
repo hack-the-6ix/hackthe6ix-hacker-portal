@@ -6,6 +6,7 @@ import {
   isAuthenticated,
   login
 } from "./utils/SessionController";
+import swal from 'sweetalert';
 
 const routes = [
   {
@@ -51,7 +52,18 @@ router.beforeEach(async (to, from, next) => {
 
   if (!isAuthenticated() && !await login()) {
     // oops we need to go to SSO page to get our tokens
-    window.location.href = getLoginRedirectURL(toHref);
+
+    // If we last redirected the user less than 5 seconds ago, we will halt and assume that the user is stuck in a login loop.
+    const lastAttemptedRedirect = parseInt(sessionStorage.lastAttemptedRedirect);
+    const isLoginLoop = !isNaN(lastAttemptedRedirect) && new Date() - parseInt(sessionStorage.lastAttemptedRedirect) < 50000;
+
+    if (!isLoginLoop) {
+      sessionStorage.lastAttemptedRedirect = new Date().getTime();
+      window.location.href = getLoginRedirectURL(toHref);
+    } else {
+      swal('Something went wrong', 'It looks like you\'re stuck in a login loop 😕\n\nPlease try to reload the page and contact us if you are still experiencing issues', 'error');
+    }
+
     return next(false);
   }
 
