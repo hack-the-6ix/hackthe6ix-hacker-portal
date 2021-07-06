@@ -6,6 +6,7 @@
       v-model='requestedWorkshops'
       name='requestedWorkshops'
       :disabled="!canEdit"
+      :rows="8"
     />
     <Textarea
       label='What do you hope to accomplish by attending Hack the 6ix?'
@@ -13,6 +14,7 @@
       v-model='accomplishEssay'
       name='accomplishEssay'
       :disabled="!canEdit"
+      :rows="8"
       required
     />
     <Checkbox
@@ -74,6 +76,7 @@ import FormSection from '@/components/FormSection';
 import Checkbox from '@/components/Checkbox';
 import Textarea from '@/components/Textarea';
 import Button from '@/components/Button';
+import swal from 'sweetalert';
 
 export default {
   name: 'AtHT6',
@@ -89,13 +92,15 @@ export default {
   },
   methods: {
     save() {
-        this.$emit('updateApplication', false);
+      this.$emit('updateApplication', false, () => {
+        swal('Application Saved', 'Your changes have been successfully saved', 'success')
+      });
     },
     submit() {
       this.$emit('updateApplication', true);
     }
   },
-  emits: ['update:form', 'update:modelTabSelected'],
+  emits: ['update:form', 'update:modelTabSelected', 'updateApplication'],
   setup(props, { emit }) {
     return {
       ...useFormSection(props, {

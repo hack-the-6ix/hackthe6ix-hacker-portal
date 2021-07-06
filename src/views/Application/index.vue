@@ -1,8 +1,7 @@
 <template>
   <Layout
     title='Hacker Application'
-    :description='`Applications are due ${dueDate}. Your progress
-    will automatically be saved every few minutes. Once you’ve
+    :description='`Applications are due ${dueDate}. Once you’ve
     submitted your application, keep an eye on your inbox
     for your application results!`'
   >
@@ -106,7 +105,7 @@ export default {
         memberNames: memberNames
       }
     },
-    async runUpdateApplication(submit) {
+    async runUpdateApplication(submit, callback) {
       const newApplication = {
         ...this.your_experience,
         ...this.about_you,
@@ -151,6 +150,9 @@ export default {
 
         // TODO: Add another state if the user requested a submission
 
+        if (callback) {
+          callback();
+        }
       } else {
         if (result.error && result.message) {
           swal('Unable to save application',

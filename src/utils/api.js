@@ -44,8 +44,8 @@ const sendRequest = async (endpoint, type, data = {}) => {
       const responseData = e.response.data;
 
       // We don't want an infinite recursive loop, so we'll only logout the user if they aren't already trying to do so
-      if (e.response.status === 401 && isAuthenticated() && !endpoint.includes('logout')) {
-         await runLogout();
+      if (e.response.status === 401 && !endpoint.includes('logout')) {
+         await runLogout(true);
       }
 
       return {

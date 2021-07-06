@@ -87,6 +87,7 @@
       class='your-experience__full'
       v-model='projectEssay'
       name='projectEssay'
+      :rows="8"
       :disabled="!canEdit"
     />
 
