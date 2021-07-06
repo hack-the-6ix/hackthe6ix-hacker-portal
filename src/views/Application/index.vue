@@ -148,7 +148,7 @@ export default {
             }
         );
 
-        // TODO: Add another state if the user requested a submission
+        swal('Application Submitted', 'Your application has been submitted successfully!', 'success');
 
         if (callback) {
           callback();
@@ -186,7 +186,7 @@ export default {
             'program',
             'yearsOfStudy',
             'hackathonsAttended',
-            'resumeFileName',
+            'resume',
             'resumeSharePermission',
             'githubLink',
             'portfolioLink',
@@ -200,6 +200,12 @@ export default {
             'mlhEmail',
             'mlhData'
         ]
+      };
+
+      // Construct a "fake" file that just passes in the file name
+      hackerApplication['resume'] = {
+        name: hackerApplication.resumeFileName,
+        fakeFile: true
       };
 
       for (const section in fields) {

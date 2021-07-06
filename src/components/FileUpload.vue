@@ -49,13 +49,6 @@ export default {
   methods: {
     async upload(event) {
       const file = event.target.files[0];
-
-      // TODO: Upload file
-      file.url = URL.createObjectURL(file);
-      if (this.modelValue) {
-        URL.revokeObjectURL(this.modelValue.url);
-      }
-
       this.$emit('update:modelValue', file);
     },
   },

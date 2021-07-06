@@ -41,6 +41,7 @@
         label='Your Resume'
         v-model='resume'
         name='resume'
+        :accept="['pdf']"
         :disabled="!canEdit"
         required
       />
@@ -116,6 +117,8 @@ import Textarea from '@/components/Textarea';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
+import { uploadResume } from "../../utils/api";
+import swal from 'sweetalert';
 
 export default {
   name: 'YourExperience',
@@ -127,6 +130,19 @@ export default {
     Select,
     Input,
     Button
+  },
+  watch: {
+    async resume(file) {
+      if (file && !file.fakeFile) {
+        const result = await uploadResume(file);
+
+        if (result.success) {
+          swal('Success!', 'Your resume has been successfully uploaded', 'success');
+        } else {
+          swal('Uh oh', `Your resume could not be uploaded\n\n${result.data}`, 'error');
+        }
+      }
+    }
   },
   computed: {
     schools() {
