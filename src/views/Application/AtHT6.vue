@@ -7,6 +7,8 @@
       name='requestedWorkshops'
       :disabled="!canEdit"
       :rows="8"
+      :maxLength="2056"
+      :lowerCaption="`Minimum 50 Words (Current count: ${ requestedWorkshops.length ? requestedWorkshops.split(' ').length : 0 })`"
     />
     <Textarea
       label='What do you hope to accomplish by attending Hack the 6ix?'
@@ -15,7 +17,9 @@
       name='accomplishEssay'
       :disabled="!canEdit"
       :rows="8"
+      :maxLength="2056"
       required
+      :lowerCaption="`Minimum 50 Words (Current count: ${ accomplishEssay.length ? accomplishEssay.split(' ').length : 0 })`"
     />
     <Checkbox
       label='I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"

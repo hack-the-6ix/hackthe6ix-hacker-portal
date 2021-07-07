@@ -5,6 +5,7 @@
       placeholder='Select'
       v-model='school'
       name='school'
+      :maxlength="256"
       :options='schools'
       :disabled="!canEdit"
       required
@@ -14,6 +15,7 @@
       placeholder='Select'
       v-model='program'
       name='program'
+      :maxlength="256"
       :options='programs'
       :disabled="!canEdit"
       required
@@ -60,6 +62,7 @@
         v-model='githubLink'
         name='githubLink'
         type='url'
+        :maxlength="1024"
         :disabled="!canEdit"
       />
     </div>
@@ -70,6 +73,7 @@
         v-model='portfolioLink'
         name='portfolioLink'
         type='url'
+        :maxlength="1024"
         :disabled="!canEdit"
       />
     </div>
@@ -80,6 +84,7 @@
         v-model='linkedinLink'
         name='linkedinLink'
         type='url'
+        :maxlength="1024"
         :disabled="!canEdit"
       />
     </div>
@@ -89,7 +94,9 @@
       v-model='projectEssay'
       name='projectEssay'
       :rows="8"
+      :maxLength="2056"
       :disabled="!canEdit"
+      :lowerCaption="`Minimum 50 Words (Current count: ${ projectEssay.length ? projectEssay.split(' ').length : 0 })`"
     />
 
     <div class="your-experience__full">

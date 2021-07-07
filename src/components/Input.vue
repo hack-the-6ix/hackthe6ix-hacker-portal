@@ -22,6 +22,7 @@
       :name="name"
       :required="required"
       :id="id"
+      :maxlength="maxlength"
     />
     <Typography v-if='error' type='small' as='p' color='error' class='input__error'>
       {{ error }}
@@ -57,6 +58,7 @@ export default {
     required: Boolean,
     disabled: Boolean,
     error: String,
+    maxlength: Number
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
