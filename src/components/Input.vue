@@ -1,46 +1,37 @@
 <template>
-  <div :class="[
-      disabled && 'input--disabled',
-      error && 'input--error',
-      'input',
-    ]">
-    <Typography
-      class="input__label"
-      color='dark-navy'
-      type='heading4'
-      as='label'
-      :for="id"
-    >
-      <span v-html='label'/>{{required ? '*' : ''}}
-    </Typography>
+  <FieldLayout
+    :required='required'
+    :disabled='disabled'
+    :error='error'
+    :label='label'
+    :id='id'
+  >
     <input
-      class="input__el"
-      v-model='value'
+      :class="[
+        error && 'input__el--error',
+        'input__el',
+      ]"
       :autocomplete="autocomplete"
       :placeholder="placeholder"
       :disabled="disabled"
-      :name="name"
       :required="required"
+      v-model='value'
+      :name="name"
       :id="id"
     />
-    <Typography v-if='error' type='small' as='p' color='error' class='input__error'>
-      {{ error }}
-    </Typography>
-  </div>
+  </FieldLayout>
 </template>
 
 <script>
-import { computed } from 'vue';
 import { v4 as uuid } from 'uuid';
-import Typography from '@/components/Typography'
+import { computed } from 'vue';
+import FieldLayout from '@/components/FieldLayout';
 
 export default {
   components: {
-    Typography,
+    FieldLayout,
   },
   props: {
-    autocomplete: String,
-    modelValue: String,
     label: {
       type: String,
       required: true,
@@ -53,7 +44,9 @@ export default {
       type: String,
       default: () => uuid().slice(-8),
     },
+    autocomplete: String,
     placeholder: String,
+    modelValue: String,
     required: Boolean,
     disabled: Boolean,
     error: String,
@@ -76,27 +69,6 @@ export default {
 @use '@/styles/units';
 
 .input {
-  --input-background: transparent;
-  --input-color: #{colors.css-color(dark-navy)};
-  flex-direction: column;
-  display: flex;
-
-  &--disabled {
-    --input-background: #{colors.css-color(disabled, $alpha: 0.15)};
-    --input-color: #{colors.css-color(disabled)};
-  }
-
-  &--error {
-    --input-background: #{colors.css-color(error, $alpha: 0.15)};
-    --input-color: #{colors.css-color(error)};
-  }
-
-  &__label {
-    margin-bottom: units.spacing(1);
-    color: var(--input-color);
-    display: block;
-  }
-
   &__el {
     @include mixins.transition(background-color);
 
@@ -104,24 +76,23 @@ export default {
       #{$tag}: $val;
     }
 
-    &:disabled {
-      color: var(--input-color);
-      cursor: not-allowed;
-    }
-
-    background-color: var(--input-background);
+    background-color: var(--field-layout__background);
     padding: units.spacing(2) units.spacing(3);
-    border: 1px solid var(--input-color);
-    border-radius: units.spacing(0.5);
     color: colors.css-color(black);
     font-family: units.$font;
     box-sizing: border-box;
+    border: none;
     width: 100%;
     margin: 0;
-  }
 
-  &__error {
-    margin-top: units.spacing(1);
+    &--error {
+      padding-right: units.spacing(6.75);
+    }
+
+    &:disabled {
+      color: var(--field-layout__color);
+      cursor: not-allowed;
+    }
   }
 }
 </style>

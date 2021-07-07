@@ -168,7 +168,10 @@ export default {
     &--active {
       color: colors.css-color(black);
       background-color: white;
-      flex-basis: unset;
+
+      @include mixins.media(tablet) {
+        flex-basis: unset;
+      }
 
       & #{$self}__nav-text {
         display: unset;
@@ -185,7 +188,6 @@ export default {
   &__form {
     background-color: colors.css-color(white);
     border-radius: units.spacing(3);
-    overflow: hidden;
   }
 }
 </style>

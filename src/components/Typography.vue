@@ -1,4 +1,4 @@
-<template inherit-attrs='false'>
+<template>
   <component
     :class="[
       transform && `text--transform--${transform}`,
@@ -9,7 +9,6 @@
       'text',
     ]"
     :type='htmlType'
-    v-bind="$attrs"
     :is="as"
   >
     <slot />

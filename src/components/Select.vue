@@ -1,56 +1,80 @@
 <template>
-  <div :class='[
-    error && "select--error",
-    disabled && "selected--disabled",
-    "select",
-  ]'>
-    <Typography class='select__label' type='heading4' as='p' color='dark-navy'>
-      <span v-html='label'/>{{required ? '*' : ''}}
-    </Typography>
-    <div class='select__main'>
-      <select class='select__el' :disabled='disabled' v-model='value'>
-        <option v-if='placeholder' value='' selected disabled hidden>
-          {{ placeholder }}
-        </option>
+  <FieldLayout
+    :required='required'
+    :disabled='disabled'
+    :error='error'
+    :label='label'
+    :id='id'
+  >
+    <div class='select'>
+      <select class='select__el' v-model='value'>
         <option
           v-for='option in options'
           :value='option.value'
           :key='option.value'
         >
-          {{option.label }}
+          {{option.label}}
         </option>
       </select>
       <Typography
+        :class='[
+          !selectedLabel && "select__display--placeholder",
+          disabled && "select__display--disabled",
+          error && "select__display--error",
+          "select__display",
+        ]'
+        @click='showMenu = !showMenu'
+        htmlType='button'
         type='paragraph'
-        as='button'
         tabindex='-1'
         color='black'
-        htmlType='button'
-        :class='[
-        !selectedLabel && "select__display--placeholder",
-        "select__display",
-      ]'>
-        {{ selectedLabel ?? placeholder }}
+        as='button'
+      >
+        <span class='select__text'>
+          {{ selectedLabel ?? placeholder }}
+        </span>
+        <Caret :class='[
+          showMenu && "select__caret--flip",
+          !error || "select__caret--hide",
+          "select__caret",
+        ]'/>
       </Typography>
+      <ul v-if='showMenu' class='select__menu'>
+        <li
+          v-for='option in options'
+          :key='option.value'
+        >
+          <Typography
+            :class='[
+              value === option.value && "select__menu-item--active",
+              "select__menu-item",
+            ]'
+            @click='value = option.value'
+            htmlType='button'
+            type='paragraph'
+            color='dark-navy'
+            as='button'
+          >
+            {{ option.label }}
+          </Typography>
+        </li>
+      </ul>
     </div>
-    <ul v-if='showMenu' class='select__menu'>
-      <li v-for='option in options' :key='option.value'>
-        <button class='select__menu-item' @click='value = option.value'>
-          {{ option.label }}
-        </button>
-      </li>
-    </ul>
-  </div>
+  </FieldLayout>
 </template>
 
 <script>
 import { computed }from 'vue';
+import FieldLayout from '@/components/FieldLayout';
 import Typography from '@/components/Typography';
+import Caret from '@/assets/caret.svg';
 
 export default {
   name: 'Select',
   components: {
+    FieldLayout,
     Typography,
+    Caret,
   },
   data() {
     return {
@@ -82,6 +106,11 @@ export default {
       )?.label;
     },
   },
+  watch: {
+    value() {
+      this.showMenu = false;
+    },
+  },
 }
 </script>
 
@@ -91,58 +120,101 @@ export default {
 @use '@/styles/units';
 
 .select {
-  $self: &;
+  position: relative;
 
-  &__label {
-    margin-bottom: units.spacing(1);
-  }
+  &__el {
+    position: absolute;
+    color: transparent;
+    appearance: none;
+    background: none;
+    border: none;
+    z-index: -1;
+    width: 100%;
+    inset: 0;
 
-  &__main {
-    position: relative;
-    display: flex;
+    @media (hover: none) {
+      z-index: 1;
+    }
   }
 
   &__display {
-    border: 1px solid colors.css-color(dark-navy);
+    @each $tag, $val in map-get(units.$font-config, paragraph) {
+      #{$tag}: $val;
+    }
+
+    grid-template-columns: auto units.spacing(3);
     padding: units.spacing(2) units.spacing(3);
-    border-radius: units.spacing(0.5);
+    color: colors.css-color(black);
+    grid-gap: units.spacing(3);
     background: transparent;
-    box-sizing: border-box;
+    align-items: center;
     text-align: start;
+    cursor: pointer;
+    display: grid;
+    border: none;
     width: 100%;
+
+    &--disabled {
+      color: var(--field-layout__color);
+      cursor: not-allowed;
+    }
 
     &--placeholder {
       color: colors.css-color(disabled);
     }
   }
 
-  &__el {
-    @each $tag, $val in map-get(units.$font-config, 'paragraph') {
-      #{$tag}: $val;
+  &__text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__caret {
+    @include mixins.transition(transform);
+    color: colors.css-color(dark-navy);
+
+    &--flip {
+      transform: rotate(180deg);
     }
 
-    padding: units.spacing(2) units.spacing(3);
-    letter-spacing: units.spacing(0.25);
-    border-radius: units.spacing(0.5);
-    border: 1px solid transparent;
-    font-family: units.$font;
-    background: transparent;
-    box-sizing: border-box;
-    position: absolute;
-    color: transparent;
-    appearance: none;
-    margin: auto;
-    width: 100%;
-    z-index: 2;
-    inset: 0;
+    &--hide {
+      opacity: 0;
+    }
   }
 
   &__menu {
-
+    border: 1px solid colors.css-color(dark-navy);
+    background-color: colors.css-color(white);
+    border-radius: units.spacing(0.5);
+    max-height: units.spacing(40);
+    margin: units.spacing(2) 0 0;
+    list-style-type: none;
+    height: fit-content;
+    position: absolute;
+    inset: 100% 0 0;
+    overflow: auto;
+    z-index: 2;
+    padding: 0;
   }
 
   &__menu-item {
+    @include mixins.transition(background-color);
+    background-color: transparent;
+    padding: units.spacing(3);
+    text-align: start;
+    cursor: pointer;
+    display: block;
+    border: none;
+    width: 100%;
 
+    &--active, &:hover, &:focus {
+      background-color: colors.css-color(disabled, $alpha: 0.1);
+    }
+
+    &:active {
+      background-color: colors.css-color(disabled, $alpha: 0.15);
+    }
   }
 }
 </style>

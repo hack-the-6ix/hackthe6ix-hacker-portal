@@ -6,7 +6,7 @@
       autocomplete="given-name"
       v-model='firstName'
       name='first_name'
-      disabled="true"
+      disabled
     />
     <Input
       label='Last Name'
@@ -14,7 +14,7 @@
       autocomplete="family-name"
       v-model='lastName'
       name='last_name'
-      disabled="true"
+      disabled
     />
     <Input
       label='Email'
@@ -23,7 +23,7 @@
       v-model='email'
       name='email'
       type='email'
-      disabled="true"
+      disabled
     />
     <Input
       label='Phone Number'
@@ -223,6 +223,7 @@ export default {
 .about-you {
   grid-template-columns: 1fr 1fr;
   grid-gap: units.spacing(6);
+  align-items: start;
   display: grid;
 
   @include mixins.media(tablet) {

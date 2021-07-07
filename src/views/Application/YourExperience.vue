@@ -158,6 +158,7 @@ export default {
 .your-experience {
   grid-template-columns: 1fr 1fr;
   grid-gap: units.spacing(6);
+  align-items: start;
   display: grid;
 
   @include mixins.media(tablet) {

@@ -50,8 +50,12 @@ html {
   }
 }
 
+body {
+  margin: 0;
+}
+
 .app {
-  padding: units.spacing(2.5) units.spacing(6) ;
+  padding: units.spacing(5) units.spacing(6);
   align-items: center;
   display: flex;
 
