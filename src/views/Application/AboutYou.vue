@@ -32,6 +32,7 @@
       v-model='phoneNumber'
       name='phoneNumber'
       type='tel'
+      :maxlength="50"
       :disabled="!canEdit"
       required
     />
@@ -103,6 +104,7 @@
         v-model='addressLine1'
         name='addressLine1'
         :disabled="!canEdit"
+        :maxlength="256"
         required
       />
       <Input
@@ -111,6 +113,7 @@
         autocomplete="address-line2"
         v-model='addressLine2'
         name='addressLine2'
+        :maxlength="256"
         :disabled="!canEdit"
       />
       <Input
@@ -120,6 +123,7 @@
         v-model='city'
         name='city'
         :disabled="!canEdit"
+        :maxlength="256"
         required
       />
       <Select
@@ -131,6 +135,7 @@
         :disabled="!canEdit"
         required
       />
+      <!-- TODO: Add postal code validation -->
       <Input
         label='Postal Code'
         autocomplete="postal-code"
@@ -138,6 +143,7 @@
         v-model='postalCode'
         name='postalCode'
         :disabled="!canEdit"
+        :maxlength="6"
         required
       />
       <Input

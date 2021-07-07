@@ -3,59 +3,61 @@
     :title='title'
     :description='description'
   >
-    <nav class='home__nav'>
-      <Typography
-        v-for='(tab, index) in tabs'
-        @click='selected = tab.id'
-        :class='[
-          selected === tab.id && "home__nav-item--active",
-          "home__nav-item",
-        ]'
-        transform='uppercase'
-        :href='`#${tab.id}`'
-        type='heading4'
-        align='center'
-        :key='tab.id'
-        as='a'
-      >
-        {{index + 1}}<span class='home__nav-text'>. {{tab.label}}</span>
-      </Typography>
-    </nav>
-    <form class='home__form' v-on:submit.prevent="">
-      <TeamFormation
-          v-if='selected === "team-formation"'
-          v-model:form='team'
-          v-model:modelTabSelected='selected'
-          :dueDate="dueDate"
-          :canAmendTeam="user?.status?.canAmendTeam"
-          @updateTeam="updateTeam"
-      />
-      <AboutYou
-          v-if='selected === "about-you"'
-          v-model:form='about_you'
-          v-model:modelTabSelected='selected'
-          :enums='enums'
-          :canEdit="user?.status?.canApply"
-      />
-      <YourExperience
-          v-if='selected === "your-experience"'
-          v-model:form='your_experience'
-          v-model:modelTabSelected='selected'
-          :enums='enums'
-          :canEdit="user?.status?.canApply"
-      />
-      <AtHT6
-          v-if='selected === "at-ht6"'
-          v-model:form='at_ht6'
-          v-model:modelTabSelected='selected'
-          :canEdit="user?.status?.canApply"
-          @updateApplication="runUpdateApplication"
-      />
-    </form>
+    <div v-if="loaded">
+      <nav class='home__nav'>
+        <Typography
+          v-for='(tab, index) in tabs'
+          @click='selected = tab.id'
+          :class='[
+            selected === tab.id && "home__nav-item--active",
+            "home__nav-item",
+          ]'
+          transform='uppercase'
+          :href='`#${tab.id}`'
+          type='heading4'
+          align='center'
+          :key='tab.id'
+          as='a'
+        >
+          {{index + 1}}<span class='home__nav-text'>. {{tab.label}}</span>
+        </Typography>
+      </nav>
+      <form class='home__form' v-on:submit.prevent="">
+        <TeamFormation
+            v-if='selected === "team-formation"'
+            v-model:form='team'
+            v-model:modelTabSelected='selected'
+            :dueDate="dueDate"
+            :canAmendTeam="user?.status?.canAmendTeam"
+            @updateTeam="updateTeam"
+        />
+        <AboutYou
+            v-if='selected === "about-you"'
+            v-model:form='about_you'
+            v-model:modelTabSelected='selected'
+            :enums='enums'
+            :canEdit="user?.status?.canApply"
+        />
+        <YourExperience
+            v-if='selected === "your-experience"'
+            v-model:form='your_experience'
+            v-model:modelTabSelected='selected'
+            :enums='enums'
+            :canEdit="user?.status?.canApply"
+        />
+        <AtHT6
+            v-if='selected === "at-ht6"'
+            v-model:form='at_ht6'
+            v-model:modelTabSelected='selected'
+            :canEdit="user?.status?.canApply"
+            @updateApplication="runUpdateApplication"
+        />
+      </form>
 
-    <Typography type='p' color='white' as='p' v-if="lastSaved" class="home__last-saved">
-      Last saved at {{lastSaved}}
-    </Typography>
+      <Typography type='p' color='white' as='p' v-if="lastSaved" class="home__last-saved">
+        Last saved at {{lastSaved}}
+      </Typography>
+    </div>
   </Layout>
 </template>
 
@@ -88,17 +90,39 @@ export default {
       team: {},
       user: {},
       enums: {},
-      lastSaved: ''
+      lastSaved: '',
+      unsavedChanges: false,
+      loaded: false
     };
   },
   watch: {
     async selected() {
-      if (this.user?.status?.canApply) {
+      if (this.user?.status?.canApply && this.unsavedChanges && this.loaded) {
         await this.runUpdateApplication(false);
+      }
+    },
+    your_experience() {
+      if (this.loaded) {
+        this.unsavedChanges = true;
+      }
+    },
+    about_you() {
+      if (this.loaded) {
+        this.unsavedChanges = true;
+      }
+    },
+    at_ht6() {
+      if (this.loaded) {
+        this.unsavedChanges = true;
       }
     }
   },
   methods: {
+    handler(event) {
+      if (this.unsavedChanges) {
+        event.returnValue = `Are you sure you want to leave?`;
+      }
+    },
     updateTeam(teamCode, memberNames) {
       this.team = {
         code: teamCode,
@@ -134,6 +158,7 @@ export default {
       );
 
       if (result.success) {
+        this.unsavedChanges = false;
         this.lastSaved = new Date().toLocaleDateString(
             'en-US',
             {
@@ -226,6 +251,12 @@ export default {
       }
     }
   },
+  beforeUnmount() {
+    document.removeEventListener('beforeunload', this.handler);
+  },
+  mounted() {
+    window.addEventListener('beforeunload', this.handler);
+  },
   beforeMount() {
     const exists = this.tabs.some(tab => window.location.hash === `#${tab.id}`);
     if (!exists) {
@@ -268,6 +299,7 @@ export default {
 
     Promise.all(promises).then(() => {
       console.log('Okay we\'re all loaded!');
+      this.loaded = true;
     });
   },
   computed: {
@@ -284,13 +316,15 @@ export default {
               : 'Hacker Application'
     },
     description() {
-      return this.user?.status?.applied
+      return this.loaded
+        ? this.user?.status?.applied
             ? `The HT6 team will review your application soon. Keep an eye on your inbox for your application results!\n\n
                Updates can be made to your team list until ${this.dueDate}. While you aren't able to make any more edits,
                you can still review your submission details below.`
             : `Applications are due ${this.dueDate}. Once you’ve
               submitted your application, keep an eye on your inbox
               for your application results!`
+        : "Loading..."
     },
     dueDate() {
       return new Date(this.user.computedApplicationDeadline || 0).toLocaleDateString(
