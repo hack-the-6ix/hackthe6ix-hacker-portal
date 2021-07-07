@@ -1,12 +1,13 @@
 import queryString from "query-string";
+import swal from 'sweetalert';
 import { createRouter, createWebHistory } from 'vue-router';
-import { getLoginRedirectURL } from "./utils/api";
 import {
+  clearTokens,
   initRefreshService,
   isAuthenticated,
-  login
+  login,
+  redirectToLogin
 } from "./utils/SessionController";
-import swal from 'sweetalert';
 
 const routes = [
   {
@@ -54,17 +55,20 @@ router.beforeEach(async (to, from, next) => {
     // oops we need to go to SSO page to get our tokens
 
     // If we last redirected the user less than 5 seconds ago, we will halt and assume that the user is stuck in a login loop.
-    const lastAttemptedRedirect = parseInt(sessionStorage.lastAttemptedRedirect);
-    const diff = new Date() - parseInt(sessionStorage.lastAttemptedRedirect);
+    const lastAttemptedRedirect = parseInt(
+        sessionStorage.lastAttemptedRedirect);
+    const diff = new Date() - lastAttemptedRedirect;
     const isLoginLoop = !isNaN(lastAttemptedRedirect) && diff < 5000;
 
     if (!isLoginLoop) {
-      sessionStorage.lastAttemptedRedirect = new Date().getTime();
-      window.location.href = getLoginRedirectURL(toHref);
+      redirectToLogin(toHref);
     } else {
-      swal('Something went wrong', `It looks like you're stuck in a login loop 😕\n\nPlease click "OK" to reload the page, and contact us if you are still experiencing issues\n\n(We last redirected you ${diff / 1000} seconds ago)`, 'error')
+      swal('Something went wrong',
+          `It looks like you're stuck in a login loop 😕\n\nPlease click "OK" to reload the page, and contact us if you are still experiencing issues\n\n(We last redirected you ${diff
+          / 1000} seconds ago)`, 'error')
       .then(() => {
-        sessionStorage.removeItem('lastAttemptedRedirect');
+        clearTokens();
+        sessionStorage.clear();
         location.reload();
       });
     }
