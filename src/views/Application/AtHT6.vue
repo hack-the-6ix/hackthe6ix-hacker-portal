@@ -47,6 +47,7 @@
       v-model='mlhData'
       name='mlhData'
       :disabled="!canEdit"
+      required
     />
 
     <div class="at-ht6__full">
