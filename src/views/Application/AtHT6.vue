@@ -1,12 +1,14 @@
 <template>
   <FormSection class='at-ht6' label='At HT6'>
     <Textarea
-      label='Which panels or workshops are you most interested in at Hackthe6ix?'
+      label='Which panels or workshops are you most interested in at Hack the 6ix?'
       class='at-ht6__full'
       v-model='requestedWorkshops'
       name='requestedWorkshops'
       :disabled="!canEdit"
       :rows="8"
+      :maxLength="2056"
+      :lowerCaption="`Minimum 50 Words (Current count: ${ requestedWorkshops.length ? requestedWorkshops.split(' ').length : 0 })`"
     />
     <Textarea
       label='What do you hope to accomplish by attending Hack the 6ix?'
@@ -15,7 +17,9 @@
       name='accomplishEssay'
       :disabled="!canEdit"
       :rows="8"
+      :maxLength="2056"
       required
+      :lowerCaption="`Minimum 50 Words (Current count: ${ accomplishEssay.length ? accomplishEssay.split(' ').length : 0 })`"
     />
     <Checkbox
       label='I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
@@ -47,6 +51,7 @@
       v-model='mlhData'
       name='mlhData'
       :disabled="!canEdit"
+      required
     />
 
     <div class="at-ht6__full">
@@ -56,11 +61,11 @@
           Back
         </Button>
         <div class="at-ht6__buttons-together">
-          <Button class="at-ht6__button" @click="save" :disabled="!canEdit">
+          <Button class="at-ht6__button" @click="save" :disabled="!canEdit" v-if="canEdit">
             Save
           </Button>
           <Button class="at-ht6__button" @click="submit" :disabled="!canEdit">
-            Submit
+            {{ canEdit ? "Submit" : "Submitted" }}
           </Button>
         </div>
       </div>
@@ -97,12 +102,23 @@ export default {
       });
     },
     submit() {
-      this.$emit('updateApplication', true, () => {
-        // TODO: Navigate the user to the post application card
-        swal('Application Submitted', 'Your application has been submitted successfully!',
-            'success').then(() => {
-            location.reload();
-        });
+      swal({
+        title: "Confirm Submission",
+        text: "Are you sure you want to submit your application?\n\nYou will not be able to make any additional changes to your application; however, you may update your team up until the submission deadline.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then(async (confirm) => {
+        if (confirm) {
+          this.$emit('updateApplication', true, () => {
+            // TODO: Navigate the user to the post application card
+            swal('Application Submitted', 'Your application has been submitted successfully!',
+                'success').then(() => {
+              location.reload();
+            });
+          });
+        }
       });
     }
   },

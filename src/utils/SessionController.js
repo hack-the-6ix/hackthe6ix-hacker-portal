@@ -1,7 +1,7 @@
-import queryString from 'query-string';
-import { logout, getLoginRedirectURL, refreshToken } from "./api";
 import jwt_decode from 'jwt-decode';
-import swal from 'sweetalert';
+import queryString from 'query-string';
+import swal from "sweetalert";
+import { getLoginRedirectURL, logout, refreshToken } from "./api";
 
 export const getToken = () => localStorage.token;
 
@@ -30,7 +30,12 @@ export const runLogout = async (noRevokeToken) => {
   }
 
   clearTokens();
-  window.location.href = getLoginRedirectURL(location.origin);
+  redirectToLogin(location.origin);
+};
+
+export const redirectToLogin = (to) => {
+  sessionStorage.lastAttemptedRedirect = new Date().getTime();
+  window.location.href = getLoginRedirectURL(to);
 };
 
 /**
@@ -60,34 +65,49 @@ export const initRefreshService = async () => {
 
     refreshServiceStarted = true;
 
-    const runRefreshToken = async (initialLoad) => {
+    const runRefreshToken = async () => {
       const response = await refreshToken(getRefreshToken());
 
-      if (response.success && response.data.token && response.data.refreshToken) {
-        setToken(response.data.token);
-        setRefreshToken(response.data.refreshToken);
+      // If we last redirected the user less than 5 seconds ago, we will halt and assume that the user is stuck in a refresh loop.
+      const lastAttemptedTokenRefresh = parseInt(
+          sessionStorage.lastAttemptedTokenRefresh);
+      const diff = new Date() - lastAttemptedTokenRefresh;
+      const isRefreshLoop = !isNaN(lastAttemptedTokenRefresh) && diff < 5000;
 
-        const parsedToken = jwt_decode(response.data.token);
-        const parsedRefreshToken = jwt_decode(response.data.refreshToken);
+      if (!isRefreshLoop) {
+        if (response.success && response.data.token
+            && response.data.refreshToken) {
+          setToken(response.data.token);
+          setRefreshToken(response.data.refreshToken);
 
-        let timeRemaining = Math.min(parsedToken.exp, parsedRefreshToken.exp) * 1000 - new Date().getTime();
-        timeRemaining = Math.max(timeRemaining - 5 * 60 * 1000, 0);
+          const parsedToken = jwt_decode(response.data.token);
+          const parsedRefreshToken = jwt_decode(response.data.refreshToken);
 
-        console.log(`Next token refresh: ${ new Date(timeRemaining + new Date().getTime()) }`);
+          let timeRemaining = Math.min(parsedToken.exp, parsedRefreshToken.exp)
+              * 1000 - new Date().getTime();
+          timeRemaining = Math.max(timeRemaining - 5 * 60 * 1000, 0);
 
-        setTimeout(runRefreshToken, timeRemaining);
-      } else {
-        if (initialLoad) {
-          // If we just loaded the page and are unable to update the token,
-          // just send the user back to the login page
-          await runLogout(true);
+          console.log(`Next token refresh: ${new Date(
+              timeRemaining + new Date().getTime())}`);
+
+          setTimeout(runRefreshToken, timeRemaining);
         } else {
-          swal('Unable to refresh token', 'Please save your work and reload the page, or try to log out and back in again.', 'error');
+          sessionStorage.lastAttemptedTokenRefresh = new Date().getTime();
+          await runLogout(true);
         }
+      } else {
+        swal('Something went wrong',
+            `It looks like you're stuck in a token refresh loop 😕\n\nPlease click "OK" to reload the page, and contact us if you are still experiencing issues\n\n(We last tried to refresh your token ${diff
+            / 1000} seconds ago)`, 'error')
+        .then(() => {
+          clearTokens();
+          sessionStorage.clear();
+          location.reload();
+        });
       }
     };
 
-    await runRefreshToken(true);
+    await runRefreshToken();
     console.log('Started token refresh service');
   }
 };

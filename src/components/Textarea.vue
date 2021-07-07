@@ -20,13 +20,15 @@
       :required="required"
       :id="id"
       :rows="rows"
+      :maxLength="maxLength"
     />
     <label
       class='textArea__label'
       :for="id"
+      v-if="lowerCaption"
     >
       <Typography type='paragraph' as='p' color='dark-grey'>
-        Minimum 50 Words
+        {{lowerCaption}}
       </Typography>
     </label>
   </div>
@@ -43,6 +45,7 @@ export default {
   },
   props: {
     modelValue: String,
+    lowerCaption: String,
     label: {
       type: String,
       required: true,
@@ -56,6 +59,7 @@ export default {
       default: () => uuid().slice(-8),
     },
     rows: Number,
+    maxLength: Number,
     required: Boolean,
     disabled: Boolean,
     success: Boolean,

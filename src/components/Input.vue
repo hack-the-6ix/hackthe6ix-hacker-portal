@@ -18,6 +18,7 @@
       v-model='value'
       :name="name"
       :id="id"
+      :maxlength="maxlength"
     />
   </FieldLayout>
 </template>
@@ -50,6 +51,7 @@ export default {
     required: Boolean,
     disabled: Boolean,
     error: String,
+    maxlength: Number
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
