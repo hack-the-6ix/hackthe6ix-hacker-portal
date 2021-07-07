@@ -88,17 +88,39 @@ export default {
       team: {},
       user: {},
       enums: {},
-      lastSaved: ''
+      lastSaved: '',
+      unsavedChanges: false,
+      loaded: false
     };
   },
   watch: {
     async selected() {
-      if (this.user?.status?.canApply) {
+      if (this.user?.status?.canApply && this.unsavedChanges && this.loaded) {
         await this.runUpdateApplication(false);
+      }
+    },
+    your_experience() {
+      if (this.loaded) {
+        this.unsavedChanges = true;
+      }
+    },
+    about_you() {
+      if (this.loaded) {
+        this.unsavedChanges = true;
+      }
+    },
+    at_ht6() {
+      if (this.loaded) {
+        this.unsavedChanges = true;
       }
     }
   },
   methods: {
+    handler(event) {
+      if (this.unsavedChanges) {
+        event.returnValue = `Are you sure you want to leave?`;
+      }
+    },
     updateTeam(teamCode, memberNames) {
       this.team = {
         code: teamCode,
@@ -134,6 +156,7 @@ export default {
       );
 
       if (result.success) {
+        this.unsavedChanges = false;
         this.lastSaved = new Date().toLocaleDateString(
             'en-US',
             {
@@ -226,6 +249,12 @@ export default {
       }
     }
   },
+  beforeUnmount() {
+    document.removeEventListener('beforeunload', this.handler);
+  },
+  mounted() {
+    window.addEventListener('beforeunload', this.handler);
+  },
   beforeMount() {
     const exists = this.tabs.some(tab => window.location.hash === `#${tab.id}`);
     if (!exists) {
@@ -268,6 +297,7 @@ export default {
 
     Promise.all(promises).then(() => {
       console.log('Okay we\'re all loaded!');
+      this.loaded = true;
     });
   },
   computed: {
