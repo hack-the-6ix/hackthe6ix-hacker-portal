@@ -57,11 +57,11 @@
           Back
         </Button>
         <div class="at-ht6__buttons-together">
-          <Button class="at-ht6__button" @click="save" :disabled="!canEdit">
+          <Button class="at-ht6__button" @click="save" :disabled="!canEdit" v-if="canEdit">
             Save
           </Button>
           <Button class="at-ht6__button" @click="submit" :disabled="!canEdit">
-            Submit
+            {{ canEdit ? "Submit" : "Submitted" }}
           </Button>
         </div>
       </div>
@@ -98,12 +98,23 @@ export default {
       });
     },
     submit() {
-      this.$emit('updateApplication', true, () => {
-        // TODO: Navigate the user to the post application card
-        swal('Application Submitted', 'Your application has been submitted successfully!',
-            'success').then(() => {
-            location.reload();
-        });
+      swal({
+        title: "Confirm Submission",
+        text: "Are you sure you want to submit your application?\n\nYou will not be able to make any additional changes to your application; however, you may update your team up until the submission deadline.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then(async (confirm) => {
+        if (confirm) {
+          this.$emit('updateApplication', true, () => {
+            // TODO: Navigate the user to the post application card
+            swal('Application Submitted', 'Your application has been submitted successfully!',
+                'success').then(() => {
+              location.reload();
+            });
+          });
+        }
       });
     }
   },
