@@ -64,7 +64,8 @@
 </template>
 
 <script>
-import { computed }from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
+import { v4 as uuid } from 'uuid';
 import FieldLayout from '@/components/FieldLayout';
 import Typography from '@/components/Typography';
 import Caret from '@/assets/caret.svg';
@@ -76,11 +77,6 @@ export default {
     Typography,
     Caret,
   },
-  data() {
-    return {
-      showMenu: false,
-    };
-  },
   props: {
     modelValue: String,
     label: String,
@@ -90,27 +86,50 @@ export default {
     disabled: Boolean,
     error: String,
     name: String,
+    id: {
+      type: String,
+      default: () => uuid().slice(-8),
+    },
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
-    return {
-      value: computed({
-        set: value => emit('update:modelValue', value),
-        get: () => props.modelValue,
-      }),
+    const showMenu = ref(false);
+    const value = computed({
+      set: value => emit('update:modelValue', value),
+      get: () => props.modelValue,
+    });
+
+    watch(value, () => {
+      showMenu.value = false;
+    });
+
+    const handler = () => {
+      showMenu.value = false;
     };
-  },
-  computed: {
-    selectedLabel() {
-      return this.options.find(
-        option => option.value === this.value
-      )?.label;
-    },
-  },
-  watch: {
-    value() {
-      this.showMenu = false;
-    },
+
+    watch(showMenu, _showMenu => {
+      if (_showMenu) {
+        window.setTimeout(() => {
+          window.addEventListener('click', handler);
+        }, 100);
+      } else {
+        window.removeEventListener('click', handler);
+      }
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('click', handler);
+    });
+  
+    return {
+      selectedLabel: computed({
+        get: () => props.options.find(
+          option => option.value === value.value
+        )?.label,
+      }),
+      showMenu,
+      value,
+    };
   },
 }
 </script>
