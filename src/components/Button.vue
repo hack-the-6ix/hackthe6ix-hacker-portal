@@ -1,4 +1,4 @@
-<template inherit-attrs='false'>
+<template inherit-attrs="false">
   <Typography
     :class="[
       disabled && 'button--disabled',
@@ -12,7 +12,7 @@
     color="white"
     :as="as"
   >
-  <FontAwesomeIcon
+    <FontAwesomeIcon
       :class="['button__icon', 'button__icon--left']"
       :icon="leftIcon"
       v-if="leftIcon"
@@ -71,8 +71,8 @@ export default {
   box-shadow: 0px units.spacing(0.5) units.spacing(1) 0px #00000033;
   background-color: rgb(var(--color));
   border: 1px solid rgb(var(--color));
-  text-transform: uppercase; 
-   
+  text-transform: uppercase;
+
   &:hover,
   &:focus {
     background-color: colors.css-color(white);

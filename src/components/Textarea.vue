@@ -1,15 +1,12 @@
 <template>
   <div class="textArea">
-    <label
-      class='textArea__label'
-      :for="id"
-    >
-      <Typography type='heading4' as='p' color='dark-navy'>
-        {{ label }}{{required ? '*' : ''}}
+    <label class="textArea__label" :for="id">
+      <Typography type="heading4" as="p" color="dark-navy">
+        {{ label }}{{ required ? '*' : '' }}
       </Typography>
     </label>
     <textarea
-      v-model='value'
+      v-model="value"
       :class="[
         success && 'textArea__el--success',
         error && 'textArea__el--error',
@@ -22,13 +19,9 @@
       :rows="rows"
       :maxLength="maxLength"
     />
-    <label
-      class='textArea__label'
-      :for="id"
-      v-if="lowerCaption"
-    >
-      <Typography type='paragraph' as='p' color='dark-grey'>
-        {{lowerCaption}}
+    <label class="textArea__label" :for="id" v-if="lowerCaption">
+      <Typography type="paragraph" as="p" color="dark-grey">
+        {{ lowerCaption }}
       </Typography>
     </label>
   </div>
@@ -37,7 +30,7 @@
 <script>
 import { computed } from 'vue';
 import { v4 as uuid } from 'uuid';
-import Typography from '@/components/Typography'
+import Typography from '@/components/Typography';
 
 export default {
   components: {
@@ -69,7 +62,7 @@ export default {
   setup(props, { emit }) {
     return {
       value: computed({
-        set: value => emit('update:modelValue', value),
+        set: (value) => emit('update:modelValue', value),
         get: () => props.modelValue,
       }),
     };

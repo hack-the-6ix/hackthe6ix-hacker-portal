@@ -1,23 +1,25 @@
 <template>
-  <div :class="[
-    disabled && 'field-layout--disabled',
-    error && 'field-layout--error',
-    'field-layout',
-  ]">
+  <div
+    :class="[
+      disabled && 'field-layout--disabled',
+      error && 'field-layout--error',
+      'field-layout',
+    ]"
+  >
     <Typography
-      class='field-layout__label'
-      color='dark-navy'
-      type='heading4'
-      as='label'
+      class="field-layout__label"
+      color="dark-navy"
+      type="heading4"
+      as="label"
       :for="id"
     >
-      <span v-html='label'/>{{ required ? '*' : '' }}
+      <span v-html="label" />{{ required ? '*' : '' }}
     </Typography>
     <div class="field-layout__main">
-      <slot/>
-      <WarningIcon v-if='error' class="field-layout__error-icon"/>
+      <slot />
+      <WarningIcon v-if="error" class="field-layout__error-icon" />
     </div>
-    <Typography v-if='error' type='small' as='p' color='error'>
+    <Typography v-if="error" type="small" as="p" color="error">
       {{ error }}
     </Typography>
   </div>

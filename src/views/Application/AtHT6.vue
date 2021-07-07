@@ -1,41 +1,45 @@
 <template>
-  <FormSection class='at-ht6' label='At HT6'>
+  <FormSection class="at-ht6" label="At HT6">
     <Textarea
-      label='Which panels or workshops are you most interested in at Hack the 6ix?'
-      class='at-ht6__full'
-      v-model='requestedWorkshops'
-      name='requestedWorkshops'
+      label="Which panels or workshops are you most interested in at Hack the 6ix?"
+      class="at-ht6__full"
+      v-model="requestedWorkshops"
+      name="requestedWorkshops"
       :disabled="!canEdit"
       :rows="8"
       :maxLength="2056"
-      :lowerCaption="`Minimum 50 Words (Current count: ${ requestedWorkshops.length ? requestedWorkshops.split(' ').length : 0 })`"
+      :lowerCaption="`Minimum 50 Words (Current count: ${
+        requestedWorkshops.length ? requestedWorkshops.split(' ').length : 0
+      })`"
     />
     <Textarea
-      label='What do you hope to accomplish by attending Hack the 6ix?'
-      class='at-ht6__full'
-      v-model='accomplishEssay'
-      name='accomplishEssay'
+      label="What do you hope to accomplish by attending Hack the 6ix?"
+      class="at-ht6__full"
+      v-model="accomplishEssay"
+      name="accomplishEssay"
       :disabled="!canEdit"
       :rows="8"
       :maxLength="2056"
       required
-      :lowerCaption="`Minimum 50 Words (Current count: ${ accomplishEssay.length ? accomplishEssay.split(' ').length : 0 })`"
+      :lowerCaption="`Minimum 50 Words (Current count: ${
+        accomplishEssay.length ? accomplishEssay.split(' ').length : 0
+      })`"
     />
     <Checkbox
       label='I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
       target="_blank" rel="noreferrer noopener" class="at-ht6__link">MLH Code of Conduct</a>.'
-      v-model='mlhCOC'
-      name='mlhCOC'
-      class='at-ht6__full'
+      v-model="mlhCOC"
+      name="mlhCOC"
+      class="at-ht6__full"
       :disabled="!canEdit"
       required
     />
     <Checkbox
-      label='I authorize MLH to send me pre- and post-event informational
-      emails, which contain free credit and opportunities from their partners.'
-      class='at-ht6__full'
-      v-model='mlhEmail'
-      name='mlhEmail'
+      label="I authorize MLH to send me pre- and post-event informational
+      emails, which contain free credit and opportunities from their partners."
+      class="at-ht6__full"
+      v-model="mlhEmail"
+      name="mlhEmail"
       :disabled="!canEdit"
     />
     <Checkbox
@@ -47,30 +51,39 @@
       target="_blank" rel="noreferrer noopener">MLH Contest Terms and Conditions</a> and the <a
       href="https://mlh.io/privacy" target="_blank" rel="noreferrer noopener" class="at-ht6__link">
       MLH Privacy Policy</a>.'
-      class='at-ht6__full'
-      v-model='mlhData'
-      name='mlhData'
+      class="at-ht6__full"
+      v-model="mlhData"
+      name="mlhData"
       :disabled="!canEdit"
       required
     />
 
     <div class="at-ht6__full">
-      <hr class="at-ht6__hr">
+      <hr class="at-ht6__hr" />
       <div class="at-ht6__buttons-spread">
-        <Button as='a' @click="tabSelected = 'your-experience'" href="#your-experience" class="at-ht6__button">
+        <Button
+          as="a"
+          @click="tabSelected = 'your-experience'"
+          href="#your-experience"
+          class="at-ht6__button"
+        >
           Back
         </Button>
         <div class="at-ht6__buttons-together">
-          <Button class="at-ht6__button" @click="save" :disabled="!canEdit" v-if="canEdit">
+          <Button
+            class="at-ht6__button"
+            @click="save"
+            :disabled="!canEdit"
+            v-if="canEdit"
+          >
             Save
           </Button>
           <Button class="at-ht6__button" @click="submit" :disabled="!canEdit">
-            {{ canEdit ? "Submit" : "Submitted" }}
+            {{ canEdit ? 'Submit' : 'Submitted' }}
           </Button>
         </div>
       </div>
     </div>
-
   </FormSection>
 </template>
 
@@ -89,38 +102,44 @@ export default {
     FormSection,
     Checkbox,
     Textarea,
-    Button
+    Button,
   },
   props: {
     form: Object,
-    canEdit: Boolean
+    canEdit: Boolean,
   },
   methods: {
     save() {
       this.$emit('updateApplication', false, () => {
-        swal('Application Saved', 'Your changes have been successfully saved', 'success')
+        swal(
+          'Application Saved',
+          'Your changes have been successfully saved',
+          'success',
+        );
       });
     },
     submit() {
       swal({
-        title: "Confirm Submission",
-        text: "Are you sure you want to submit your application?\n\nYou will not be able to make any additional changes to your application; however, you may update your team up until the submission deadline.",
-        icon: "warning",
+        title: 'Confirm Submission',
+        text: 'Are you sure you want to submit your application?\n\nYou will not be able to make any additional changes to your application; however, you may update your team up until the submission deadline.',
+        icon: 'warning',
         buttons: true,
         dangerMode: true,
-      })
-      .then(async (confirm) => {
+      }).then(async (confirm) => {
         if (confirm) {
           this.$emit('updateApplication', true, () => {
             // TODO: Navigate the user to the post application card
-            swal('Application Submitted', 'Your application has been submitted successfully!',
-                'success').then(() => {
+            swal(
+              'Application Submitted',
+              'Your application has been submitted successfully!',
+              'success',
+            ).then(() => {
               location.reload();
             });
           });
         }
       });
-    }
+    },
   },
   emits: ['update:form', 'update:modelTabSelected', 'updateApplication'],
   setup(props, { emit }) {
@@ -133,12 +152,12 @@ export default {
         mlhData: false,
       }),
       tabSelected: computed({
-        set: value => emit('update:modelTabSelected', value),
+        set: (value) => emit('update:modelTabSelected', value),
         get: () => props.modelTabSelected,
       }),
     };
   },
-}
+};
 </script>
 
 <style lang="scss">
@@ -176,7 +195,8 @@ export default {
     pointer-events: all;
     cursor: pointer;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       color: colors.css-color(teal, hover);
     }
 

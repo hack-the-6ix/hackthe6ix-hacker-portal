@@ -1,18 +1,20 @@
 <template>
-  <div :class='["multicheck", disabled && "multicheck--disabled"]'>
-    <Typography class='multicheck__label' type='heading4' as='p' color='dark-navy'>
-      <span v-html='label'/>{{required ? '*' : ''}}
+  <div :class="['multicheck', disabled && 'multicheck--disabled']">
+    <Typography
+      class="multicheck__label"
+      type="heading4"
+      as="p"
+      color="dark-navy"
+    >
+      <span v-html="label" />{{ required ? '*' : '' }}
     </Typography>
-    <ul class='multicheck__options'>
-      <li
-        v-for='option in options'
-        :key='option.value'
-      >
+    <ul class="multicheck__options">
+      <li v-for="option in options" :key="option.value">
         <Checkbox
-          @update:modelValue='selected[option.value] = !selected[option.value]'
-          :modelValue='selected[option.value]'
-          :label='option.label'
-          :disabled='disabled || isMaxed && !selected[option.value]'
+          @update:modelValue="selected[option.value] = !selected[option.value]"
+          :modelValue="selected[option.value]"
+          :label="option.label"
+          :disabled="disabled || (isMaxed && !selected[option.value])"
         />
       </li>
     </ul>
@@ -23,7 +25,7 @@
 import { computed } from 'vue';
 import Typography from '@/components/Typography';
 import Checkbox from '@/components/Checkbox';
- 
+
 export default {
   components: {
     Typography,
@@ -58,7 +60,7 @@ export default {
   setup(props, { emit }) {
     return {
       value: computed({
-        set: value => emit('update:modelValue', value),
+        set: (value) => emit('update:modelValue', value),
         get: () => props.modelValue,
       }),
     };

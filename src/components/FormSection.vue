@@ -1,11 +1,11 @@
-<template inherit-attrs='false'>
-  <div class='form-section'>
-    <fieldset class='form-section__content'>
-      <legend class='form-section__legend'>
-        {{label}}
+<template inherit-attrs="false">
+  <div class="form-section">
+    <fieldset class="form-section__content">
+      <legend class="form-section__legend">
+        {{ label }}
       </legend>
-      <div v-bind='$attrs'>
-        <slot/>
+      <div v-bind="$attrs">
+        <slot />
       </div>
     </fieldset>
   </div>
@@ -19,9 +19,9 @@ export default {
     label: {
       type: String,
       required: true,
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss">

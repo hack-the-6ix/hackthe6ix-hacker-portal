@@ -1,15 +1,15 @@
 <template>
-  <main class='layout'>
-    <div class='layout__content'>
-      <header class='layout__header' v-if='title || description'>
-        <Typography type='heading1' v-if='title'>
-          {{title}}
+  <main class="layout">
+    <div class="layout__content">
+      <header class="layout__header" v-if="title || description">
+        <Typography type="heading1" v-if="title">
+          {{ title }}
         </Typography>
-        <Typography type='heading4' as='p' weight='400' v-if='description'>
-          {{description}}
+        <Typography type="heading4" as="p" weight="400" v-if="description">
+          {{ description }}
         </Typography>
       </header>
-      <slot/>
+      <slot />
     </div>
   </main>
 </template>
@@ -26,7 +26,7 @@ export default {
     title: String,
     description: String,
   },
-}
+};
 </script>
 
 <style lang="scss">

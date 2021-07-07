@@ -1,172 +1,176 @@
 <template>
-  <FormSection class='about-you' label='About you'>
+  <FormSection class="about-you" label="About you">
     <Input
-      label='First Name'
-      placeholder='Enter first name'
+      label="First Name"
+      placeholder="Enter first name"
       autocomplete="given-name"
-      v-model='firstName'
-      name='first_name'
+      v-model="firstName"
+      name="first_name"
       disabled
     />
     <Input
-      label='Last Name'
-      placeholder='Enter last name'
+      label="Last Name"
+      placeholder="Enter last name"
       autocomplete="family-name"
-      v-model='lastName'
-      name='last_name'
+      v-model="lastName"
+      name="last_name"
       disabled
     />
     <Input
-      label='Email'
-      placeholder='name@gmail.com'
+      label="Email"
+      placeholder="name@gmail.com"
       autocomplete="email"
-      v-model='email'
-      name='email'
-      type='email'
+      v-model="email"
+      name="email"
+      type="email"
       disabled
     />
     <Input
-      label='Phone Number'
-      placeholder='12345678901'
+      label="Phone Number"
+      placeholder="12345678901"
       autocomplete="tel"
-      v-model='phoneNumber'
-      name='phoneNumber'
-      type='tel'
+      v-model="phoneNumber"
+      name="phoneNumber"
+      type="tel"
       :maxlength="50"
       :disabled="!canEdit"
       required
     />
     <Checkbox
-      label='I give permission to Hack the 6ix for sending me emails containing information from the event sponsors.'
-      class='about-you__full'
-      v-model='emailConsent'
+      label="I give permission to Hack the 6ix for sending me emails containing information from the event sponsors."
+      class="about-you__full"
+      v-model="emailConsent"
       :disabled="!canEdit"
-      name='emailConsent'
+      name="emailConsent"
     />
     <Select
-      label='Gender'
-      placeholder='Select'
-      v-model='gender'
-      name='gender'
-      :options='genders'
+      label="Gender"
+      placeholder="Select"
+      v-model="gender"
+      name="gender"
+      :options="genders"
       :disabled="!canEdit"
       required
     />
     <Select
-      label='Your Pronouns'
-      placeholder='Select'
-      v-model='pronouns'
-      name='pronouns'
-      :options='pronounOptions'
+      label="Your Pronouns"
+      placeholder="Select"
+      v-model="pronouns"
+      name="pronouns"
+      :options="pronounOptions"
       :disabled="!canEdit"
     />
     <div>
       <Select
-        label='Ethnicity'
-        placeholder='Select'
-        v-model='ethnicity'
-        name='ethnicity'
-        :options='ethnicities'
+        label="Ethnicity"
+        placeholder="Select"
+        v-model="ethnicity"
+        name="ethnicity"
+        :options="ethnicities"
         :disabled="!canEdit"
         required
       />
     </div>
     <Select
-      label='Your Timezone'
-      placeholder='Select'
-      v-model='timezone'
-      name='timezone'
-      :options='timezones'
+      label="Your Timezone"
+      placeholder="Select"
+      v-model="timezone"
+      name="timezone"
+      :options="timezones"
       :disabled="!canEdit"
       required
     />
     <Checkbox
-      label='I live in Canada <strong>and</strong> I want to receive Hack the 6ix swag.'
-      class='about-you__full'
-      v-model='wantSwag'
-      name='wantSwag'
+      label="I live in Canada <strong>and</strong> I want to receive Hack the 6ix swag."
+      class="about-you__full"
+      v-model="wantSwag"
+      name="wantSwag"
       :disabled="!canEdit"
     />
-    <template v-if='wantSwag'>
-      <div class='about-you__full'>
-        <Typography type='heading3' color='dark-navy' as='h2'>
+    <template v-if="wantSwag">
+      <div class="about-you__full">
+        <Typography type="heading3" color="dark-navy" as="h2">
           Shipping Address
         </Typography>
-        <Typography type='paragraphy' color='black'>
-          We will ship your Hack The 6ix swag to this address if you
-          live in Canada and submit a project on Devpost at the event.
+        <Typography type="paragraphy" color="black">
+          We will ship your Hack The 6ix swag to this address if you live in
+          Canada and submit a project on Devpost at the event.
         </Typography>
       </div>
       <Input
-        label='Address Line 1'
-        placeholder='Enter street number and street name'
+        label="Address Line 1"
+        placeholder="Enter street number and street name"
         autocomplete="address-line1"
-        v-model='addressLine1'
-        name='addressLine1'
+        v-model="addressLine1"
+        name="addressLine1"
         :disabled="!canEdit"
         :maxlength="256"
         required
       />
       <Input
-        label='Address Line 2'
-        placeholder='Apartment, suite number, etc.'
+        label="Address Line 2"
+        placeholder="Apartment, suite number, etc."
         autocomplete="address-line2"
-        v-model='addressLine2'
-        name='addressLine2'
+        v-model="addressLine2"
+        name="addressLine2"
         :maxlength="256"
         :disabled="!canEdit"
       />
       <Input
-        label='City'
-        placeholder='Enter city name'
+        label="City"
+        placeholder="Enter city name"
         autocomplete="address-level2"
-        v-model='city'
-        name='city'
+        v-model="city"
+        name="city"
         :disabled="!canEdit"
         :maxlength="256"
         required
       />
       <Select
-        label='Province'
-        placeholder='Select'
-        v-model='province'
-        name='province'
-        :options='provinces'
+        label="Province"
+        placeholder="Select"
+        v-model="province"
+        name="province"
+        :options="provinces"
         :disabled="!canEdit"
         required
       />
       <!-- TODO: Add postal code validation -->
       <Input
-        label='Postal Code'
+        label="Postal Code"
         autocomplete="postal-code"
-        placeholder='Ex: V4Q3H9'
-        v-model='postalCode'
-        name='postalCode'
+        placeholder="Ex: V4Q3H9"
+        v-model="postalCode"
+        name="postalCode"
         :disabled="!canEdit"
         :maxlength="6"
         required
       />
-      <Input
-        label='Country'
-        modelValue='Canada'
-        name='country'
-        disabled
-      />
+      <Input label="Country" modelValue="Canada" name="country" disabled />
     </template>
 
     <div class="about-you__full">
-      <hr class="about-you__hr">
+      <hr class="about-you__hr" />
 
       <div class="about-you__buttons-spread">
-        <Button as='a' @click="tabSelected = 'team-formation'" href="#team-formation" class="about-you__button">
+        <Button
+          as="a"
+          @click="tabSelected = 'team-formation'"
+          href="#team-formation"
+          class="about-you__button"
+        >
           Back
         </Button>
-        <Button as='a' @click="tabSelected = 'your-experience'" href="#your-experience" class="about-you__button">
-          {{ canEdit ? "Save & Continue" : "Continue" }}
+        <Button
+          as="a"
+          @click="tabSelected = 'your-experience'"
+          href="#your-experience"
+          class="about-you__button"
+        >
+          {{ canEdit ? 'Save & Continue' : 'Continue' }}
         </Button>
       </div>
     </div>
-
   </FormSection>
 </template>
 
@@ -188,35 +192,35 @@ export default {
     Checkbox,
     Select,
     Input,
-    Button
+    Button,
   },
   computed: {
     genders() {
-      return (this.enums?.gender || []).map(x => ({
+      return (this.enums?.gender || []).map((x) => ({
         label: x,
         value: x,
       }));
     },
     pronounOptions() {
-      return (this.enums?.pronouns || []).map(x => ({
+      return (this.enums?.pronouns || []).map((x) => ({
         label: x,
         value: x,
       }));
     },
     ethnicities() {
-      return (this.enums?.ethnicity || []).map(x => ({
+      return (this.enums?.ethnicity || []).map((x) => ({
         label: x,
         value: x,
       }));
     },
     timezones() {
-      return (this.enums?.timezone || []).map(x => ({
+      return (this.enums?.timezone || []).map((x) => ({
         label: x,
         value: x,
       }));
     },
     provinces() {
-      return (this.enums?.province || []).map(x => ({
+      return (this.enums?.province || []).map((x) => ({
         label: x,
         value: x,
       }));
@@ -226,10 +230,10 @@ export default {
     modelTabSelected: String,
     form: Object,
     enums: Object,
-    canEdit: Boolean
+    canEdit: Boolean,
   },
   emits: ['update:form', 'update:modelTabSelected'],
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     return {
       ...useFormSection(props, {
         firstName: '',
@@ -249,12 +253,12 @@ export default {
         postalCode: '',
       }),
       tabSelected: computed({
-        set: value => emit('update:modelTabSelected', value),
+        set: (value) => emit('update:modelTabSelected', value),
         get: () => props.modelTabSelected,
       }),
     };
   },
-}
+};
 </script>
 
 <style lang="scss">

@@ -1,16 +1,26 @@
 <template>
-  <div :class='["checkbox", disabled && "checkbox--disabled"]'>
-    <div class='checkbox__body'>
-      <input class='checkbox__el' :id='id' :required='required' :disabled='disabled' type='checkbox' v-model='value'/>
-      <div class='checkbox__box'>
-        <Check :class='[
-          value && "checkbox__svg--show",
-          "checkbox__svg",
-        ]'/>
+  <div :class="['checkbox', disabled && 'checkbox--disabled']">
+    <div class="checkbox__body">
+      <input
+        class="checkbox__el"
+        :id="id"
+        :required="required"
+        :disabled="disabled"
+        type="checkbox"
+        v-model="value"
+      />
+      <div class="checkbox__box">
+        <Check :class="[value && 'checkbox__svg--show', 'checkbox__svg']" />
       </div>
     </div>
-    <Typography class='checkbox__label' color='black' type='paragraph' as='label' :for='id'>
-      <span v-html='label'/>{{required ? '*' : ''}}
+    <Typography
+      class="checkbox__label"
+      color="black"
+      type="paragraph"
+      as="label"
+      :for="id"
+    >
+      <span v-html="label" />{{ required ? '*' : '' }}
     </Typography>
   </div>
 </template>
@@ -39,7 +49,7 @@ export default {
   setup(props, { emit }) {
     return {
       value: computed({
-        set: value => emit('update:modelValue', value),
+        set: (value) => emit('update:modelValue', value),
         get: () => props.modelValue,
       }),
     };

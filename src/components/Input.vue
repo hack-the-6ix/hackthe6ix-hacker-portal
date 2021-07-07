@@ -1,21 +1,18 @@
 <template>
   <FieldLayout
-    :required='required'
-    :disabled='disabled'
-    :error='error'
-    :label='label'
-    :id='id'
+    :required="required"
+    :disabled="disabled"
+    :error="error"
+    :label="label"
+    :id="id"
   >
     <input
-      :class="[
-        error && 'input__el--error',
-        'input__el',
-      ]"
+      :class="[error && 'input__el--error', 'input__el']"
       :autocomplete="autocomplete"
       :placeholder="placeholder"
       :disabled="disabled"
       :required="required"
-      v-model='value'
+      v-model="value"
       :name="name"
       :id="id"
       :maxlength="maxlength"
@@ -51,13 +48,13 @@ export default {
     required: Boolean,
     disabled: Boolean,
     error: String,
-    maxlength: Number
+    maxlength: Number,
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
     return {
       value: computed({
-        set: value => emit('update:modelValue', value),
+        set: (value) => emit('update:modelValue', value),
         get: () => props.modelValue,
       }),
     };

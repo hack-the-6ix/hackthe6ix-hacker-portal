@@ -1,59 +1,64 @@
 <template>
   <FieldLayout
-    :required='required'
-    :disabled='disabled'
-    :error='error'
-    :label='label'
-    :id='id'
+    :required="required"
+    :disabled="disabled"
+    :error="error"
+    :label="label"
+    :id="id"
   >
-    <div class='select'>
-      <select :id='id' :disabled='disabled' :name='name' class='select__el' v-model='value'>
+    <div class="select">
+      <select
+        :id="id"
+        :disabled="disabled"
+        :name="name"
+        class="select__el"
+        v-model="value"
+      >
         <option
-          v-for='option in options'
-          :value='option.value'
-          :key='option.value'
+          v-for="option in options"
+          :value="option.value"
+          :key="option.value"
         >
-          {{option.label}}
+          {{ option.label }}
         </option>
       </select>
       <Typography
-        :class='[
-          !selectedLabel && "select__display--placeholder",
-          disabled && "select__display--disabled",
-          error && "select__display--error",
-          "select__display",
-        ]'
-        @click='showMenu = disabled ? false : !showMenu'
-        htmlType='button'
-        type='paragraph'
-        tabindex='-1'
-        color='black'
-        as='button'
+        :class="[
+          !selectedLabel && 'select__display--placeholder',
+          disabled && 'select__display--disabled',
+          error && 'select__display--error',
+          'select__display',
+        ]"
+        @click="showMenu = disabled ? false : !showMenu"
+        htmlType="button"
+        type="paragraph"
+        tabindex="-1"
+        color="black"
+        as="button"
       >
-        <span class='select__text'>
+        <span class="select__text">
           {{ selectedLabel ?? placeholder }}
         </span>
-        <Caret :class='[
-          showMenu && "select__caret--flip",
-          !error || "select__caret--hide",
-          "select__caret",
-        ]'/>
+        <Caret
+          :class="[
+            showMenu && 'select__caret--flip',
+            !error || 'select__caret--hide',
+            'select__caret',
+          ]"
+        />
       </Typography>
-      <ul v-if='showMenu' class='select__menu'>
-        <li
-          v-for='option in options'
-          :key='option.value'
-        >
+      <ul v-if="showMenu" class="select__menu">
+        <li v-for="option in options" :key="option.value">
           <Typography
-            :class='[
-              value === option.value && "select__menu-item--active",
-              "select__menu-item",
-            ]'
-            @click='value = option.value'
-            htmlType='button'
-            type='paragraph'
-            color='dark-navy'
-            as='button'
+            :class="[
+              value === option.value && 'select__menu-item--active',
+              'select__menu-item',
+            ]"
+            @click="value = option.value"
+            htmlType="button"
+            type="paragraph"
+            color="dark-navy"
+            as="button"
           >
             {{ option.label }}
           </Typography>
@@ -95,7 +100,7 @@ export default {
   setup(props, { emit }) {
     const showMenu = ref(false);
     const value = computed({
-      set: value => emit('update:modelValue', value),
+      set: (value) => emit('update:modelValue', value),
       get: () => props.modelValue,
     });
 
@@ -107,7 +112,7 @@ export default {
       showMenu.value = false;
     };
 
-    watch(showMenu, _showMenu => {
+    watch(showMenu, (_showMenu) => {
       if (_showMenu) {
         window.setTimeout(() => {
           window.addEventListener('click', handler);
@@ -120,18 +125,17 @@ export default {
     onUnmounted(() => {
       window.removeEventListener('click', handler);
     });
-  
+
     return {
       selectedLabel: computed({
-        get: () => props.options.find(
-          option => option.value === value.value
-        )?.label,
+        get: () =>
+          props.options.find((option) => option.value === value.value)?.label,
       }),
       showMenu,
       value,
     };
   },
-}
+};
 </script>
 
 <style lang="scss">
@@ -228,7 +232,9 @@ export default {
     border: none;
     width: 100%;
 
-    &--active, &:hover, &:focus {
+    &--active,
+    &:hover,
+    &:focus {
       background-color: colors.css-color(disabled, $alpha: 0.1);
     }
 

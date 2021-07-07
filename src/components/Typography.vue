@@ -8,7 +8,7 @@
       `text--type--${type}`,
       'text',
     ]"
-    :type='htmlType'
+    :type="htmlType"
     :is="as"
   >
     <slot />

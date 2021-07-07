@@ -3,9 +3,10 @@ $colors: (
   //  value: {hex} - color value,
   //  static: {bool} - Optional. Skip interactive colors generation
   //),
-  'navy': (
-    value: #1696b3,
-  ),
+  'navy':
+    (
+      value: #1696b3,
+    ),
   'teal': (
     value: #23b5af,
   ),
@@ -71,7 +72,7 @@ $colors: (
   'error': (
     value: #ca500b,
     static: true,
-  ),
+  )
 );
 
 $_modifiers: (

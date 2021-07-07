@@ -1,4 +1,4 @@
-import queryString from "query-string";
+import queryString from 'query-string';
 import swal from 'sweetalert';
 import { createRouter, createWebHistory } from 'vue-router';
 import {
@@ -6,27 +6,28 @@ import {
   initRefreshService,
   isAuthenticated,
   login,
-  redirectToLogin
-} from "./utils/SessionController";
+  redirectToLogin,
+} from './utils/SessionController';
 
 const routes = [
   {
     path: '/',
-    redirect: '/application'
+    redirect: '/application',
   },
   {
     path: '/application',
-    component: () => import(/* webpackChunkName: "Application" */ './views/Application'),
+    component: () =>
+      import(/* webpackChunkName: "Application" */ './views/Application'),
   },
   {
-    path: "/:catchAll(.*)",
-    redirect: '/'
-  }
+    path: '/:catchAll(.*)',
+    redirect: '/',
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
 });
 
 const stripTokenFromAddress = () => {
@@ -51,22 +52,26 @@ const stripTokenFromAddress = () => {
 router.beforeEach(async (to, from, next) => {
   const toHref = window.location.origin + to.fullPath;
 
-  if (!isAuthenticated() && !await login()) {
+  if (!isAuthenticated() && !(await login())) {
     // oops we need to go to SSO page to get our tokens
 
     // If we last redirected the user less than 5 seconds ago, we will halt and assume that the user is stuck in a login loop.
     const lastAttemptedRedirect = parseInt(
-        sessionStorage.lastAttemptedRedirect);
+      sessionStorage.lastAttemptedRedirect,
+    );
     const diff = new Date() - lastAttemptedRedirect;
     const isLoginLoop = !isNaN(lastAttemptedRedirect) && diff < 5000;
 
     if (!isLoginLoop) {
       redirectToLogin(toHref);
     } else {
-      swal('Something went wrong',
-          `It looks like you're stuck in a login loop 😕\n\nPlease click "OK" to reload the page, and contact us if you are still experiencing issues\n\n(We last redirected you ${diff
-          / 1000} seconds ago)`, 'error')
-      .then(() => {
+      swal(
+        'Something went wrong',
+        `It looks like you're stuck in a login loop 😕\n\nPlease click "OK" to reload the page, and contact us if you are still experiencing issues\n\n(We last redirected you ${
+          diff / 1000
+        } seconds ago)`,
+        'error',
+      ).then(() => {
         clearTokens();
         sessionStorage.clear();
         location.reload();
@@ -87,4 +92,4 @@ router.beforeEach(async (to, from, next) => {
   next();
 });
 
-export default router
+export default router;

@@ -1,34 +1,42 @@
 <template>
-  <div class='file-upload'>
-    <Typography class='file-upload__label' type='heading4' color='dark-navy' as='label' :for='id'>
-      {{label}}{{required ? '*' : ''}}
+  <div class="file-upload">
+    <Typography
+      class="file-upload__label"
+      type="heading4"
+      color="dark-navy"
+      as="label"
+      :for="id"
+    >
+      {{ label }}{{ required ? '*' : '' }}
     </Typography>
-    <div class='file-upload__body'>
+    <div class="file-upload__body">
       <input
-        :accept='serializedAccept'
-        class='file-upload__field'
-        :required='required'
-        @input='upload'
-        type='file'
-        :id='id'
+        :accept="serializedAccept"
+        class="file-upload__field"
+        :required="required"
+        @input="upload"
+        type="file"
+        :id="id"
       />
-      <div class='file-upload__content'>
-        <FileIcon width='50' class='file-upload__icon'/>
+      <div class="file-upload__content">
+        <FileIcon width="50" class="file-upload__icon" />
         <div>
-          <Typography v-if='!this.modelValue' type='heading4' as='p' color='dark-navy'>
-            Drop Files here or <Typography
-              type='heading4'
-              color='teal'
-              as='span'
-            >
+          <Typography
+            v-if="!this.modelValue"
+            type="heading4"
+            as="p"
+            color="dark-navy"
+          >
+            Drop Files here or
+            <Typography type="heading4" color="teal" as="span">
               Browse
             </Typography>
           </Typography>
-          <Typography v-else type='heading4' as='p' color='teal'>
-            {{this.modelValue.name}}
+          <Typography v-else type="heading4" as="p" color="teal">
+            {{ this.modelValue.name }}
           </Typography>
-          <Typography type='small' as='p' color='black'>
-            Accepted file format: {{accept.join(', ') || 'All'}}
+          <Typography type="small" as="p" color="black">
+            Accepted file format: {{ accept.join(', ') || 'All' }}
           </Typography>
         </div>
       </div>
@@ -70,13 +78,11 @@ export default {
       default: () => Math.random().toString().slice(-8),
     },
   },
-  emits: [
-    'update:modelValue',
-  ],
+  emits: ['update:modelValue'],
   setup(props, { emit }) {
     return {
       value: computed({
-        set: value => emit('update:modelValue', value),
+        set: (value) => emit('update:modelValue', value),
         get: () => props.modelValue,
       }),
     };
@@ -103,7 +109,8 @@ export default {
     position: relative;
     overflow: hidden;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: colors.css-color(grey, hover);
     }
 
@@ -134,9 +141,10 @@ export default {
     z-index: 1;
     inset: 0;
 
-    &:hover #{$self}__content, &:active  {
-    background-color: colors.css-color(grey, hover);
-  }
+    &:hover #{$self}__content,
+    &:active {
+      background-color: colors.css-color(grey, hover);
+    }
   }
 
   &__icon {

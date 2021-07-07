@@ -1,21 +1,24 @@
 <template>
-  <div class='app'>
-    <Logo width='24' class='app__logo'/>
+  <div class="app">
+    <Logo width="24" class="app__logo" />
     <span>
-      <Typography color='teal' type='heading3' as='span' transform='uppercase'>
+      <Typography color="teal" type="heading3" as="span" transform="uppercase">
         HT6
       </Typography>
-      <Typography color='yellow' type='heading3' as='span' transform='uppercase'>
+      <Typography
+        color="yellow"
+        type="heading3"
+        as="span"
+        transform="uppercase"
+      >
         Digital
       </Typography>
     </span>
     <span style="margin-left: auto">
-      <Button color="black" @click="confirmRunLogout">
-        Sign Out
-      </Button>
+      <Button color="black" @click="confirmRunLogout"> Sign Out </Button>
     </span>
   </div>
-  <router-view/>
+  <router-view />
 </template>
 
 <script>
@@ -23,7 +26,7 @@ import Typography from '@/components/Typography';
 import Button from '@/components/Button';
 import Logo from '@/assets/icon.svg';
 import swal from 'sweetalert';
-import {runLogout} from "./utils/SessionController";
+import { runLogout } from './utils/SessionController';
 
 export default {
   name: 'App',
@@ -35,25 +38,24 @@ export default {
   methods: {
     confirmRunLogout() {
       swal({
-        title: "Confirm Sign Out",
-        text: "Are you sure you want to sign out?",
-        icon: "warning",
+        title: 'Confirm Sign Out',
+        text: 'Are you sure you want to sign out?',
+        icon: 'warning',
         buttons: true,
         dangerMode: true,
-      })
-      .then(async (confirm) => {
+      }).then(async (confirm) => {
         if (confirm) {
           await runLogout();
         }
       });
-    }
+    },
   },
   components: {
     Typography,
     Logo,
-    Button
+    Button,
   },
-}
+};
 </script>
 
 <style lang="scss">
@@ -64,7 +66,7 @@ export default {
 @include colors.init();
 
 html {
-  background: linear-gradient(88.96deg, #002C37 1.77%, #004D57 95.9%);
+  background: linear-gradient(88.96deg, #002c37 1.77%, #004d57 95.9%);
   font-family: units.$font;
 
   @include mixins.media(tablet) {
