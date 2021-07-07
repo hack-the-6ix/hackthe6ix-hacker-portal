@@ -1,10 +1,7 @@
 <template>
   <Layout
-    title='Hacker Application'
-    :description='`Applications are due ${dueDate}. Your progress
-    will automatically be saved every few minutes. Once you’ve
-    submitted your application, keep an eye on your inbox
-    for your application results!`'
+    :title='title'
+    :description='description'
   >
     <nav class='home__nav'>
       <Typography
@@ -25,11 +22,40 @@
       </Typography>
     </nav>
     <form class='home__form' v-on:submit.prevent="">
-      <TeamFormation v-if='selected === "team-formation"' v-model:form='team' v-model:modelSelected='selected'/>
-      <AboutYou v-if='selected === "about-you"' v-model:form='about_you' v-model:enums='enums'/>
-      <YourExperience v-if='selected === "your-experience"' v-model:form='your_experience' v-model:enums='enums'/>
-      <AtHT6 v-if='selected === "at-ht6"' v-model:form='at_ht6'/>
+      <TeamFormation
+          v-if='selected === "team-formation"'
+          v-model:form='team'
+          v-model:modelTabSelected='selected'
+          :dueDate="dueDate"
+          :canAmendTeam="user?.status?.canAmendTeam"
+          @updateTeam="updateTeam"
+      />
+      <AboutYou
+          v-if='selected === "about-you"'
+          v-model:form='about_you'
+          v-model:modelTabSelected='selected'
+          :enums='enums'
+          :canEdit="user?.status?.canApply"
+      />
+      <YourExperience
+          v-if='selected === "your-experience"'
+          v-model:form='your_experience'
+          v-model:modelTabSelected='selected'
+          :enums='enums'
+          :canEdit="user?.status?.canApply"
+      />
+      <AtHT6
+          v-if='selected === "at-ht6"'
+          v-model:form='at_ht6'
+          v-model:modelTabSelected='selected'
+          :canEdit="user?.status?.canApply"
+          @updateApplication="runUpdateApplication"
+      />
     </form>
+
+    <Typography type='p' color='white' as='p' v-if="lastSaved" class="home__last-saved">
+      Last saved at {{lastSaved}}
+    </Typography>
   </Layout>
 </template>
 
@@ -40,7 +66,8 @@ import YourExperience from '@/views/Application/YourExperience';
 import AtHT6 from '@/views/Application/AtHT6';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
-import { getApplicationEnums, getProfile, getTeam } from "../../utils/api";
+import { getApplicationEnums, getProfile, getTeam, updateApplication } from "../../utils/api";
+import swal from 'sweetalert';
 
 export default {
   name: 'Application',
@@ -60,13 +87,144 @@ export default {
       at_ht6: {},
       team: {},
       user: {},
-      enums: {}
+      enums: {},
+      lastSaved: ''
     };
   },
   watch: {
-    form(newVal) {
-      console.log(newVal);
+    async selected() {
+      if (this.user?.status?.canApply) {
+        await this.runUpdateApplication(false);
+      }
+    }
+  },
+  methods: {
+    updateTeam(teamCode, memberNames) {
+      this.team = {
+        code: teamCode,
+        memberNames: memberNames
+      }
     },
+    async runUpdateApplication(submit, callback) {
+      const newApplication = {
+        ...this.your_experience,
+        ...this.about_you,
+        ...this.at_ht6
+      };
+
+      // These are values we injected into the form to display, but don't need to submit
+      delete newApplication.firstName;
+      delete newApplication.lastName;
+      delete newApplication.email;
+      delete newApplication.resumeFileName;
+      delete newApplication.resume;
+
+      // Delete address fields if they don't want swag
+      if (!newApplication.wantSwag) {
+        newApplication.addressLine1 = '';
+        newApplication.addressLine2 = '';
+        newApplication.city = '';
+        newApplication.province = '';
+        newApplication.postalCode = '';
+      }
+
+      const result = await updateApplication(
+          newApplication,
+          submit
+      );
+
+      if (result.success) {
+        this.lastSaved = new Date().toLocaleDateString(
+            'en-US',
+            {
+              year: 'numeric',
+              day: 'numeric',
+              month: 'long',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric',
+              timeZoneName: 'short'
+            }
+        );
+
+        if (callback) {
+          callback();
+        }
+      } else {
+        if (result.error && result.message) {
+          swal('Unable to save application',
+              `${result.message}\n\nThe following fields failed validation:\n${(result.error.map(
+                  e => e[1])).join('\n')}`, 'error');
+        } else {
+          swal('Unable to save application', result.data, 'error');
+        }
+      }
+    },
+    loadApplication(hackerApplication) {
+      // The hacker application arrives as one big dictionary, so we have to split it up
+      // based on the tab
+      const fields = {
+        'about_you': [
+            'emailConsent',
+            'phoneNumber',
+            'gender',
+            'pronouns',
+            'ethnicity',
+            'timezone',
+            'wantSwag',
+            'addressLine1',
+            'addressLine2',
+            'city',
+            'province',
+            'postalCode'
+        ],
+        'your_experience': [
+            'school',
+            'program',
+            'yearsOfStudy',
+            'hackathonsAttended',
+            'resume',
+            'resumeSharePermission',
+            'githubLink',
+            'portfolioLink',
+            'linkedinLink',
+            'projectEssay'
+        ],
+        'at_ht6': [
+            'requestedWorkshops',
+            'accomplishEssay',
+            'mlhCOC',
+            'mlhEmail',
+            'mlhData'
+        ]
+      };
+
+      // Construct a "fake" file that just passes in the file name
+      hackerApplication['resume'] = {
+        name: hackerApplication.resumeFileName,
+        fakeFile: true
+      };
+
+      for (const section in fields) {
+        for (const field of fields[section]) {
+          if (hackerApplication[field] !== undefined) {
+            this[section][field] = hackerApplication[field];
+          }
+        }
+      }
+    },
+    async loadTeam(teamCode) {
+      if (teamCode) {
+        const teamResult = await getTeam();
+
+        if (teamResult) {
+          this.team = teamResult.data;
+        } else {
+          // TODO: Replace with message that's always on screen
+          swal('Unable to fetch team', teamResult.data, 'error');
+        }
+      }
+    }
   },
   beforeMount() {
     const exists = this.tabs.some(tab => window.location.hash === `#${tab.id}`);
@@ -79,23 +237,33 @@ export default {
     const promises = [];
 
     promises.push((async () => {
-      const user = await getProfile();
-      this.user = user.data;
+      const result = await getProfile();
 
-      // Load immutable data in about you
-      this.about_you.firstName = user.data.firstName;
-      this.about_you.lastName = user.data.lastName;
-      this.about_you.email = user.data.email;
+      if (result.success) {
+        this.user = result.data;
 
-      if (this.user.hackerApplication.teamCode) {
-        const team = await getTeam();
-        this.team = team.data;
+        // Load immutable data in about you
+        this.about_you.firstName = result.data.firstName;
+        this.about_you.lastName = result.data.lastName;
+        this.about_you.email = result.data.email;
+
+        this.loadApplication(result.data.hackerApplication || {});
+        await this.loadTeam(result.data.hackerApplication?.teamCode)
+      } else {
+        // TODO: Replace with message that's always on screen
+        swal('Unable to fetch user', result.data, 'error');
       }
     })());
 
     promises.push((async () => {
-      const enums = await getApplicationEnums();
-      this.enums = enums.data;
+      const result = await getApplicationEnums();
+
+      if (result.success) {
+        this.enums = result.data;
+      } else {
+        // TODO: Replace with message that's always on screen
+        swal('Unable to fetch enums', result.data, 'error');
+      }
     })());
 
     Promise.all(promises).then(() => {
@@ -103,6 +271,27 @@ export default {
     });
   },
   computed: {
+    /**
+     * Possible states:
+     * - Did submit, application deadline passed
+     * - Did submit, application deadline not passed <- Application submitted state
+     * - Did not submit, application deadline passed
+     * - Did not submit, application deadline not passed <- Standard state
+     */
+    title() {
+      return this.user?.status?.applied
+              ? 'Application has been submitted!'
+              : 'Hacker Application'
+    },
+    description() {
+      return this.user?.status?.applied
+            ? `The HT6 team will review your application soon. Keep an eye on your inbox for your application results!\n\n
+               Updates can be made to your team list until ${this.dueDate}. While you aren't able to make any more edits,
+               you can still review your submission details below.`
+            : `Applications are due ${this.dueDate}. Once you’ve
+              submitted your application, keep an eye on your inbox
+              for your application results!`
+    },
     dueDate() {
       return new Date(this.user.computedApplicationDeadline || 0).toLocaleDateString(
         'en-US',
@@ -188,6 +377,11 @@ export default {
   &__form {
     background-color: colors.css-color(white);
     border-radius: units.spacing(3);
+  }
+
+  &__last-saved {
+    text-align: right;
+    margin-top: units.spacing(3);
   }
 }
 </style>

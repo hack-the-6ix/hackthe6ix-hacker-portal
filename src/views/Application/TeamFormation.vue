@@ -21,12 +21,12 @@
 
       <hr class="team-formation__hr">
 
-      <div class="team-formation__buttons">
-        <Button @click="triggerLeaveTeam">
+      <div class="team-formation__buttons-spread">
+        <Button @click="triggerLeaveTeam" :disabled="!canAmendTeam">
           Leave Team
         </Button>
 
-        <Button as='a' @click="tabSelected = 'about-you'" href="#about-you">
+        <Button as='a' @click="tabSelected = 'about-you'" href="#about-you" style="text-decoration: none">
           Continue
         </Button>
       </div>
@@ -50,35 +50,47 @@
               name='code'
               required
           />
-          <Button @click="triggerJoinTeam">
+          <Button @click="triggerJoinTeam" style="margin-top: auto" :disabled="!canAmendTeam">
             Join
           </Button>
         </div>
 
         <hr class="team-formation__hr">
 
-        <Button @click="joinTeamPage = false">
-          Back
-        </Button>
+        <div class="team-formation__buttons-spread">
+          <Button @click="joinTeamPage = false">
+            Back
+          </Button>
+        </div>
       </div>
       <div v-else>
         <Typography type='heading2' align='center' color='dark-navy'>
           You are currently not on a team.
         </Typography>
         <Typography type='heading4' as='p' align='center' color='black'>
-          Registering as a team helps speed up the review process.
+          Don't have a team? No worries! You can go solo or decide after submitting your application.
+          Just remember to do so before {{dueDate}}.
         </Typography>
 
-        <hr class="team-formation__hr">
+        <br/>
 
-        <div class="team-formation__buttons">
-          <Button @click="triggerCreateTeam">
+        <div class="team-formation__buttons-together">
+          <Button @click="triggerCreateTeam" :disabled="!canAmendTeam">
             Create Team
           </Button>
-          <Button @click="joinTeamPage = true">
+          <Button @click="joinTeamPage = true" :disabled="!canAmendTeam">
             Join Team
           </Button>
         </div>
+
+        <hr class="team-formation__hr">
+
+        <div class="team-formation__buttons-spread">
+          <Button as='a' @click="tabSelected = 'about-you'" href="#about-you" class="team-formation__buttons-right" style="text-decoration: none">
+            Continue
+          </Button>
+        </div>
+
       </div>
     </div>
   </FormSection>
@@ -91,6 +103,7 @@ import FormSection from '@/components/FormSection';
 import Typography from '@/components/Typography';
 import Button from "@/components/Button";
 import Input from '@/components/Input';
+import swal from 'sweetalert';
 import { createTeam, joinTeam, leaveTeam } from "../../utils/api";
 
 export default {
@@ -103,9 +116,11 @@ export default {
   },
   props: {
     form: Object,
-    modelSelected: String
+    modelTabSelected: String,
+    dueDate: String,
+    canAmendTeam: Boolean
   },
-  emits: ['update:form', 'update:modelSelected'],
+  emits: ['update:form', 'update:modelTabSelected', 'updateTeam'],
   data() {
     return {
       joinTeamPage: false,
@@ -119,32 +134,48 @@ export default {
         memberNames: [],
       }),
       tabSelected: computed({
-        set: value => emit('update:modelSelected', value),
-        get: () => props.modelSelected,
+        set: value => emit('update:modelTabSelected', value),
+        get: () => props.modelTabSelected,
       }),
     };
   },
   methods: {
     async triggerLeaveTeam() {
-      await leaveTeam();
+      swal({
+        title: "Confirm Leave Team",
+        text: "Are you sure you want to leave this team?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then(async (confirm) => {
+        if (confirm) {
+          const result = await leaveTeam();
 
-      this.code = '';
-      this.memberNames = [];
+          if (result.success) {
+            this.$emit('updateTeam', '', []);
+          } else {
+            swal('Unable to leave team', result.data, 'error');
+          }
+        }
+      });
     },
     async triggerCreateTeam() {
-      const newTeam = await createTeam();
+      const result = await createTeam();
 
-      this.code = newTeam.data.code;
-      this.memberNames = newTeam.data.memberNames;
+      if (result.success) {
+        this.$emit('updateTeam', result.data.code, result.data.memberNames);
+      } else {
+        swal('Unable to create team', result.data, 'error');
+      }
     },
     async triggerJoinTeam() {
-      const newTeam = await joinTeam(this.temporaryCode);
+      const result = await joinTeam(this.temporaryCode);
 
-      if (newTeam.success) {
-        this.code = newTeam.data.code;
-        this.memberNames = newTeam.data.memberNames;
+      if (result.success) {
+        this.$emit('updateTeam', result.data.code, result.data.memberNames);
       } else {
-        alert(newTeam.data);
+        swal('Unable to join team', result.data, 'error');
       }
     }
   }
@@ -161,19 +192,39 @@ export default {
       margin-bottom: units.spacing(6);
     }
 
-    &__buttons {
-      grid-template-columns: 1fr 1fr;
-      grid-gap: units.spacing(6);
-      display: grid;
+    &__buttons-right {
+      margin-left: auto;
 
       @include mixins.media(tablet) {
+        margin-left: 0;
+      }
+    }
+
+    &__buttons-spread {
+      display: flex;
+      justify-content: space-between;
+
+      @include mixins.media(tablet) {
+        display: grid;
+        grid-gap: units.spacing(3);
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &__buttons-together {
+      display: flex;
+      justify-content: center;
+      grid-gap: units.spacing(3);
+
+      @include mixins.media(tablet) {
+        display: grid;
         grid-template-columns: 1fr;
       }
     }
 
     &__join-box {
       grid-template-columns: 8fr 2fr;
-      grid-gap: units.spacing(6);
+      grid-gap: units.spacing(3);
       display: grid;
 
       @include mixins.media(tablet) {

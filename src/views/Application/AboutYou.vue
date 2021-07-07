@@ -29,16 +29,18 @@
       label='Phone Number'
       placeholder='12345678901'
       autocomplete="tel"
-      v-model='phone'
-      name='phone'
+      v-model='phoneNumber'
+      name='phoneNumber'
       type='tel'
+      :disabled="!canEdit"
       required
     />
     <Checkbox
       label='I give permission to Hack the 6ix for sending me emails containing information from the event sponsors.'
       class='about-you__full'
-      v-model='allow_email'
-      name='allow_email'
+      v-model='emailConsent'
+      :disabled="!canEdit"
+      name='emailConsent'
     />
     <Select
       label='Gender'
@@ -46,14 +48,16 @@
       v-model='gender'
       name='gender'
       :options='genders'
+      :disabled="!canEdit"
       required
     />
     <Select
       label='Your Pronouns'
       placeholder='Select'
-      v-model='pronoun'
+      v-model='pronouns'
       name='pronouns'
-      :options='pronouns'
+      :options='pronounOptions'
+      :disabled="!canEdit"
     />
     <div>
       <Select
@@ -62,6 +66,7 @@
         v-model='ethnicity'
         name='ethnicity'
         :options='ethnicities'
+        :disabled="!canEdit"
         required
       />
     </div>
@@ -71,15 +76,17 @@
       v-model='timezone'
       name='timezone'
       :options='timezones'
+      :disabled="!canEdit"
       required
     />
     <Checkbox
       label='I live in Canada <strong>and</strong> I want to receive Hack the 6ix swag.'
       class='about-you__full'
-      v-model='in_canada'
-      name='in_canada'
+      v-model='wantSwag'
+      name='wantSwag'
+      :disabled="!canEdit"
     />
-    <template v-if='in_canada'>
+    <template v-if='wantSwag'>
       <div class='about-you__full'>
         <Typography type='heading3' color='dark-navy' as='h2'>
           Shipping Address
@@ -93,16 +100,18 @@
         label='Address Line 1'
         placeholder='Enter street number and street name'
         autocomplete="address-line1"
-        v-model='address_line_1'
-        name='address_line_1'
+        v-model='addressLine1'
+        name='addressLine1'
+        :disabled="!canEdit"
         required
       />
       <Input
         label='Address Line 2'
         placeholder='Apartment, suite number, etc.'
         autocomplete="address-line2"
-        v-model='address_line_2'
-        name='address_line_2'
+        v-model='addressLine2'
+        name='addressLine2'
+        :disabled="!canEdit"
       />
       <Input
         label='City'
@@ -110,6 +119,7 @@
         autocomplete="address-level2"
         v-model='city'
         name='city'
+        :disabled="!canEdit"
         required
       />
       <Select
@@ -118,14 +128,16 @@
         v-model='province'
         name='province'
         :options='provinces'
+        :disabled="!canEdit"
         required
       />
       <Input
         label='Postal Code'
         autocomplete="postal-code"
         placeholder='Ex: V4Q3H9'
-        v-model='postal_code'
-        name='postal_code'
+        v-model='postalCode'
+        name='postalCode'
+        :disabled="!canEdit"
         required
       />
       <Input
@@ -135,13 +147,29 @@
         disabled
       />
     </template>
+
+    <div class="about-you__full">
+      <hr class="about-you__hr">
+
+      <div class="about-you__buttons-spread">
+        <Button as='a' @click="tabSelected = 'team-formation'" href="#team-formation" class="about-you__button">
+          Back
+        </Button>
+        <Button as='a' @click="tabSelected = 'your-experience'" href="#your-experience" class="about-you__button">
+          {{ canEdit ? "Save & Continue" : "Continue" }}
+        </Button>
+      </div>
+    </div>
+
   </FormSection>
 </template>
 
 <script>
+import { computed } from 'vue';
 import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import Checkbox from '@/components/Checkbox';
+import Button from '@/components/Button';
 import Typography from '@/components/Typography';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
@@ -154,6 +182,7 @@ export default {
     Checkbox,
     Select,
     Input,
+    Button
   },
   computed: {
     genders() {
@@ -162,7 +191,7 @@ export default {
         value: x,
       }));
     },
-    pronouns() {
+    pronounOptions() {
       return (this.enums?.pronouns || []).map(x => ({
         label: x,
         value: x,
@@ -188,28 +217,34 @@ export default {
     },
   },
   props: {
+    modelTabSelected: String,
     form: Object,
-    enums: Object
+    enums: Object,
+    canEdit: Boolean
   },
-  emits: ['update:form'],
-  setup(props) {
+  emits: ['update:form', 'update:modelTabSelected'],
+  setup(props, {emit}) {
     return {
       ...useFormSection(props, {
         firstName: '',
         lastName: '',
-        phone: '',
+        phoneNumber: '',
         email: '',
-        allow_email: false,
+        emailConsent: false,
         gender: '',
-        pronoun: '',
+        pronouns: '',
         ethnicity: '',
         timezone: '',
-        in_canada: false,
-        address_line_1: '',
-        address_line_2: '',
+        wantSwag: false,
+        addressLine1: '',
+        addressLine2: '',
         city: '',
         province: '',
-        postal_code: '',
+        postalCode: '',
+      }),
+      tabSelected: computed({
+        set: value => emit('update:modelTabSelected', value),
+        get: () => props.modelTabSelected,
       }),
     };
   },
@@ -235,6 +270,25 @@ export default {
 
     @include mixins.media(tablet) {
       grid-column: span 1;
+    }
+  }
+
+  &__hr {
+    margin-bottom: units.spacing(6);
+  }
+
+  &__button {
+    text-decoration: none;
+  }
+
+  &__buttons-spread {
+    display: flex;
+    justify-content: space-between;
+
+    @include mixins.media(tablet) {
+      display: grid;
+      grid-gap: units.spacing(3);
+      grid-template-columns: 1fr;
     }
   }
 }

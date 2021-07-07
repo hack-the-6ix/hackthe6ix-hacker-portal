@@ -3,31 +3,36 @@
     <Textarea
       label='Which panels or workshops are you most interested in at Hackthe6ix?'
       class='at-ht6__full'
-      v-model='interests'
-      name='interests'
+      v-model='requestedWorkshops'
+      name='requestedWorkshops'
+      :disabled="!canEdit"
+      :rows="8"
     />
     <Textarea
       label='What do you hope to accomplish by attending Hack the 6ix?'
       class='at-ht6__full'
-      v-model='goals'
-      name='goals'
+      v-model='accomplishEssay'
+      name='accomplishEssay'
+      :disabled="!canEdit"
+      :rows="8"
       required
     />
     <Checkbox
       label='I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
       target="_blank" rel="noreferrer noopener" class="at-ht6__link">MLH Code of Conduct</a>.'
-      v-model='code_of_conduct'
-      name='code_of_conduct'
+      v-model='mlhCOC'
+      name='mlhCOC'
       class='at-ht6__full'
+      :disabled="!canEdit"
       required
     />
     <Checkbox
       label='I authorize MLH to send me pre- and post-event informational
       emails, which contain free credit and opportunities from their partners.'
       class='at-ht6__full'
-      v-model='mlh_email'
-      name='mlh_email'
-      required
+      v-model='mlhEmail'
+      name='mlhEmail'
+      :disabled="!canEdit"
     />
     <Checkbox
       label='I authorize Hack the 6ix to share my application/registration
@@ -39,18 +44,39 @@
       href="https://mlh.io/privacy" target="_blank" rel="noreferrer noopener" class="at-ht6__link">
       MLH Privacy Policy</a>.'
       class='at-ht6__full'
-      v-model='share_mlh'
-      name='share_mlh'
-      required
+      v-model='mlhData'
+      name='mlhData'
+      :disabled="!canEdit"
     />
+
+    <div class="at-ht6__full">
+      <hr class="at-ht6__hr">
+      <div class="at-ht6__buttons-spread">
+        <Button as='a' @click="tabSelected = 'your-experience'" href="#your-experience" class="at-ht6__button">
+          Back
+        </Button>
+        <div class="at-ht6__buttons-together">
+          <Button class="at-ht6__button" @click="save" :disabled="!canEdit">
+            Save
+          </Button>
+          <Button class="at-ht6__button" @click="submit" :disabled="!canEdit">
+            Submit
+          </Button>
+        </div>
+      </div>
+    </div>
+
   </FormSection>
 </template>
 
 <script>
+import { computed } from 'vue';
 import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import Checkbox from '@/components/Checkbox';
 import Textarea from '@/components/Textarea';
+import Button from '@/components/Button';
+import swal from 'sweetalert';
 
 export default {
   name: 'AtHT6',
@@ -58,19 +84,41 @@ export default {
     FormSection,
     Checkbox,
     Textarea,
+    Button
   },
   props: {
     form: Object,
+    canEdit: Boolean
   },
-  emits: ['update:form'],
-  setup(props) {
+  methods: {
+    save() {
+      this.$emit('updateApplication', false, () => {
+        swal('Application Saved', 'Your changes have been successfully saved', 'success')
+      });
+    },
+    submit() {
+      this.$emit('updateApplication', true, () => {
+        // TODO: Navigate the user to the post application card
+        swal('Application Submitted', 'Your application has been submitted successfully!',
+            'success').then(() => {
+            location.reload();
+        });
+      });
+    }
+  },
+  emits: ['update:form', 'update:modelTabSelected', 'updateApplication'],
+  setup(props, { emit }) {
     return {
       ...useFormSection(props, {
-        interests: '',
-        goals: '',
-        code_of_conduct: false,
-        mlh_email: false,
-        share_mlh: false,
+        requestedWorkshops: '',
+        accomplishEssay: '',
+        mlhCOC: false,
+        mlhEmail: false,
+        mlhData: false,
+      }),
+      tabSelected: computed({
+        set: value => emit('update:modelTabSelected', value),
+        get: () => props.modelTabSelected,
       }),
     };
   },
@@ -118,6 +166,36 @@ export default {
 
     &:active {
       color: colors.css-color(teal, active);
+    }
+  }
+
+  &__hr {
+    margin-bottom: units.spacing(6);
+  }
+
+  &__button {
+    text-decoration: none;
+  }
+
+  &__buttons-together {
+    display: flex;
+    justify-content: center;
+    grid-gap: units.spacing(3);
+
+    @include mixins.media(tablet) {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__buttons-spread {
+    display: flex;
+    justify-content: space-between;
+
+    @include mixins.media(tablet) {
+      display: grid;
+      grid-gap: units.spacing(3);
+      grid-template-columns: 1fr;
     }
   }
 }

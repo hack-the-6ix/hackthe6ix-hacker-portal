@@ -19,6 +19,7 @@
       :name="name"
       :required="required"
       :id="id"
+      :rows="rows"
     />
     <label
       class='textArea__label'
@@ -54,6 +55,7 @@ export default {
       type: String,
       default: () => uuid().slice(-8),
     },
+    rows: Number,
     required: Boolean,
     disabled: Boolean,
     success: Boolean,

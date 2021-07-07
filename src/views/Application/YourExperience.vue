@@ -6,6 +6,7 @@
       v-model='school'
       name='school'
       :options='schools'
+      :disabled="!canEdit"
       required
     />
     <Select
@@ -14,22 +15,25 @@
       v-model='program'
       name='program'
       :options='programs'
+      :disabled="!canEdit"
       required
     />
     <Select
       label='Year of Study'
       placeholder='Select'
-      v-model='year_of_study'
-      name='year_of_study'
+      v-model='yearsOfStudy'
+      name='yearsOfStudy'
       :options='years'
+      :disabled="!canEdit"
       required
     />
     <Select
       label='Number of Hackathons Attended'
       placeholder='Select'
-      v-model='hackathons'
-      name='hackathons'
+      v-model='hackathonsAttended'
+      name='hackathonsAttended'
       :options='hackathonsOptions'
+      :disabled="!canEdit"
       required
     />
     <div class='your-experience__file'>
@@ -37,12 +41,15 @@
         label='Your Resume'
         v-model='resume'
         name='resume'
+        :accept="['pdf']"
+        :disabled="!canEdit"
         required
       />
       <Checkbox
         label='I allow Hack the 6ix to distribute my resume to its event sponsors.'
-        v-model='share_resume'
-        name='share_resume'
+        v-model='resumeSharePermission'
+        name='resumeSharePermission'
+        :disabled="!canEdit"
       />
     </div>
     <!-- shameless plugs btw -->
@@ -50,39 +57,58 @@
       <Input
         label='GitHub Link'
         placeholder='Ex: https://github.com/fpunny'
-        v-model='github'
-        name='github'
+        v-model='githubLink'
+        name='githubLink'
         type='url'
+        :disabled="!canEdit"
       />
     </div>
     <div class='your-experience__gap'>
       <Input
         label='Personal Website or Portfolio'
         placeholder='Ex: https://fpunny.xyz'
-        v-model='portfolio'
-        name='portfolio'
+        v-model='portfolioLink'
+        name='portfolioLink'
         type='url'
+        :disabled="!canEdit"
       />
     </div>
     <div class='your-experience__gap'>
       <Input
         label='Linkedin'
         placeholder='Ex: https://www.linkedin.com/company/hackthe6ixofficial'
-        v-model='linkedin'
-        name='linkedin'
+        v-model='linkedinLink'
+        name='linkedinLink'
         type='url'
+        :disabled="!canEdit"
       />
     </div>
     <Textarea
       label='Tell us about a project that you are proud of. What tools did you use and what was the outcome?'
       class='your-experience__full'
-      v-model='experience'
-      name='experience'
+      v-model='projectEssay'
+      name='projectEssay'
+      :rows="8"
+      :disabled="!canEdit"
     />
+
+    <div class="your-experience__full">
+      <hr class="your-experience__hr">
+      <div class="your-experience__buttons-spread">
+        <Button as='a' @click="tabSelected = 'about-you'" href="#about-you" class="your-experience__button">
+          Back
+        </Button>
+        <Button as='a' @click="tabSelected = 'at-ht6'" href="#at-ht6" class="your-experience__button">
+          {{ canEdit ? "Save & Continue" : "Continue" }}
+        </Button>
+      </div>
+    </div>
+
   </FormSection>
 </template>
 
 <script>
+import { computed } from 'vue';
 import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import FileUpload from '@/components/FileUpload';
@@ -90,6 +116,9 @@ import Checkbox from '@/components/Checkbox';
 import Textarea from '@/components/Textarea';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
+import Button from '@/components/Button';
+import { uploadResume } from "../../utils/api";
+import swal from 'sweetalert';
 
 export default {
   name: 'YourExperience',
@@ -100,6 +129,20 @@ export default {
     Textarea,
     Select,
     Input,
+    Button
+  },
+  watch: {
+    async resume(file) {
+      if (file && !file.fakeFile) {
+        const result = await uploadResume(file);
+
+        if (result.success) {
+          swal('Success!', 'Your resume has been successfully uploaded', 'success');
+        } else {
+          swal('Uh oh', `Your resume could not be uploaded\n\n${result.data}`, 'error');
+        }
+      }
+    }
   },
   computed: {
     schools() {
@@ -129,22 +172,27 @@ export default {
   },
   props: {
     form: Object,
-    enums: Object
+    enums: Object,
+    canEdit: Boolean
   },
-  emits: ['update:form'],
-  setup(props) {
+  emits: ['update:form', 'update:modelTabSelected'],
+  setup(props, { emit }) {
     return {
       ...useFormSection(props, {
         school: '',
         program: '',
-        year_of_study: '',
-        hackathons: '',
+        yearsOfStudy: '',
+        hackathonsAttended: '',
         resume: null,
-        share_resume: false,
-        github: '',
-        portfolio: '',
-        linkedin: '',
-        experience: '',
+        resumeSharePermission: false,
+        githubLink: '',
+        portfolioLink: '',
+        linkedinLink: '',
+        projectEssay: '',
+      }),
+      tabSelected: computed({
+        set: value => emit('update:modelTabSelected', value),
+        get: () => props.modelTabSelected,
       }),
     };
   },
@@ -193,6 +241,25 @@ export default {
 
     @include mixins.media(tablet) {
       grid-column: span 1;
+    }
+  }
+
+  &__hr {
+    margin-bottom: units.spacing(6);
+  }
+
+  &__button {
+    text-decoration: none;
+  }
+
+  &__buttons-spread {
+    display: flex;
+    justify-content: space-between;
+
+    @include mixins.media(tablet) {
+      display: grid;
+      grid-gap: units.spacing(3);
+      grid-template-columns: 1fr;
     }
   }
 }
