@@ -7,7 +7,7 @@
     :id='id'
   >
     <div class='select'>
-      <select class='select__el' v-model='value'>
+      <select :id='id' :disabled='disabled' :name='name' class='select__el' v-model='value'>
         <option
           v-for='option in options'
           :value='option.value'
@@ -23,7 +23,7 @@
           error && "select__display--error",
           "select__display",
         ]'
-        @click='showMenu = !showMenu'
+        @click='showMenu = disabled ? false : !showMenu'
         htmlType='button'
         type='paragraph'
         tabindex='-1'
@@ -89,6 +89,7 @@ export default {
     placeholder: String,
     disabled: Boolean,
     error: String,
+    name: String,
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
