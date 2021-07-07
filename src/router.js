@@ -55,13 +55,18 @@ router.beforeEach(async (to, from, next) => {
 
     // If we last redirected the user less than 5 seconds ago, we will halt and assume that the user is stuck in a login loop.
     const lastAttemptedRedirect = parseInt(sessionStorage.lastAttemptedRedirect);
-    const isLoginLoop = !isNaN(lastAttemptedRedirect) && new Date() - parseInt(sessionStorage.lastAttemptedRedirect) < 50000;
+    const diff = new Date() - parseInt(sessionStorage.lastAttemptedRedirect);
+    const isLoginLoop = !isNaN(lastAttemptedRedirect) && diff < 5000;
 
     if (!isLoginLoop) {
       sessionStorage.lastAttemptedRedirect = new Date().getTime();
       window.location.href = getLoginRedirectURL(toHref);
     } else {
-      swal('Something went wrong', 'It looks like you\'re stuck in a login loop 😕\n\nPlease try to reload the page and contact us if you are still experiencing issues', 'error');
+      swal('Something went wrong', `It looks like you're stuck in a login loop 😕\n\nPlease click "OK" to reload the page, and contact us if you are still experiencing issues\n\n(We last redirected you ${diff / 1000} seconds ago)`, 'error')
+      .then(() => {
+        sessionStorage.removeItem('lastAttemptedRedirect');
+        location.reload();
+      });
     }
 
     return next(false);
