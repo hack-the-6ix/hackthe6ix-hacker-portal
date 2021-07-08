@@ -9,7 +9,7 @@
       :rows="8"
       :maxLength="2056"
       :lowerCaption="`Minimum 50 Words (Current count: ${
-        requestedWorkshops.length ? requestedWorkshops.split(' ').length : 0
+        requestedWorkshops?.length ? requestedWorkshops?.split(' ')?.length : 0
       })`"
     />
     <Textarea
@@ -22,7 +22,7 @@
       :maxLength="2056"
       required
       :lowerCaption="`Minimum 50 Words (Current count: ${
-        accomplishEssay.length ? accomplishEssay.split(' ').length : 0
+        accomplishEssay?.length ? accomplishEssay?.split(' ')?.length : 0
       })`"
     />
     <Checkbox

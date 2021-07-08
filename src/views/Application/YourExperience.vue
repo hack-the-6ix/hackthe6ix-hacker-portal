@@ -97,7 +97,7 @@
       :maxLength="2056"
       :disabled="!canEdit"
       :lowerCaption="`Minimum 50 Words (Current count: ${
-        projectEssay.length ? projectEssay.split(' ').length : 0
+        projectEssay?.length ? projectEssay?.split(' ').length : 0
       })`"
     />
 
