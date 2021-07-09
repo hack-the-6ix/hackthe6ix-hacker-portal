@@ -127,16 +127,7 @@ export default {
         dangerMode: true,
       }).then(async (confirm) => {
         if (confirm) {
-          this.$emit('updateApplication', true, () => {
-            // TODO: Navigate the user to the post application card
-            swal(
-              'Application Submitted',
-              'Your application has been submitted successfully!',
-              'success',
-            ).then(() => {
-              location.reload();
-            });
-          });
+          this.$emit('updateApplication', true);
         }
       });
     },
