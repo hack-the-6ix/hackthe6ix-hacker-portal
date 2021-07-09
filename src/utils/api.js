@@ -76,8 +76,16 @@ const sendRequest = async (endpoint, type, data = {}, headers) => {
   }
 };
 
-export const getLoginRedirectURL = (nextPage) =>
-  `${trimmedBaseURL}/auth/${authProvider}/login?redirectTo=${nextPage}`;
+export const getLoginRedirectURL = async (redirectTo) =>
+  sendRequest(`/auth/${authProvider}/login`, 'POST', {
+    callbackURL: `${location.origin}/callback`,
+    redirectTo: redirectTo,
+  });
+export const authCallback = async (state, code) =>
+  sendRequest(`/auth/${authProvider}/callback`, 'POST', {
+    state: state,
+    code: code,
+  });
 
 export const refreshToken = async (refreshToken) =>
   sendRequest(`/auth/${authProvider}/refresh`, 'POST', {

@@ -1,11 +1,10 @@
-import queryString from 'query-string';
 import swal from 'sweetalert';
 import { createRouter, createWebHistory } from 'vue-router';
 import {
   clearTokens,
+  handleCallback,
   initRefreshService,
   isAuthenticated,
-  login,
   redirectToLogin,
 } from './utils/SessionController';
 
@@ -20,6 +19,13 @@ const routes = [
       import(/* webpackChunkName: "Application" */ './views/Application'),
   },
   {
+    path: '/callback',
+    component: handleCallback,
+    meta: {
+      noAuth: true,
+    },
+  },
+  {
     path: '/:catchAll(.*)',
     redirect: '/',
   },
@@ -30,30 +36,17 @@ const router = createRouter({
   routes,
 });
 
-const stripTokenFromAddress = () => {
-  // Remove token from URL if it's there
-  // Update URL to exclude
-  const params = queryString.parse(location.search);
-
-  if (params.token || params.refreshToken) {
-    const url = new URL(location.href);
-    delete params.token;
-    delete params.refreshToken;
-    url.search = queryString.stringify(params);
-
-    location.replace(url.href);
-
-    return true;
+router.beforeEach(async (to, from, next) => {
+  // Do not intercept this
+  if (to?.meta?.noAuth) {
+    return next();
   }
 
-  return false;
-};
-
-router.beforeEach(async (to, from, next) => {
-  const toHref = window.location.origin + to.fullPath;
-
-  if (!isAuthenticated() && !(await login())) {
+  if (!isAuthenticated()) {
     // oops we need to go to SSO page to get our tokens
+
+    // Ensure that our redirect is never back to the callback again (prevent infinite loops)
+    const redirectTo = to.path === '/callback' ? '/' : to.fullPath;
 
     // If we last redirected the user less than 5 seconds ago, we will halt and assume that the user is stuck in a login loop.
     const lastAttemptedRedirect = parseInt(
@@ -63,7 +56,7 @@ router.beforeEach(async (to, from, next) => {
     const isLoginLoop = !isNaN(lastAttemptedRedirect) && diff < 5000;
 
     if (!isLoginLoop) {
-      redirectToLogin(toHref);
+      await redirectToLogin(redirectTo);
     } else {
       swal(
         'Something went wrong',
@@ -79,14 +72,12 @@ router.beforeEach(async (to, from, next) => {
     }
 
     return next(false);
-  }
-
-  if (stripTokenFromAddress()) {
-    return next(false);
-  }
-
-  if (isAuthenticated()) {
-    await initRefreshService();
+  } else {
+    // we are authenticated!
+    if (!(await initRefreshService())) {
+      // If the token refresh failed, do not proceed
+      return next(false);
+    }
   }
 
   next();
