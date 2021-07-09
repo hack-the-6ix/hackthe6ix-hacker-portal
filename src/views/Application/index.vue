@@ -1,73 +1,76 @@
 <template>
   <div v-if="loaded">
-    <Layout
-      :title="title"
-      :description="description"
-      v-if="user?.status?.canAmendTeam"
-    >
-      <nav class="home__nav">
-        <Typography
-          v-for="(tab, index) in tabs"
-          @click="selected = tab.id"
-          :class="[
+    <div v-if="user?.status?.canAmendTeam">
+      <ApplicationSubmitted
+          v-if="applicationSubmittedDialogOpen"
+          @closeApplicationSubmittedDialog="applicationSubmittedDialogOpen = false"
+      />
+      <Layout
+          :title="title"
+          :description="description"
+          v-else
+      >
+        <nav class="home__nav">
+          <Typography
+              v-for="(tab, index) in tabs"
+              @click="selected = tab.id"
+              :class="[
             selected === tab.id && 'home__nav-item--active',
             'home__nav-item',
           ]"
-          transform="uppercase"
-          :href="`#${tab.id}`"
-          type="heading4"
-          align="center"
-          :key="tab.id"
-          as="a"
+              transform="uppercase"
+              :href="`#${tab.id}`"
+              type="heading4"
+              align="center"
+              :key="tab.id"
+              as="a"
+          >
+            {{ index + 1 }}<span class="home__nav-text">. {{ tab.label }}</span>
+          </Typography>
+        </nav>
+        <form class="home__form" v-on:submit.prevent="">
+          <TeamFormation
+              v-if="selected === 'team-formation'"
+              v-model:form="team"
+              v-model:modelTabSelected="selected"
+              :dueDate="dueDate"
+              :canAmendTeam="user?.status?.canAmendTeam"
+              @updateTeam="updateTeam"
+          />
+          <AboutYou
+              v-if="selected === 'about-you'"
+              v-model:form="about_you"
+              v-model:modelTabSelected="selected"
+              :enums="enums"
+              :canEdit="user?.status?.canApply"
+          />
+          <YourExperience
+              v-if="selected === 'your-experience'"
+              v-model:form="your_experience"
+              v-model:modelTabSelected="selected"
+              :enums="enums"
+              :canEdit="user?.status?.canApply"
+          />
+          <AtHT6
+              v-if="selected === 'at-ht6'"
+              v-model:form="at_ht6"
+              v-model:modelTabSelected="selected"
+              :canEdit="user?.status?.canApply"
+              @updateApplication="runUpdateApplication"
+          />
+        </form>
+        <Typography
+            type="p"
+            color="white"
+            as="p"
+            v-if="lastSaved"
+            class="home__last-saved"
         >
-          {{ index + 1 }}<span class="home__nav-text">. {{ tab.label }}</span>
+          Last saved at {{ lastSaved }}
         </Typography>
-      </nav>
-      <form class="home__form" v-on:submit.prevent="">
-        <TeamFormation
-          v-if="selected === 'team-formation'"
-          v-model:form="team"
-          v-model:modelTabSelected="selected"
-          :dueDate="dueDate"
-          :canAmendTeam="user?.status?.canAmendTeam"
-          @updateTeam="updateTeam"
-        />
-        <AboutYou
-          v-if="selected === 'about-you'"
-          v-model:form="about_you"
-          v-model:modelTabSelected="selected"
-          :enums="enums"
-          :canEdit="user?.status?.canApply"
-        />
-        <YourExperience
-          v-if="selected === 'your-experience'"
-          v-model:form="your_experience"
-          v-model:modelTabSelected="selected"
-          :enums="enums"
-          :canEdit="user?.status?.canApply"
-        />
-        <AtHT6
-          v-if="selected === 'at-ht6'"
-          v-model:form="at_ht6"
-          v-model:modelTabSelected="selected"
-          :canEdit="user?.status?.canApply"
-          @updateApplication="runUpdateApplication"
-        />
-      </form>
-
-      <Typography
-        type="p"
-        color="white"
-        as="p"
-        v-if="lastSaved"
-        class="home__last-saved"
-      >
-        Last saved at {{ lastSaved }}
-      </Typography>
-    </Layout>
-    <Layout title="" description="" v-else>
-      <ApplicationsClosed :applied="user.status.applied" />
-    </Layout>
+      </Layout>
+    </div>
+    <ApplicationsClosed :applied="user.status.applied" v-else />
   </div>
 </template>
 
@@ -77,6 +80,7 @@ import AboutYou from '@/views/Application/AboutYou';
 import YourExperience from '@/views/Application/YourExperience';
 import AtHT6 from '@/views/Application/AtHT6';
 import ApplicationsClosed from '@/views/Application/ApplicationsClosed';
+import ApplicationSubmitted from '@/views/Application/ApplicationSubmitted';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
 import {
@@ -97,6 +101,7 @@ export default {
     Typography,
     Layout,
     ApplicationsClosed,
+    ApplicationSubmitted,
   },
   data() {
     return {
@@ -110,6 +115,7 @@ export default {
       lastSaved: '',
       unsavedChanges: false,
       loaded: false,
+      applicationSubmittedDialogOpen: false
     };
   },
   watch: {
@@ -139,6 +145,38 @@ export default {
       if (this.unsavedChanges) {
         event.returnValue = `Are you sure you want to leave?`;
       }
+    },
+    async fetchEnums() {
+      const result = await getApplicationEnums();
+
+      if (result.success) {
+        this.enums = result.data;
+      } else {
+        // TODO: Replace with message that's always on screen
+        swal('Unable to fetch enums', result.data, 'error');
+      }
+
+      return true;
+    },
+    async fetchProfile() {
+      const result = await getProfile();
+
+      if (result.success) {
+        this.user = result.data;
+
+        // Load immutable data in about you
+        this.about_you.firstName = result.data.firstName;
+        this.about_you.lastName = result.data.lastName;
+        this.about_you.email = result.data.email;
+
+        this.loadApplication(result.data.hackerApplication || {});
+        await this.loadTeam(result.data.hackerApplication?.teamCode);
+      } else {
+        // TODO: Replace with message that's always on screen
+        swal('Unable to fetch user', result.data, 'error');
+      }
+
+      return true;
     },
     updateTeam(teamCode, memberNames) {
       this.team = {
@@ -182,6 +220,11 @@ export default {
           second: 'numeric',
           timeZoneName: 'short',
         });
+
+        if (submit) {
+          await this.fetchProfile();
+          this.applicationSubmittedDialogOpen = true;
+        }
 
         if (callback) {
           callback();
@@ -284,43 +327,7 @@ export default {
       this.selected = window.location.hash.slice(1);
     }
 
-    const promises = [];
-
-    promises.push(
-      (async () => {
-        const result = await getProfile();
-
-        if (result.success) {
-          this.user = result.data;
-
-          // Load immutable data in about you
-          this.about_you.firstName = result.data.firstName;
-          this.about_you.lastName = result.data.lastName;
-          this.about_you.email = result.data.email;
-
-          this.loadApplication(result.data.hackerApplication || {});
-          await this.loadTeam(result.data.hackerApplication?.teamCode);
-        } else {
-          // TODO: Replace with message that's always on screen
-          swal('Unable to fetch user', result.data, 'error');
-        }
-      })(),
-    );
-
-    promises.push(
-      (async () => {
-        const result = await getApplicationEnums();
-
-        if (result.success) {
-          this.enums = result.data;
-        } else {
-          // TODO: Replace with message that's always on screen
-          swal('Unable to fetch enums', result.data, 'error');
-        }
-      })(),
-    );
-
-    Promise.all(promises).then(() => {
+    Promise.all([this.fetchProfile(), this.fetchEnums()]).then(() => {
       console.log("Okay we're all loaded!");
       this.loaded = true;
     });
