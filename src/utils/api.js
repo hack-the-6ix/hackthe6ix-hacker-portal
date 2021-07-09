@@ -86,7 +86,6 @@ export const authCallback = async (state, code) =>
     state: state,
     code: code,
   });
-
 export const refreshToken = async (refreshToken) =>
   sendRequest(`/auth/${authProvider}/refresh`, 'POST', {
     refreshToken: refreshToken,
