@@ -89,8 +89,10 @@ export default {
     }
 
     &:disabled {
+      -webkit-text-fill-color: var(--field-layout__color);
       color: var(--field-layout__color);
       cursor: not-allowed;
+      opacity: 1;
     }
   }
 }

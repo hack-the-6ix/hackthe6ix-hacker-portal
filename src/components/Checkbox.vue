@@ -1,5 +1,11 @@
 <template>
-  <div :class="['checkbox', disabled && 'checkbox--disabled', !!error && 'checkbox--error']">
+  <div
+    :class="[
+      'checkbox',
+      disabled && 'checkbox--disabled',
+      !!error && 'checkbox--error',
+    ]"
+  >
     <div class="checkbox__body">
       <input
         class="checkbox__el"

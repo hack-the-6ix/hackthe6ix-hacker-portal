@@ -25,5 +25,5 @@ export default function useFormSection(props, initForm) {
       error: errors[name],
       name,
     }),
-  }
+  };
 }

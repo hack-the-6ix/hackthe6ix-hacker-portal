@@ -197,6 +197,7 @@ export default {
   &__caret {
     @include mixins.transition(transform);
     color: colors.css-color(dark-navy);
+    width: units.spacing(3);
 
     &--flip {
       transform: rotate(180deg);

@@ -84,7 +84,7 @@ import ApplicationsClosed from '@/views/Application/ApplicationsClosed';
 import ApplicationSubmitted from '@/views/Application/ApplicationSubmitted';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
-import validateForm, {hasErrors} from '@/utils/validateForm';
+import validateForm, { hasErrors } from '@/utils/validateForm';
 import {
   getApplicationEnums,
   getProfile,
