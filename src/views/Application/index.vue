@@ -163,14 +163,8 @@ export default {
       });
 
       if (!confirm) return;
-      this.runUpdateApplication(true, async () => {
-        // TODO: Navigate the user to the post application card
-        await swal(
-          'Application Submitted',
-          'Your application has been submitted successfully!',
-          'success',
-        );
-        location.reload();
+      this.runUpdateApplication(true, () => {
+        this.applicationSubmittedDialogOpen = true;
       });
     },
     async fetchEnums() {
@@ -265,7 +259,6 @@ export default {
 
         if (submit) {
           await this.fetchProfile();
-          this.applicationSubmittedDialogOpen = true;
         }
 
         if (callback) {
