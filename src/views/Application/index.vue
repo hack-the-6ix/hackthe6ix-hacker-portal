@@ -1,65 +1,74 @@
 <template>
-  <Layout :title="title" :description="description" v-if="loaded">
-    <nav class="home__nav">
-      <Typography
-        v-for="(tab, index) in tabs"
-        @click="selected = tab.id"
-        :class="[
-          selected === tab.id && 'home__nav-item--active',
-          'home__nav-item',
-        ]"
-        transform="uppercase"
-        :href="`#${tab.id}`"
-        type="heading4"
-        align="center"
-        :key="tab.id"
-        as="a"
-      >
-        {{ index + 1 }}<span class="home__nav-text">. {{ tab.label }}</span>
-      </Typography>
-    </nav>
-    <form class="home__form" v-on:submit.prevent="">
-      <TeamFormation
-        v-if="selected === 'team-formation'"
-        v-model:form="team"
-        v-model:modelTabSelected="selected"
-        :dueDate="dueDate"
-        :canAmendTeam="user?.status?.canAmendTeam"
-        @updateTeam="updateTeam"
-      />
-      <AboutYou
-        v-if="selected === 'about-you'"
-        v-model:form="about_you"
-        v-model:modelTabSelected="selected"
-        :enums="enums"
-        :canEdit="user?.status?.canApply"
-      />
-      <YourExperience
-        v-if="selected === 'your-experience'"
-        v-model:form="your_experience"
-        v-model:modelTabSelected="selected"
-        :enums="enums"
-        :canEdit="user?.status?.canApply"
-      />
-      <AtHT6
-        v-if="selected === 'at-ht6'"
-        v-model:form="at_ht6"
-        v-model:modelTabSelected="selected"
-        :canEdit="user?.status?.canApply"
-        @updateApplication="runUpdateApplication"
-      />
-    </form>
-
-    <Typography
-      type="p"
-      color="white"
-      as="p"
-      v-if="lastSaved"
-      class="home__last-saved"
+  <div v-if="loaded">
+    <Layout
+      :title="title"
+      :description="description"
+      v-if="user?.status?.canAmendTeam"
     >
-      Last saved at {{ lastSaved }}
-    </Typography>
-  </Layout>
+      <nav class="home__nav">
+        <Typography
+          v-for="(tab, index) in tabs"
+          @click="selected = tab.id"
+          :class="[
+            selected === tab.id && 'home__nav-item--active',
+            'home__nav-item',
+          ]"
+          transform="uppercase"
+          :href="`#${tab.id}`"
+          type="heading4"
+          align="center"
+          :key="tab.id"
+          as="a"
+        >
+          {{ index + 1 }}<span class="home__nav-text">. {{ tab.label }}</span>
+        </Typography>
+      </nav>
+      <form class="home__form" v-on:submit.prevent="">
+        <TeamFormation
+          v-if="selected === 'team-formation'"
+          v-model:form="team"
+          v-model:modelTabSelected="selected"
+          :dueDate="dueDate"
+          :canAmendTeam="user?.status?.canAmendTeam"
+          @updateTeam="updateTeam"
+        />
+        <AboutYou
+          v-if="selected === 'about-you'"
+          v-model:form="about_you"
+          v-model:modelTabSelected="selected"
+          :enums="enums"
+          :canEdit="user?.status?.canApply"
+        />
+        <YourExperience
+          v-if="selected === 'your-experience'"
+          v-model:form="your_experience"
+          v-model:modelTabSelected="selected"
+          :enums="enums"
+          :canEdit="user?.status?.canApply"
+        />
+        <AtHT6
+          v-if="selected === 'at-ht6'"
+          v-model:form="at_ht6"
+          v-model:modelTabSelected="selected"
+          :canEdit="user?.status?.canApply"
+          @updateApplication="runUpdateApplication"
+        />
+      </form>
+
+      <Typography
+        type="p"
+        color="white"
+        as="p"
+        v-if="lastSaved"
+        class="home__last-saved"
+      >
+        Last saved at {{ lastSaved }}
+      </Typography>
+    </Layout>
+    <Layout title="" description="" v-else>
+      <ApplicationsClosed :applied="user.status.applied" />
+    </Layout>
+  </div>
 </template>
 
 <script>
@@ -67,6 +76,7 @@ import TeamFormation from '@/views/Application/TeamFormation';
 import AboutYou from '@/views/Application/AboutYou';
 import YourExperience from '@/views/Application/YourExperience';
 import AtHT6 from '@/views/Application/AtHT6';
+import ApplicationsClosed from '@/views/Application/ApplicationsClosed';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
 import {
@@ -86,6 +96,7 @@ export default {
     AtHT6,
     Typography,
     Layout,
+    ApplicationsClosed,
   },
   data() {
     return {
@@ -329,10 +340,10 @@ export default {
     },
     description() {
       return this.user?.status?.applied
-          ? `The HT6 team will review your application soon. Keep an eye on your inbox for your application results!\n\n
+        ? `The HT6 team will review your application soon. Keep an eye on your inbox for your application results!\n\n
                Updates can be made to your team list until ${this.dueDate}. While you aren't able to make any more edits,
                you can still review your submission details below.`
-          : `Applications are due ${this.dueDate}. Once you’ve
+        : `Applications are due ${this.dueDate}. Once you’ve
               submitted your application, keep an eye on your inbox
               for your application results!`;
     },
