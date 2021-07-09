@@ -1,5 +1,6 @@
 <template>
   <FormSection class="about-you" label="About you">
+    <FormDisclaimer />
     <Input
       label="First Name"
       placeholder="Enter first name"
@@ -183,6 +184,7 @@ import Button from '@/components/Button';
 import Typography from '@/components/Typography';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
+import FormDisclaimer from '@/components/FormDisclaimer.vue';
 
 export default {
   name: 'AboutYou',
@@ -193,6 +195,7 @@ export default {
     Select,
     Input,
     Button,
+    FormDisclaimer,
   },
   computed: {
     genders() {
