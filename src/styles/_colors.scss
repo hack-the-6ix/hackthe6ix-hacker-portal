@@ -72,7 +72,15 @@ $colors: (
   'error': (
     value: #ca500b,
     static: true,
-  )
+  ),
+  'success': (
+    value: #0F893B,
+    static: true,
+  ),
+  'light-success': (
+    value: #F3FFF8,
+    static: true,
+  ),
 );
 
 $_modifiers: (
