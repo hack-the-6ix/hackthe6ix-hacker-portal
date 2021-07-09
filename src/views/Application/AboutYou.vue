@@ -4,24 +4,24 @@
       label="First Name"
       placeholder="Enter first name"
       autocomplete="given-name"
-      v-model="firstName"
-      name="first_name"
+      v-bind="bindField('firstName', errors)"
+      v-model='firstName'
       disabled
     />
     <Input
       label="Last Name"
       placeholder="Enter last name"
       autocomplete="family-name"
-      v-model="lastName"
-      name="last_name"
+      v-bind="bindField('lastName', errors)"
+      v-model='lastName'
       disabled
     />
     <Input
       label="Email"
       placeholder="name@gmail.com"
       autocomplete="email"
-      v-model="email"
-      name="email"
+      v-bind="bindField('email', errors)"
+      v-model='email'
       type="email"
       disabled
     />
@@ -29,25 +29,25 @@
       label="Phone Number"
       placeholder="12345678901"
       autocomplete="tel"
-      v-model="phoneNumber"
-      name="phoneNumber"
+      v-bind="bindField('phoneNumber', errors)"
+      v-model='phoneNumber'
       type="tel"
-      :maxlength="50"
+      :maxlength="10"
       :disabled="!canEdit"
       required
     />
     <Checkbox
       label="I give permission to Hack the 6ix for sending me emails containing information from the event sponsors."
       class="about-you__full"
-      v-model="emailConsent"
+      v-bind="bindField('emailConsent', errors)"
+      v-model='emailConsent'
       :disabled="!canEdit"
-      name="emailConsent"
     />
     <Select
       label="Gender"
       placeholder="Select"
-      v-model="gender"
-      name="gender"
+      v-bind="bindField('gender', errors)"
+      v-model='gender'
       :options="genders"
       :disabled="!canEdit"
       required
@@ -55,8 +55,7 @@
     <Select
       label="Your Pronouns"
       placeholder="Select"
-      v-model="pronouns"
-      name="pronouns"
+      v-bind="bindField('pronouns', errors)"
       :options="pronounOptions"
       :disabled="!canEdit"
     />
@@ -64,8 +63,8 @@
       <Select
         label="Ethnicity"
         placeholder="Select"
+        v-bind="bindField('ethnicity', errors)"
         v-model="ethnicity"
-        name="ethnicity"
         :options="ethnicities"
         :disabled="!canEdit"
         required
@@ -74,8 +73,8 @@
     <Select
       label="Your Timezone"
       placeholder="Select"
+      v-bind="bindField('timezone', errors)"
       v-model="timezone"
-      name="timezone"
       :options="timezones"
       :disabled="!canEdit"
       required
@@ -83,8 +82,8 @@
     <Checkbox
       label="I live in Canada <strong>and</strong> I want to receive Hack the 6ix swag."
       class="about-you__full"
-      v-model="wantSwag"
-      name="wantSwag"
+      v-bind="bindField('wantSwag', errors)"
+      v-model='wantSwag'
       :disabled="!canEdit"
     />
     <template v-if="wantSwag">
@@ -101,8 +100,8 @@
         label="Address Line 1"
         placeholder="Enter street number and street name"
         autocomplete="address-line1"
+        v-bind="bindField('addressLine1', errors)"
         v-model="addressLine1"
-        name="addressLine1"
         :disabled="!canEdit"
         :maxlength="256"
         required
@@ -111,6 +110,7 @@
         label="Address Line 2"
         placeholder="Apartment, suite number, etc."
         autocomplete="address-line2"
+        v-bind="bindField('addressLine2', errors)"
         v-model="addressLine2"
         name="addressLine2"
         :maxlength="256"
@@ -120,8 +120,8 @@
         label="City"
         placeholder="Enter city name"
         autocomplete="address-level2"
-        v-model="city"
-        name="city"
+        v-bind="bindField('city', errors)"
+        v-model='city'
         :disabled="!canEdit"
         :maxlength="256"
         required
@@ -129,8 +129,8 @@
       <Select
         label="Province"
         placeholder="Select"
-        v-model="province"
-        name="province"
+        v-bind="bindField('province', errors)"
+        v-model='province'
         :options="provinces"
         :disabled="!canEdit"
         required
@@ -140,8 +140,8 @@
         label="Postal Code"
         autocomplete="postal-code"
         placeholder="Ex: V4Q3H9"
-        v-model="postalCode"
-        name="postalCode"
+        v-bind="bindField('postalCode', errors)"
+        v-model='postalCode'
         :disabled="!canEdit"
         :maxlength="6"
         required
@@ -231,6 +231,7 @@ export default {
     form: Object,
     enums: Object,
     canEdit: Boolean,
+    errors: Object,
   },
   emits: ['update:form', 'update:modelTabSelected'],
   setup(props, { emit }) {

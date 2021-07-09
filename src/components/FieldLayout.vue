@@ -22,6 +22,9 @@
     <Typography v-if="error" type="small" as="p" color="error">
       {{ error }}
     </Typography>
+    <Typography v-else-if="info" type="small" as="p" color="disabled">
+      {{ info }}
+    </Typography>
   </div>
 </template>
 
@@ -38,6 +41,7 @@ export default {
     required: Boolean,
     disabled: Boolean,
     error: String,
+    info: String,
     label: {
       type: String,
       required: true,
@@ -85,12 +89,12 @@ export default {
 
   &__error-icon {
     inset: auto units.spacing(3) units.spacing(2) auto;
+    transform: translateY(-15%);
     color: colors.css-color(error);
-    transform: translateY(-50%);
     width: units.spacing(0.75);
     position: absolute;
-    margin: auto 0;
     height: auto;
+    margin: 0;
   }
 }
 </style>

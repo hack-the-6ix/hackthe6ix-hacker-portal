@@ -1,4 +1,4 @@
-<template inherit-attrs="false">
+<template>
   <div class="form-section">
     <fieldset class="form-section__content">
       <legend class="form-section__legend">

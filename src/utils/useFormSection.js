@@ -7,7 +7,7 @@ export default function useFormSection(props, initForm) {
     emit('update:form', { ...initForm });
   }
 
-  return Object.keys(initForm).reduce((acc, field) => {
+  const fields = Object.keys(initForm).reduce((acc, field) => {
     acc[field] = computed({
       get: () => props.form[field],
       set: (value) =>
@@ -18,4 +18,12 @@ export default function useFormSection(props, initForm) {
     });
     return acc;
   }, {});
+
+  return {
+    ...fields,
+    bindField: (name, errors = {}) => ({
+      error: errors[name],
+      name,
+    }),
+  }
 }

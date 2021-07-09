@@ -170,7 +170,7 @@ export default {
     padding: units.spacing(2) units.spacing(3);
     color: colors.css-color(black);
     grid-gap: units.spacing(3);
-    background: transparent;
+    background: var(--field-layout__background);
     align-items: center;
     text-align: start;
     cursor: pointer;

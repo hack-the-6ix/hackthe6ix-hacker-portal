@@ -3,8 +3,8 @@
     <Textarea
       label="Which panels or workshops are you most interested in at Hack the 6ix?"
       class="at-ht6__full"
+      v-bind="bindField('requestedWorkshops', errors)"
       v-model="requestedWorkshops"
-      name="requestedWorkshops"
       :disabled="!canEdit"
       :rows="8"
       :maxLength="2056"
@@ -15,8 +15,8 @@
     <Textarea
       label="What do you hope to accomplish by attending Hack the 6ix?"
       class="at-ht6__full"
+      v-bind="bindField('accomplishEssay', errors)"
       v-model="accomplishEssay"
-      name="accomplishEssay"
       :disabled="!canEdit"
       :rows="8"
       :maxLength="2056"
@@ -28,8 +28,8 @@
     <Checkbox
       label='I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
       target="_blank" rel="noreferrer noopener" class="at-ht6__link">MLH Code of Conduct</a>.'
+      v-bind="bindField('mlhCOC', errors)"
       v-model="mlhCOC"
-      name="mlhCOC"
       class="at-ht6__full"
       :disabled="!canEdit"
       required
@@ -38,8 +38,8 @@
       label="I authorize MLH to send me pre- and post-event informational
       emails, which contain free credit and opportunities from their partners."
       class="at-ht6__full"
+      v-bind="bindField('mlhEmail', errors)"
       v-model="mlhEmail"
-      name="mlhEmail"
       :disabled="!canEdit"
     />
     <Checkbox
@@ -52,8 +52,8 @@
       href="https://mlh.io/privacy" target="_blank" rel="noreferrer noopener" class="at-ht6__link">
       MLH Privacy Policy</a>.'
       class="at-ht6__full"
+      v-bind="bindField('mlhData', errors)"
       v-model="mlhData"
-      name="mlhData"
       :disabled="!canEdit"
       required
     />
@@ -78,7 +78,7 @@
           >
             Save
           </Button>
-          <Button class="at-ht6__button" @click="submit" :disabled="!canEdit">
+          <Button class="at-ht6__button" htmlType="submit" :disabled="!canEdit">
             {{ canEdit ? 'Submit' : 'Submitted' }}
           </Button>
         </div>
@@ -107,6 +107,7 @@ export default {
   props: {
     form: Object,
     canEdit: Boolean,
+    errors: Object,
   },
   methods: {
     save() {
@@ -118,30 +119,8 @@ export default {
         );
       });
     },
-    submit() {
-      swal({
-        title: 'Confirm Submission',
-        text: 'Are you sure you want to submit your application?\n\nYou will not be able to make any additional changes to your application; however, you may update your team up until the submission deadline.',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
-      }).then(async (confirm) => {
-        if (confirm) {
-          this.$emit('updateApplication', true, () => {
-            // TODO: Navigate the user to the post application card
-            swal(
-              'Application Submitted',
-              'Your application has been submitted successfully!',
-              'success',
-            ).then(() => {
-              location.reload();
-            });
-          });
-        }
-      });
-    },
   },
-  emits: ['update:form', 'update:modelTabSelected', 'updateApplication'],
+  emits: ['update:form', 'update:modelTabSelected'],
   setup(props, { emit }) {
     return {
       ...useFormSection(props, {

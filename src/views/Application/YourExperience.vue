@@ -3,8 +3,8 @@
     <Select
       label="Your School (Most Recently Attended)"
       placeholder="Select"
+      v-bind="bindField('school', errors)"
       v-model="school"
-      name="school"
       :maxlength="256"
       :options="schools"
       :disabled="!canEdit"
@@ -13,8 +13,8 @@
     <Select
       label="Your Program of Study"
       placeholder="Select"
+      v-bind="bindField('program', errors)"
       v-model="program"
-      name="program"
       :maxlength="256"
       :options="programs"
       :disabled="!canEdit"
@@ -23,8 +23,8 @@
     <Select
       label="Year of Study"
       placeholder="Select"
+      v-bind="bindField('yearOfStudy', errors)"
       v-model="yearsOfStudy"
-      name="yearsOfStudy"
       :options="years"
       :disabled="!canEdit"
       required
@@ -32,8 +32,8 @@
     <Select
       label="Number of Hackathons Attended"
       placeholder="Select"
+      v-bind="bindField('hackathonsAttended', errors)"
       v-model="hackathonsAttended"
-      name="hackathonsAttended"
       :options="hackathonsOptions"
       :disabled="!canEdit"
       required
@@ -41,16 +41,16 @@
     <div class="your-experience__file">
       <FileUpload
         label="Your Resume"
+        v-bind="bindField('resume', errors)"
         v-model="resume"
-        name="resume"
         :accept="['pdf']"
         :disabled="!canEdit"
         required
       />
       <Checkbox
         label="I allow Hack the 6ix to distribute my resume to its event sponsors."
+        v-bind="bindField('resumeSharePermissions', errors)"
         v-model="resumeSharePermission"
-        name="resumeSharePermission"
         :disabled="!canEdit"
       />
     </div>
@@ -59,8 +59,8 @@
       <Input
         label="GitHub Link"
         placeholder="Ex: https://github.com/fpunny"
+        v-bind="bindField('githubLink', errors)"
         v-model="githubLink"
-        name="githubLink"
         type="url"
         :maxlength="1024"
         :disabled="!canEdit"
@@ -70,8 +70,8 @@
       <Input
         label="Personal Website or Portfolio"
         placeholder="Ex: https://fpunny.xyz"
+        v-bind="bindField('portfolioLink', errors)"
         v-model="portfolioLink"
-        name="portfolioLink"
         type="url"
         :maxlength="1024"
         :disabled="!canEdit"
@@ -81,8 +81,8 @@
       <Input
         label="Linkedin"
         placeholder="Ex: https://www.linkedin.com/company/hackthe6ixofficial"
+        v-bind="bindField('linkedinLink', errors)"
         v-model="linkedinLink"
-        name="linkedinLink"
         type="url"
         :maxlength="1024"
         :disabled="!canEdit"
@@ -91,8 +91,8 @@
     <Textarea
       label="Tell us about a project that you are proud of. What tools did you use and what was the outcome?"
       class="your-experience__full"
+      v-bind="bindField('projectEssay', errors)"
       v-model="projectEssay"
-      name="projectEssay"
       :rows="8"
       :maxLength="2056"
       :disabled="!canEdit"
@@ -200,6 +200,7 @@ export default {
     form: Object,
     enums: Object,
     canEdit: Boolean,
+    errors: Object,
   },
   emits: ['update:form', 'update:modelTabSelected'],
   setup(props, { emit }) {

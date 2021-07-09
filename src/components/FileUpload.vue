@@ -22,7 +22,7 @@
         <FileIcon width="50" class="file-upload__icon" />
         <div>
           <Typography
-            v-if="!this.modelValue"
+            v-if="!this.modelValue.name"
             type="heading4"
             as="p"
             color="dark-navy"
@@ -96,7 +96,6 @@ export default {
 @use '@/styles/units';
 
 .file-upload {
-  max-width: units.spacing(116);
   $self: &;
 
   &__label {

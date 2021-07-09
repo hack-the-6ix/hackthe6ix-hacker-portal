@@ -1,17 +1,15 @@
 <template>
-  <div class="textArea">
-    <label class="textArea__label" :for="id">
-      <Typography type="heading4" as="p" color="dark-navy">
-        {{ label }}{{ required ? '*' : '' }}
-      </Typography>
-    </label>
+  <FieldLayout
+    :required="required"
+    :disabled="disabled"
+    :error="error"
+    :label="label"
+    :info="lowerCaption"
+    :id="id"
+  >
     <textarea
       v-model="value"
-      :class="[
-        success && 'textArea__el--success',
-        error && 'textArea__el--error',
-        'textArea__el',
-      ]"
+      class="textArea__el"
       :disabled="disabled"
       :name="name"
       :required="required"
@@ -19,22 +17,17 @@
       :rows="rows"
       :maxLength="maxLength"
     />
-    <label class="textArea__label" :for="id" v-if="lowerCaption">
-      <Typography type="paragraph" as="p" color="dark-grey">
-        {{ lowerCaption }}
-      </Typography>
-    </label>
-  </div>
+  </FieldLayout>
 </template>
 
 <script>
 import { computed } from 'vue';
 import { v4 as uuid } from 'uuid';
-import Typography from '@/components/Typography';
+import FieldLayout from '@/components/FieldLayout';
 
 export default {
   components: {
-    Typography,
+    FieldLayout,
   },
   props: {
     modelValue: String,
@@ -56,7 +49,7 @@ export default {
     required: Boolean,
     disabled: Boolean,
     success: Boolean,
-    error: Boolean,
+    error: String,
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
@@ -76,17 +69,6 @@ export default {
 @use '@/styles/units';
 
 .textArea {
-  display: flex;
-  flex-direction: column;
-
-  &__label {
-    @each $t, $v in map-get(units.$font-config, small) {
-      #{$t}: $v;
-    }
-    font-weight: 700;
-    margin-bottom: units.spacing(1);
-  }
-
   &__el {
     @include mixins.transition(background-color);
 
@@ -94,24 +76,15 @@ export default {
       #{$tag}: $val;
     }
 
-    &--error {
-      border: 1px solid colors.css-color(error);
-      background-color: colors.css-color(error, $alpha: 0.3);
-    }
-
-    &--success {
-      border: 1px solid colors.css-color(success);
-      background-color: colors.css-color(success, $alpha: 0.3);
-    }
-
-    background-color: colors.css-color(white);
+    background-color: var(--field-layout__background);
     padding: units.spacing(2) units.spacing(2);
     border-radius: units.spacing(0.5);
     color: colors.css-color(black);
     font-family: units.$font;
     box-sizing: border-box;
+    display: flex;
     resize: vertical;
-    border: 1px solid colors.css-color('dark-navy');
+    border: none;
     width: 100%;
     margin: 0;
   }

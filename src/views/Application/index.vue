@@ -19,9 +19,9 @@
           {{ index + 1 }}<span class="home__nav-text">. {{ tab.label }}</span>
         </Typography>
       </nav>
-      <form class="home__form" v-on:submit.prevent="">
+      <form class="home__form" v-on:submit.prevent="submit" novalidate>
         <TeamFormation
-          v-if="selected === 'team-formation'"
+          v-show="selected === 'team-formation'"
           v-model:form="team"
           v-model:modelTabSelected="selected"
           :dueDate="dueDate"
@@ -29,25 +29,28 @@
           @updateTeam="updateTeam"
         />
         <AboutYou
-          v-if="selected === 'about-you'"
+          v-show="selected === 'about-you'"
           v-model:form="about_you"
           v-model:modelTabSelected="selected"
           :enums="enums"
           :canEdit="user?.status?.canApply"
+          :errors="errors.about_you"
         />
         <YourExperience
-          v-if="selected === 'your-experience'"
+          v-show="selected === 'your-experience'"
           v-model:form="your_experience"
           v-model:modelTabSelected="selected"
           :enums="enums"
           :canEdit="user?.status?.canApply"
+          :errors="errors.your_experience"
         />
         <AtHT6
-          v-if="selected === 'at-ht6'"
+          v-show="selected === 'at-ht6'"
           v-model:form="at_ht6"
           v-model:modelTabSelected="selected"
           :canEdit="user?.status?.canApply"
           @updateApplication="runUpdateApplication"
+          :errors="errors.at_ht6"
         />
       </form>
 
@@ -71,6 +74,7 @@ import YourExperience from '@/views/Application/YourExperience';
 import AtHT6 from '@/views/Application/AtHT6';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
+import validateForm, {hasErrors} from '@/utils/validateForm';
 import {
   getApplicationEnums,
   getProfile,
@@ -92,6 +96,11 @@ export default {
   data() {
     return {
       selected: 'team-formation',
+      errors: {
+        your_experience: {},
+        about_you: {},
+        at_ht6: {},
+      },
       your_experience: {},
       about_you: {},
       at_ht6: {},
@@ -131,6 +140,26 @@ export default {
         event.returnValue = `Are you sure you want to leave?`;
       }
     },
+    async submit() {
+      const confirm = await swal({
+        title: 'Confirm Submission',
+        text: 'Are you sure you want to submit your application?\n\nYou will not be able to make any additional changes to your application; however, you may update your team up until the submission deadline.',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+      });
+
+      if (!confirm) return;
+      this.runUpdateApplication(true, async () => {
+        // TODO: Navigate the user to the post application card
+        await swal(
+          'Application Submitted',
+          'Your application has been submitted successfully!',
+          'success',
+        );
+        location.reload();
+      });
+    },
     updateTeam(teamCode, memberNames) {
       this.team = {
         code: teamCode,
@@ -138,6 +167,21 @@ export default {
       };
     },
     async runUpdateApplication(submit, callback) {
+      this.errors = validateForm(
+        this.about_you,
+        this.your_experience,
+        this.at_ht6,
+      );
+
+      if (submit) {
+        this.errors = validateForm(
+          this.about_you,
+          this.your_experience,
+          this.at_ht6,
+        );
+        if (hasErrors(this.errors)) return;
+      }
+
       const newApplication = {
         ...this.your_experience,
         ...this.about_you,

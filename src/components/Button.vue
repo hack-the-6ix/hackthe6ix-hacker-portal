@@ -1,12 +1,12 @@
-<template inherit-attrs="false">
+<template>
   <Typography
     :class="[
       disabled && 'button--disabled',
       `button--color--${color}`,
       'button',
     ]"
-    v-bind="$attrs"
     :disabled="disabled"
+    :htmlType="htmlType"
     type="heading4"
     align="center"
     color="white"
@@ -40,6 +40,10 @@ export default {
     rightIcon: [String, Array],
     leftIcon: [String, Array],
     disabled: Boolean,
+    htmlType: {
+      type: String,
+      default: () => 'button',
+    },
     color: {
       type: String,
       default: () => 'dark-navy',
