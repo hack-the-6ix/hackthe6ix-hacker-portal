@@ -2,69 +2,67 @@
   <div v-if="loaded">
     <div v-if="user?.status?.canAmendTeam">
       <ApplicationSubmitted
-          v-if="applicationSubmittedDialogOpen"
-          @closeApplicationSubmittedDialog="applicationSubmittedDialogOpen = false"
+        v-if="applicationSubmittedDialogOpen"
+        @closeApplicationSubmittedDialog="
+          applicationSubmittedDialogOpen = false
+        "
       />
-      <Layout
-          :title="title"
-          :description="description"
-          v-else
-      >
+      <Layout :title="title" :description="description" v-else>
         <nav class="home__nav">
           <Typography
-              v-for="(tab, index) in tabs"
-              @click="selected = tab.id"
-              :class="[
-            selected === tab.id && 'home__nav-item--active',
-            'home__nav-item',
-          ]"
-              transform="uppercase"
-              :href="`#${tab.id}`"
-              type="heading4"
-              align="center"
-              :key="tab.id"
-              as="a"
+            v-for="(tab, index) in tabs"
+            @click="selected = tab.id"
+            :class="[
+              selected === tab.id && 'home__nav-item--active',
+              'home__nav-item',
+            ]"
+            transform="uppercase"
+            :href="`#${tab.id}`"
+            type="heading4"
+            align="center"
+            :key="tab.id"
+            as="a"
           >
             {{ index + 1 }}<span class="home__nav-text">. {{ tab.label }}</span>
           </Typography>
         </nav>
         <form class="home__form" v-on:submit.prevent="">
           <TeamFormation
-              v-if="selected === 'team-formation'"
-              v-model:form="team"
-              v-model:modelTabSelected="selected"
-              :dueDate="dueDate"
-              :canAmendTeam="user?.status?.canAmendTeam"
-              @updateTeam="updateTeam"
+            v-if="selected === 'team-formation'"
+            v-model:form="team"
+            v-model:modelTabSelected="selected"
+            :dueDate="dueDate"
+            :canAmendTeam="user?.status?.canAmendTeam"
+            @updateTeam="updateTeam"
           />
           <AboutYou
-              v-if="selected === 'about-you'"
-              v-model:form="about_you"
-              v-model:modelTabSelected="selected"
-              :enums="enums"
-              :canEdit="user?.status?.canApply"
+            v-if="selected === 'about-you'"
+            v-model:form="about_you"
+            v-model:modelTabSelected="selected"
+            :enums="enums"
+            :canEdit="user?.status?.canApply"
           />
           <YourExperience
-              v-if="selected === 'your-experience'"
-              v-model:form="your_experience"
-              v-model:modelTabSelected="selected"
-              :enums="enums"
-              :canEdit="user?.status?.canApply"
+            v-if="selected === 'your-experience'"
+            v-model:form="your_experience"
+            v-model:modelTabSelected="selected"
+            :enums="enums"
+            :canEdit="user?.status?.canApply"
           />
           <AtHT6
-              v-if="selected === 'at-ht6'"
-              v-model:form="at_ht6"
-              v-model:modelTabSelected="selected"
-              :canEdit="user?.status?.canApply"
-              @updateApplication="runUpdateApplication"
+            v-if="selected === 'at-ht6'"
+            v-model:form="at_ht6"
+            v-model:modelTabSelected="selected"
+            :canEdit="user?.status?.canApply"
+            @updateApplication="runUpdateApplication"
           />
         </form>
         <Typography
-            type="p"
-            color="white"
-            as="p"
-            v-if="lastSaved"
-            class="home__last-saved"
+          type="p"
+          color="white"
+          as="p"
+          v-if="lastSaved"
+          class="home__last-saved"
         >
           Last saved at {{ lastSaved }}
         </Typography>
@@ -115,7 +113,7 @@ export default {
       lastSaved: '',
       unsavedChanges: false,
       loaded: false,
-      applicationSubmittedDialogOpen: false
+      applicationSubmittedDialogOpen: false,
     };
   },
   watch: {

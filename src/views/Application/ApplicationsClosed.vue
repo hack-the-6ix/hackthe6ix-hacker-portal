@@ -38,11 +38,11 @@ export default {
   components: {
     Typography,
     FormSection,
-    Layout
+    Layout,
   },
   props: {
     applied: Boolean,
-  }
+  },
 };
 </script>
 

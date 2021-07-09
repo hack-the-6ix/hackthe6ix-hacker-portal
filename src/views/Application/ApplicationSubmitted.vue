@@ -17,14 +17,18 @@
           color="black"
           class="application-submitted__content"
         >
-          Thank you for completing the application form! You will receive an email confirmation soon.<br/><br/>
-          We will send your application results to your email within a few weeks.
+          Thank you for completing the application form! You will receive an
+          email confirmation soon.<br /><br />
+          We will send your application results to your email within a few
+          weeks.
         </Typography>
 
         <hr class="application-submitted__hr" />
 
         <div class="application-submitted__buttons-spread">
-          <Button @click="close" class="application-submitted__buttons-right"> Back to Home </Button>
+          <Button @click="close" class="application-submitted__buttons-right">
+            Back to Home
+          </Button>
         </div>
       </FormSection>
     </div>
@@ -43,14 +47,14 @@ export default {
     Typography,
     FormSection,
     Button,
-    Layout
+    Layout,
   },
   emits: [' closeApplicationSubmittedDialog '],
   methods: {
     close() {
       this.$emit('closeApplicationSubmittedDialog');
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -86,11 +90,11 @@ export default {
     display: flex;
     justify-content: space-between;
 
-  @include mixins.media(tablet) {
-    display: grid;
-    grid-gap: units.spacing(3);
-    grid-template-columns: 1fr;
-  }
+    @include mixins.media(tablet) {
+      display: grid;
+      grid-gap: units.spacing(3);
+      grid-template-columns: 1fr;
+    }
   }
 }
 </style>
