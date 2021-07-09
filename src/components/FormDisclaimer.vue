@@ -6,13 +6,16 @@
       'form-disclaimer',
     ]"
   >
-    <button @click="$emit('close')" class="form-disclaimer__close" type="button">
+    <button
+      @click="$emit('close')"
+      class="form-disclaimer__close"
+      type="button"
+    >
       <Close />
     </button>
 
     <div class="form-disclaimer__body">
       <slot name="body">
-
         <SuccessIcon class="form-disclaimer__icon" />
         <ErrorIcon v-if="error" class="form-disclaimer__icon" />
         <DisableIcon v-if="disabled" class="form-disclaimer__icon" />
@@ -35,20 +38,17 @@
             type="heading4"
             as="label"
           >
-            Please resolve the following before proceeding on to the next page. 
+            Please resolve the following before proceeding on to the next page.
           </Typography>
-          <ul
-            v-if="error" 
-            class="form-disclaimer__error"
-          >
-          <Typography
-            class="form-disclaimer__points"
-            color="error"
-            type="heading4"
-            as="a"
-          >
-            <li><a href="#">About You</a></li>
-          </Typography>
+          <ul v-if="error" class="form-disclaimer__error">
+            <Typography
+              class="form-disclaimer__points"
+              color="error"
+              type="heading4"
+              as="a"
+            >
+              <li><a href="#">About You</a></li>
+            </Typography>
           </ul>
         </div>
         <div class="form-disclaimer__details">
@@ -59,12 +59,9 @@
             type="heading4"
             as="a"
           >
-            Please complete the previous section to edit this page. 
+            Please complete the previous section to edit this page.
           </Typography>
-          <ul 
-            v-if="disabled"
-            class="form-disclaimer__disabled"
-          >
+          <ul v-if="disabled" class="form-disclaimer__disabled">
             <Typography
               v-if="error"
               class="form-disclaimer__points"
@@ -94,7 +91,7 @@ export default {
     SuccessIcon,
     ErrorIcon,
     DisableIcon,
-    Close
+    Close,
   },
   props: {
     disabled: Boolean,
@@ -153,13 +150,13 @@ export default {
     color: colors.css-color(black);
   }
 
-  &__error, &__disabled {
+  &__error,
+  &__disabled {
     list-style-position: inside;
     padding-left: 0;
   }
 
   border-left: 4px solid var(--form-disclaimer__color);
-  background-color: var(--form-disclaimer__background); 
+  background-color: var(--form-disclaimer__background);
 }
-
 </style>

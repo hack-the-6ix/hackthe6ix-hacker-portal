@@ -1,27 +1,23 @@
 <template>
-  <div class='message'>
+  <div class="message">
     <button @click="$emit('close')" class="message__close" type="button">
-          <Close />
-        </button>
+      <Close />
+    </button>
 
     <div class="message__body">
       <slot name="body">
-          <Typography
-            class="message__label"
-            color="black"
-            type="paragraph"
-            as="p"
-          >
-            This question allows us to gauge our
-            hackathon's commitment to diversity
-            and inclusion where we can equitably
-            work towards a better and inclusive
-            hacking community for everyone. We at
-            Hack the 6ix believe that diversity
-            delivers a unique array of ideas and is a
-            key ingredient for better
-            decision-making among teams. 
-          </Typography>
+        <Typography
+          class="message__label"
+          color="black"
+          type="paragraph"
+          as="p"
+        >
+          This question allows us to gauge our hackathon's commitment to
+          diversity and inclusion where we can equitably work towards a better
+          and inclusive hacking community for everyone. We at Hack the 6ix
+          believe that diversity delivers a unique array of ideas and is a key
+          ingredient for better decision-making among teams.
+        </Typography>
       </slot>
     </div>
   </div>
@@ -34,7 +30,7 @@ import Close from '@/assets/close.svg';
 export default {
   components: {
     Typography,
-    Close
+    Close,
   },
   props: {
     type: {
@@ -65,11 +61,11 @@ export default {
   }
 
   &__body {
-    padding: units.spacing(10) units.spacing(12) units.spacing(10) units.spacing(12);
+    padding: units.spacing(10) units.spacing(12) units.spacing(10)
+      units.spacing(12);
   }
 
   border: 1px solid var(--message__color);
   background-color: var(--message__background);
 }
-
 </style>
