@@ -14,6 +14,7 @@
         :accept="serializedAccept"
         class="file-upload__field"
         :required="required"
+        :disabled='disabled'
         @input="upload"
         type="file"
         :id="id"
@@ -68,6 +69,7 @@ export default {
   props: {
     modelValue: Object,
     required: Boolean,
+    disabled: Boolean,
     label: String,
     accept: {
       type: Array,
@@ -106,7 +108,6 @@ export default {
   &__body {
     border-radius: units.spacing(5);
     position: relative;
-    overflow: hidden;
 
     &:hover,
     &:focus {
@@ -131,18 +132,30 @@ export default {
 
   &__field {
     border-radius: units.spacing(5);
+    color: transparent;
     position: absolute;
     cursor: pointer;
     margin: auto;
     height: 100%;
     width: 100%;
-    opacity: 0;
     z-index: 1;
     inset: 0;
 
-    &:hover #{$self}__content,
-    &:active {
+    &::-webkit-file-upload-button {
+      display: none;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover ~ #{$self}__content,
+    &:not(:disabled):focus ~ #{$self}__content {
       background-color: colors.css-color(grey, hover);
+    }
+
+    &:not(:disabled):active ~ #{$self}__content {
+      background-color: colors.css-color(grey, active);
     }
   }
 

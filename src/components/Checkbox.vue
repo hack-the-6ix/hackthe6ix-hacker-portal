@@ -103,12 +103,14 @@ export default {
   &__body {
     margin-bottom: auto;
     position: relative;
+    display: flex;
   }
 
   &__el {
     position: absolute;
     cursor: pointer;
     appearance: none;
+    border: none;
     height: 100%;
     margin: auto;
     width: 100%;
@@ -145,6 +147,7 @@ export default {
     @include mixins.transition(opacity);
     margin-top: units.spacing(0.5);
     display: flex;
+    width: 100%;
     opacity: 0;
 
     &--show {

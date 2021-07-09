@@ -145,6 +145,7 @@ export default {
 
 .select {
   position: relative;
+  $self: &;
 
   &__el {
     position: absolute;
@@ -181,6 +182,10 @@ export default {
     &--disabled {
       color: var(--field-layout__color);
       cursor: not-allowed;
+
+      & #{$self}__caret {
+        color: colors.css-color(--field-layout__color);
+      }
     }
 
     &--placeholder {

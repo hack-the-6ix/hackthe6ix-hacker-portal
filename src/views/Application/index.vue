@@ -154,6 +154,13 @@ export default {
       }
     },
     async submit() {
+      this.errors = validateForm(
+        this.about_you,
+        this.your_experience,
+        this.at_ht6,
+      );
+      if (hasErrors(this.errors)) return;
+
       const confirm = await swal({
         title: 'Confirm Submission',
         text: 'Are you sure you want to submit your application?\n\nYou will not be able to make any additional changes to your application; however, you may update your team up until the submission deadline.',
@@ -212,21 +219,6 @@ export default {
       };
     },
     async runUpdateApplication(submit, callback) {
-      this.errors = validateForm(
-        this.about_you,
-        this.your_experience,
-        this.at_ht6,
-      );
-
-      if (submit) {
-        this.errors = validateForm(
-          this.about_you,
-          this.your_experience,
-          this.at_ht6,
-        );
-        if (hasErrors(this.errors)) return;
-      }
-
       const newApplication = {
         ...this.your_experience,
         ...this.about_you,

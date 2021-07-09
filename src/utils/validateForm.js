@@ -69,7 +69,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
     if (
       !errors.about_you.postalCode &&
       !about_you.postalCode.match(
-        /^[ABCEGHJ-NPRSTVXY][0-9][ABCEGHJ-NPRSTV-Z] [0-9][ABCEGHJ-NPRSTV-Z][0-9]$/,
+        /^[ABCEGHJ-NPRSTVXY][0-9][ABCEGHJ-NPRSTV-Z][0-9][ABCEGHJ-NPRSTV-Z][0-9]$/,
       )
     ) {
       errors.about_you.postalCode = 'Invalid postal code';

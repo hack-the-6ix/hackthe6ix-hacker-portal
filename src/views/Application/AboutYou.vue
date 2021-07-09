@@ -1,6 +1,5 @@
 <template>
   <FormSection class="about-you" label="About you">
-    <FormDisclaimer />
     <Input
       label="First Name"
       placeholder="Enter first name"
@@ -33,7 +32,7 @@
       v-bind="bindField('phoneNumber', errors)"
       v-model="phoneNumber"
       type="tel"
-      :maxlength="10"
+      :maxlength="20"
       :disabled="!canEdit"
       required
     />
@@ -57,6 +56,7 @@
       label="Your Pronouns"
       placeholder="Select"
       v-bind="bindField('pronouns', errors)"
+      v-model="pronouns"
       :options="pronounOptions"
       :disabled="!canEdit"
     />
@@ -184,7 +184,6 @@ import Button from '@/components/Button';
 import Typography from '@/components/Typography';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
-import FormDisclaimer from '@/components/FormDisclaimer.vue';
 
 export default {
   name: 'AboutYou',
@@ -195,7 +194,6 @@ export default {
     Select,
     Input,
     Button,
-    FormDisclaimer,
   },
   computed: {
     genders() {
