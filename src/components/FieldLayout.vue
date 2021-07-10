@@ -15,7 +15,7 @@
     >
       <span v-html="label" />{{ required ? '*' : '' }}
     </Typography>
-    <div class="field-layout__main">
+    <div :class="['field-layout__main', !noOutline && 'field-layout--outlined']">
       <slot />
       <WarningIcon v-if="error" class="field-layout__error-icon" />
     </div>
@@ -38,6 +38,7 @@ export default {
     WarningIcon,
   },
   props: {
+    noOutline: Boolean,
     required: Boolean,
     disabled: Boolean,
     error: String,
@@ -59,11 +60,15 @@ export default {
 @use '@/styles/units';
 
 .field-layout {
-  --field-layout__color: #{colors.css-color(dark-navy)};
   --field-layout__background: transparent;
+  --field-layout__color: #{colors.css-color(dark-navy)};
   grid-template-columns: 1fr;
   grid-gap: units.spacing(1);
   display: grid;
+
+  &--outlined {
+    border: 1px solid var(--field-layout__color);
+  }
 
   &--error {
     --field-layout__color: #{colors.css-color(error)};
@@ -80,7 +85,6 @@ export default {
   }
 
   &__main {
-    border: 1px solid var(--field-layout__color);
     border-radius: units.spacing(0.5);
     box-sizing: border-box;
     position: relative;

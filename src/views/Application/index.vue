@@ -314,11 +314,13 @@ export default {
         ],
       };
 
-      // Construct a "fake" file that just passes in the file name
-      hackerApplication['resume'] = {
-        name: hackerApplication.resumeFileName,
-        fakeFile: true,
-      };
+      if (hackerApplication.resumeFileName) {
+        // Construct a "fake" file that just passes in the file name
+        hackerApplication['resume'] = {
+          name: hackerApplication.resumeFileName,
+          fakeFile: true,
+        };
+      }
 
       for (const section in fields) {
         for (const field of fields[section]) {

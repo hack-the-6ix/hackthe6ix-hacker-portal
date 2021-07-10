@@ -1,53 +1,54 @@
 <template>
-  <div class="file-upload">
-    <Typography
-      class="file-upload__label"
-      type="heading4"
-      color="dark-navy"
-      as="label"
-      :for="id"
-    >
-      {{ label }}{{ required ? '*' : '' }}
-    </Typography>
-    <div class="file-upload__body">
-      <input
-        :accept="serializedAccept"
-        class="file-upload__field"
-        :required="required"
-        :disabled='disabled'
-        @input="upload"
-        :name='name'
-        type="file"
-        :id="id"
-      />
-      <div class="file-upload__content">
-        <FileIcon width="50" class="file-upload__icon" />
-        <div>
-          <Typography
-            v-if="!this.modelValue?.name"
-            type="heading4"
-            as="p"
-            color="dark-navy"
-          >
-            Drop Files here or
-            <Typography type="heading4" color="teal" as="span">
-              Browse
+  <FieldLayout
+      :required="required"
+      :disabled="disabled"
+      :noOutline="true"
+      :error="error"
+      :label="label"
+      :id="id"
+  >
+    <div class="file-upload">
+      <div class="file-upload__body">
+        <input
+          :accept="serializedAccept"
+          class="file-upload__field"
+          :required="required"
+          :disabled='disabled'
+          @input="upload"
+          :name='name'
+          type="file"
+          :id="id"
+        />
+        <div :class="['file-upload__content', error && 'file-upload__error']">
+          <FileIcon width="50" class="file-upload__icon" />
+          <div>
+            <Typography
+              v-if="!this.modelValue?.name"
+              type="heading4"
+              as="p"
+              color="dark-navy"
+            >
+              Drop Files here or
+              <Typography type="heading4" color="teal" as="span">
+                Browse
+              </Typography>
             </Typography>
-          </Typography>
-          <Typography v-else class="file-upload__name" type="heading4" as="p" color="teal">
-            {{ this.modelValue?.name }}
-          </Typography>
-          <Typography type="small" as="p" color="black">
-            Accepted file format: {{ accept.join(', ') || 'All' }}
-          </Typography>
+            <Typography v-else class="file-upload__name" type="heading4" as="p" color="teal">
+              {{ this.modelValue?.name }}
+            </Typography>
+            <Typography type="small" as="p" color="black">
+              Accepted file format: {{ accept.join(', ') || 'All' }}
+            </Typography>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </FieldLayout>
 </template>
 
 <script>
 import Typography from '@/components/Typography';
+import FieldLayout from '@/components/FieldLayout';
 import FileIcon from '@/assets/file.svg';
 import { computed } from 'vue';
 
@@ -55,6 +56,7 @@ export default {
   components: {
     Typography,
     FileIcon,
+    FieldLayout,
   },
   methods: {
     async upload(event) {
@@ -68,6 +70,7 @@ export default {
     },
   },
   props: {
+    error: String,
     modelValue: Object,
     required: Boolean,
     disabled: Boolean,
@@ -130,6 +133,10 @@ export default {
     grid-gap: units.spacing(6);
     box-sizing: border-box;
     display: grid;
+  }
+
+  &__error {
+    border: 3px solid colors.css-color(error);
   }
 
   &__field {
