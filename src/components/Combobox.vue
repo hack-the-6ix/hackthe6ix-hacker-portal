@@ -156,8 +156,10 @@ export default {
     margin: 0;
 
     &:disabled {
+      -webkit-text-fill-color: colors.css-color(disabled);
       color: colors.css-color(disabled);
       cursor: not-allowed;
+      opacity: 1;
     }
   }
 
