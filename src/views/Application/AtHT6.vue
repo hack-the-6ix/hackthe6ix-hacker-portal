@@ -1,5 +1,9 @@
 <template>
-  <FormSection class="at-ht6" label="At HT6">
+  <FormSection
+    :disclaimer="disclaimer"
+    class="at-ht6"
+    label="At HT6"
+  >
     <Textarea
       label="Which panels or workshops are you most interested in at Hack the 6ix?"
       class="at-ht6__full"
@@ -108,6 +112,30 @@ export default {
     form: Object,
     canEdit: Boolean,
     errors: Object,
+    pageErrors: Array,
+  },
+  computed: {
+    disclaimer() {
+      const fieldErrors = Object.values(this.errors).filter(Boolean);
+      const pageErrors = this.pageErrors.filter(id => id !== 'at_ht6').map(
+        id => {
+          const label = id.charAt(0).toUpperCase() + id.slice(1).replace(/_./g, s => ` ${s.charAt(1).toUpperCase()}`);
+          return `<a class='at-ht6__disclaimer-link' href="#${id.replace(/_/g, '-')}">${label}</a>`
+        },
+      );
+
+      if (!fieldErrors.length && !pageErrors.length) return;
+      return [
+        {
+          label: 'Please resolve the following pages before you submit.',
+          items: pageErrors,
+        },
+        {
+          label: 'Please resolve the following fields before you submit.',
+          items: fieldErrors,
+        },
+      ];
+    },
   },
   methods: {
     save() {
@@ -211,6 +239,20 @@ export default {
       display: grid;
       grid-gap: units.spacing(3);
       grid-template-columns: 1fr;
+    }
+  }
+
+  &__disclaimer-link {
+    @include mixins.transition(color);
+    color: colors.css-color(navy);
+
+    &:hover,
+    &:focus {
+      color: colors.css-color(navy, hover);
+    }
+
+    &:active {
+      color: colors.css-color(navy, active);
     }
   }
 }

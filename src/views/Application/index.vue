@@ -33,6 +33,7 @@
             v-model:modelTabSelected="selected"
             :dueDate="dueDate"
             :canAmendTeam="user?.status?.canAmendTeam"
+            :pageErrors="pageErrors"
             @updateTeam="updateTeam"
           />
           <AboutYou
@@ -40,6 +41,7 @@
             v-model:form="about_you"
             v-model:errors="errors.about_you"
             v-model:modelTabSelected="selected"
+            :pageErrors="pageErrors"
             :enums="enums"
             :canEdit="user?.status?.canApply"
           />
@@ -48,6 +50,7 @@
             v-model:form="your_experience"
             v-model:errors="errors.your_experience"
             v-model:modelTabSelected="selected"
+            :pageErrors="pageErrors"
             :enums="enums"
             :canEdit="user?.status?.canApply"
           />
@@ -56,6 +59,7 @@
             v-model:form="at_ht6"
             v-model:errors="errors.at_ht6"
             v-model:modelTabSelected="selected"
+            :pageErrors="pageErrors"
             :canEdit="user?.status?.canApply"
             @updateApplication="runUpdateApplication"
           />
@@ -148,6 +152,9 @@ export default {
     },
     'about_you.postalCode'(value) {
       this.about_you.postalCode = value.toUpperCase();
+    },
+    $route(to) {
+      this.selected = to.hash.slice(1);
     },
   },
   methods: {
@@ -385,6 +392,11 @@ export default {
         : `Applications are due ${this.dueDate}. Once you’ve
               submitted your application, keep an eye on your inbox
               for your application results!`;
+    },
+    pageErrors() {
+      return Object.keys(this.errors).map(
+        key => Object.values(this.errors[key]).filter(Boolean).length && key,
+      ).filter(Boolean);
     },
     dueDate() {
       return new Date(

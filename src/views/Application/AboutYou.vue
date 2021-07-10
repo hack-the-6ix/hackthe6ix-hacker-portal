@@ -1,5 +1,9 @@
 <template>
-  <FormSection class="about-you" label="About you">
+  <FormSection
+    :disclaimer="disclaimer"
+    class="about-you"
+    label="About you"
+  >
     <Input
       label="First Name"
       placeholder="Enter first name"
@@ -179,9 +183,9 @@
 import { computed } from 'vue';
 import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
+import Typography from '@/components/Typography';
 import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
-import Typography from '@/components/Typography';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
 
@@ -196,6 +200,27 @@ export default {
     Button,
   },
   computed: {
+    disclaimer() {
+      const fieldErrors = Object.values(this.errors).filter(Boolean);
+      const pageErrors = this.pageErrors.filter(id => id !== 'about_you').map(
+        id => {
+          const label = id.charAt(0).toUpperCase() + id.slice(1).replace(/_./g, s => ` ${s.charAt(1).toUpperCase()}`);
+          return `<a class='about-you__link' href="#${id.replace(/_/g, '-')}">${label}</a>`
+        },
+      );
+
+      if (!fieldErrors.length && !pageErrors.length) return;
+      return [
+        {
+          label: 'Please resolve the following pages before you submit.',
+          items: pageErrors,
+        },
+        {
+          label: 'Please resolve the following fields before you submit.',
+          items: fieldErrors,
+        },
+      ];
+    },
     genders() {
       return (this.enums?.gender || []).map((x) => ({
         label: x,
@@ -229,6 +254,7 @@ export default {
   },
   props: {
     modelTabSelected: String,
+    pageErrors: Array,
     form: Object,
     enums: Object,
     canEdit: Boolean,
@@ -265,6 +291,7 @@ export default {
 
 <style lang="scss">
 @use '@/styles/mixins';
+@use '@/styles/colors';
 @use '@/styles/units';
 
 .about-you {
@@ -301,6 +328,20 @@ export default {
       display: grid;
       grid-gap: units.spacing(3);
       grid-template-columns: 1fr;
+    }
+  }
+
+  &__link {
+    @include mixins.transition(color);
+    color: colors.css-color(navy);
+
+    &:hover,
+    &:focus {
+      color: colors.css-color(navy, hover);
+    }
+
+    &:active {
+      color: colors.css-color(navy, active);
     }
   }
 }

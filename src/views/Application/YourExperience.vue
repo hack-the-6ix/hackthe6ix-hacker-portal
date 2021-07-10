@@ -1,5 +1,9 @@
 <template>
-  <FormSection class="your-experience" label="Your Experience">
+  <FormSection
+    :disclaimer="disclaimer"
+    class="your-experience"
+    label="Your Experience"
+  >
     <Select
       label="Your School (Most Recently Attended)"
       placeholder="Select"
@@ -174,6 +178,27 @@ export default {
     },
   },
   computed: {
+    disclaimer() {
+      const fieldErrors = Object.values(this.errors).filter(Boolean);
+      const pageErrors = this.pageErrors.filter(id => id !== 'your_experience').map(
+        id => {
+          const label = id.charAt(0).toUpperCase() + id.slice(1).replace(/_./g, s => ` ${s.charAt(1).toUpperCase()}`);
+          return `<a class='your-experience__link' href="#${id.replace(/_/g, '-')}">${label}</a>`
+        },
+      );
+
+      if (!fieldErrors.length && !pageErrors.length) return;
+      return [
+        {
+          label: 'Please resolve the following pages before you submit.',
+          items: pageErrors,
+        },
+        {
+          label: 'Please resolve the following fields before you submit.',
+          items: fieldErrors,
+        },
+      ];
+    },
     schools() {
       return (this.enums?.school || []).map((x) => ({
         label: x,
@@ -204,6 +229,7 @@ export default {
     enums: Object,
     canEdit: Boolean,
     errors: Object,
+    pageErrors: Array,
   },
   emits: ['update:form', 'update:modelTabSelected', 'update:errors'],
   setup(props, { emit }) {
@@ -230,6 +256,7 @@ export default {
 </script>
 
 <style lang="scss">
+@use '@/styles/colors';
 @use '@/styles/mixins';
 @use '@/styles/units';
 
@@ -290,6 +317,20 @@ export default {
       display: grid;
       grid-gap: units.spacing(3);
       grid-template-columns: 1fr;
+    }
+  }
+
+  &__link {
+    @include mixins.transition(color);
+    color: colors.css-color(navy);
+
+    &:hover,
+    &:focus {
+      color: colors.css-color(navy, hover);
+    }
+
+    &:active {
+      color: colors.css-color(navy, active);
     }
   }
 }

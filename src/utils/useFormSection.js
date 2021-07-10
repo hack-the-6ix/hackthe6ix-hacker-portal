@@ -15,7 +15,7 @@ export default function useFormSection(props, initForm) {
         emit('update:errors', {
           ...props.errors,
           [field]: undefined,
-        })
+        });
       },
     });
     return acc;

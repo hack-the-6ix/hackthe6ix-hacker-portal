@@ -4,6 +4,12 @@
       <legend class="form-section__legend">
         {{ label }}
       </legend>
+      <FormDisclaimer
+        class="form-section__disclaimer"
+        :type='disclaimerType'
+        :data='disclaimer'
+        v-if='disclaimer'
+      />
       <div v-bind="$attrs">
         <slot />
       </div>
@@ -12,13 +18,23 @@
 </template>
 
 <script>
+import FormDisclaimer from '@/components/FormDisclaimer';
+
 export default {
   name: 'FormSection',
   inheritAttrs: false,
+  components: {
+    FormDisclaimer,
+  },
   props: {
     label: {
       type: String,
       required: true,
+    },
+    disclaimer: Array,
+    disclaimerType: {
+      type: String,
+      default: () => 'error',
     },
   },
 };
@@ -46,6 +62,10 @@ export default {
 
   &__legend {
     display: none;
+  }
+
+  &__disclaimer {
+    margin-bottom: units.spacing(6);
   }
 }
 </style>
