@@ -43,7 +43,7 @@
         label="Your Resume"
         v-bind="bindField('resume', errors)"
         v-model="resume"
-        :accept="['pdf']"
+        :accept="['application/pdf']"
         :disabled="!canEdit"
         required
       />
