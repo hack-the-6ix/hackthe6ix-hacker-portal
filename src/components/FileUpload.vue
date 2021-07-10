@@ -19,7 +19,7 @@
           type="file"
           :id="id"
         />
-        <div class="file-upload__content">
+        <div :class="['file-upload__content']">
           <FileIcon width="50" class="file-upload__icon" />
           <div>
             <Typography
@@ -132,6 +132,10 @@ export default {
     grid-gap: units.spacing(6);
     box-sizing: border-box;
     display: grid;
+  }
+
+  &__error {
+    border: 3px solid colors.css-color(error);
   }
 
   &__field {
