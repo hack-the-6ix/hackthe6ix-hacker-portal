@@ -274,7 +274,7 @@ export default {
   display: grid;
 
   @include mixins.media(tablet) {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(1px, 1fr);
   }
 
   &__full {

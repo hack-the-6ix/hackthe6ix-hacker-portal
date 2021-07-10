@@ -146,6 +146,9 @@ export default {
         this.unsavedChanges = true;
       }
     },
+    'about_you.postalCode'(value) {
+      this.about_you.postalCode = value.toUpperCase();
+    },
   },
   methods: {
     handler(event) {

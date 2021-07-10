@@ -16,15 +16,12 @@ function requiredValidator(form, error) {
 function validateLink(key, field) {
   if (!field) return;
 
-  if (!field.startsWith('https://')) {
-    return `${displayKey(key)} must start with https`;
-  }
-
-  if (
-    !field.match(
-      /^(https:\/\/)?([w|W]{3}\.)+[a-zA-Z0-9\-.]{3,}\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?$/,
-    )
-  ) {
+  try {
+    const url = new URL(field);
+    if (!['http:', 'https:'].includes(url.protocol)) {
+      return `${displayKey(key)} must start with http or https`;
+    }
+  } catch {
     return `${displayKey(key)} is not a valid url`;
   }
 }
@@ -60,7 +57,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   // Validate about_you data
   if (
     !errors.about_you.phoneNumber &&
-    about_you.phoneNumber.match(/\d/g).length !== 10
+    about_you.phoneNumber.match(/\d/g).length !== 20
   ) {
     errors.about_you.phoneNumber = 'Invalid phone number';
   }
@@ -99,7 +96,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   }
 
   if (!errors.your_experience.projectEssay) {
-    const count = your_experience.projectEssay?.split(' ').length ?? 0;
+    const count = your_experience.projectEssay?.split(' ').filter(Boolean).length ?? 0;
     if (count !== 0 && count < 50) {
       errors.your_experience.projectEssay = `Project Essay must be atleast 50 words`;
     }
@@ -107,14 +104,14 @@ export default function validateForm(about_you, your_experience, at_ht6) {
 
   // Validate at_ht6
   if (!errors.at_ht6.requestedWorkshops) {
-    const count = at_ht6.requestedWorkshops?.split(' ').length ?? 0;
+    const count = at_ht6.requestedWorkshops?.split(' ').filter(Boolean).length ?? 0;
     if (count !== 0 && count < 50) {
       errors.at_ht6.requestedWorkshops = `Workshop Essay must be atleast 50 words`;
     }
   }
 
   if (!errors.at_ht6.accomplishEssay) {
-    const count = at_ht6.accomplishEssay?.split(' ').length ?? 0;
+    const count = at_ht6.accomplishEssay?.split(' ').filter(Boolean).length ?? 0;
     if (count !== 0 && count < 50) {
       errors.at_ht6.accomplishEssay = `Accomplish Essay must be atleast 50 words`;
     }

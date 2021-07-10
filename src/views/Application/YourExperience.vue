@@ -237,7 +237,7 @@ export default {
   display: grid;
 
   @include mixins.media(tablet) {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(1px, 1fr);
   }
 
   &__full {
@@ -261,7 +261,7 @@ export default {
   }
 
   &__file {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(1px, 1fr);
     grid-gap: units.spacing(3);
     grid-column: span 2;
     display: grid;

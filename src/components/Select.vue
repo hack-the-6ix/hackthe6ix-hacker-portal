@@ -168,10 +168,11 @@ export default {
     }
 
     grid-template-columns: auto units.spacing(3);
+    background: var(--field-layout__background);
     padding: units.spacing(2) units.spacing(3);
     color: colors.css-color(black);
     grid-gap: units.spacing(3);
-    background: var(--field-layout__background);
+    box-sizing: border-box;
     align-items: center;
     text-align: start;
     cursor: pointer;

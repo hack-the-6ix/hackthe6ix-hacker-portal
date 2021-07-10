@@ -16,6 +16,7 @@
         :required="required"
         :disabled='disabled'
         @input="upload"
+        :name='name'
         type="file"
         :id="id"
       />
@@ -23,7 +24,7 @@
         <FileIcon width="50" class="file-upload__icon" />
         <div>
           <Typography
-            v-if="!this.modelValue.name"
+            v-if="!this.modelValue?.name"
             type="heading4"
             as="p"
             color="dark-navy"
@@ -33,8 +34,8 @@
               Browse
             </Typography>
           </Typography>
-          <Typography v-else type="heading4" as="p" color="teal">
-            {{ this.modelValue.name }}
+          <Typography v-else class="file-upload__name" type="heading4" as="p" color="teal">
+            {{ this.modelValue?.name }}
           </Typography>
           <Typography type="small" as="p" color="black">
             Accepted file format: {{ accept.join(', ') || 'All' }}
@@ -71,6 +72,7 @@ export default {
     required: Boolean,
     disabled: Boolean,
     label: String,
+    name: String,
     accept: {
       type: Array,
       default: () => [],
@@ -163,6 +165,10 @@ export default {
     fill: colors.css-color(dark-navy);
     align-self: center;
     width: 100%;
+  }
+
+  &__name {
+    word-break: break-all;
   }
 }
 </style>
