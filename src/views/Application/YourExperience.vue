@@ -4,7 +4,7 @@
     class="your-experience"
     label="Your Experience"
   >
-    <Select
+    <Combobox
       label="Your School (Most Recently Attended)"
       placeholder="Select"
       v-bind="bindField('school', errors)"
@@ -135,6 +135,7 @@ import { computed } from 'vue';
 import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import FileUpload from '@/components/FileUpload';
+import Combobox from '@/components/Combobox';
 import Checkbox from '@/components/Checkbox';
 import Textarea from '@/components/Textarea';
 import Select from '@/components/Select';
@@ -148,6 +149,7 @@ export default {
   components: {
     FormSection,
     FileUpload,
+    Combobox,
     Checkbox,
     Textarea,
     Select,
@@ -206,10 +208,7 @@ export default {
       ];
     },
     schools() {
-      return (this.enums?.school || []).map((x) => ({
-        label: x,
-        value: x,
-      }));
+      return this.enums?.school ?? [];
     },
     programs() {
       return (this.enums?.programOfStudy || []).map((x) => ({
