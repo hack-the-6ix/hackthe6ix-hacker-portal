@@ -57,7 +57,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   // Validate about_you data
   if (
     !errors.about_you.phoneNumber &&
-    about_you.phoneNumber.match(/\d/g).length === 0
+    (!about_you.phoneNumber.match(/\d/g) || about_you.phoneNumber.match(/\d/g).length === 0)
   ) {
     errors.about_you.phoneNumber = 'Invalid phone number';
   }
