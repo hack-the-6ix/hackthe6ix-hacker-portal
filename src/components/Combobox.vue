@@ -87,17 +87,24 @@ export default {
     }
   },
   computed: {
+    normalizedOptions() {
+      return this.options.reduce((acc, option) => {
+        acc[option.toLowerCase()] = option;
+        return acc;
+      }, {});
+    },
     filteredOptions() {
-      if (!this.displayText) return this.options.slice(0, 10);
+      if (this.displayText.length < 3) return this.options.slice(0, 10);
 
       return stringSimilarity.findBestMatch(
-          this.displayText,
-          this.options,
+          this.displayText.toLowerCase(),
+          Object.keys(this.normalizedOptions),
         ).ratings
-        .filter(rating => rating.rating > 0.5)
+        // More we type, stricter the search
+        .filter(rating => rating.rating >= Math.min(0.1 + (this.displayText.length * 0.03), 0.8))
         .sort((a, b) => b.rating - a.rating)
         .slice(0, 10)
-        .map(rating => rating.target);
+        .map(rating => this.normalizedOptions[rating.target]);
     },
   },
   props: {
