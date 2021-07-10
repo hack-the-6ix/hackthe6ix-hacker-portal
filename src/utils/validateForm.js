@@ -47,7 +47,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
         : [],
     )
     .forEach(requiredValidator(about_you, errors.about_you));
-  ['school', 'program', 'yearsOfStudy', 'resume', 'hackathonsAttended'].forEach(
+  ['school', 'program', 'yearsOfStudy', 'resume', 'hackathonsAttended', 'projectEssay'].forEach(
     requiredValidator(your_experience, errors.your_experience),
   );
   ['accomplishEssay', 'mlhCOC', 'mlhData'].forEach(

@@ -97,8 +97,9 @@
       :maxLength="2056"
       :disabled="!canEdit"
       :lowerCaption="`Minimum 50 Words (Current count: ${
-        projectEssay?.length ? projectEssay?.split(' ').length : 0
+        projectEssay?.split(' ').filter(Boolean).length ?? 0
       })`"
+      required
     />
 
     <div class="your-experience__full">
