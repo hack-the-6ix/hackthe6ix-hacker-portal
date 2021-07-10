@@ -83,7 +83,7 @@
     </div>
     <div class="your-experience__gap">
       <Input
-        label="Linkedin"
+        label="LinkedIn"
         placeholder="Ex: https://www.linkedin.com/company/hackthe6ixofficial"
         v-bind="bindField('linkedinLink', errors)"
         v-model="linkedinLink"

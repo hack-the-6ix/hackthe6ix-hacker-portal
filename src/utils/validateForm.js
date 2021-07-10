@@ -1,4 +1,15 @@
+const fieldNameLookup = {
+  'mlhCOC': 'MLH Code of Conduct',
+  'mlhData': 'MLH Terms and Conditions',
+  'GitHub': 'GitHub',
+  'LinkedIn': 'LinkedIn'
+};
+
 function displayKey(key) {
+  if (fieldNameLookup[key]) {
+    return fieldNameLookup[key];
+  }
+
   return (
     key.charAt(0).toUpperCase() + key.slice(1).replace(/[A-Z]/g, (c) => ` ${c}`)
   );
@@ -76,7 +87,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   // Validate your_experience
   if (!errors.your_experience.githubLink) {
     errors.your_experience.githubLink = validateLink(
-      'Github',
+      'GitHub',
       your_experience.githubLink,
     );
   }
@@ -90,7 +101,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
 
   if (!errors.your_experience.linkedinLink) {
     errors.your_experience.linkedinLink = validateLink(
-      'Linkedin',
+      'LinkedIn',
       your_experience.linkedinLink,
     );
   }
