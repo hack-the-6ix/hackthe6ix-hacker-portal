@@ -19,7 +19,7 @@
           type="file"
           :id="id"
         />
-        <div :class="['file-upload__content']">
+        <div :class="['file-upload__content', error && 'file-upload__error']">
           <FileIcon width="50" class="file-upload__icon" />
           <div>
             <Typography
@@ -70,6 +70,7 @@ export default {
     },
   },
   props: {
+    error: String,
     modelValue: Object,
     required: Boolean,
     disabled: Boolean,
