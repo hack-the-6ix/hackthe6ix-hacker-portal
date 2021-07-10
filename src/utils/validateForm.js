@@ -1,7 +1,27 @@
+const fieldNameLookup = {
+  'mlhCOC': 'MLH Code of Conduct',
+  'mlhData': 'MLH Terms and Conditions',
+  'GitHub': 'GitHub',
+  'LinkedIn': 'LinkedIn',
+  'at_ht6': 'At HT6'
+};
+
 function displayKey(key) {
+  if (fieldNameLookup[key]) {
+    return fieldNameLookup[key];
+  }
+
   return (
     key.charAt(0).toUpperCase() + key.slice(1).replace(/[A-Z]/g, (c) => ` ${c}`)
   );
+}
+
+export function computePageLabel(id) {
+  if (fieldNameLookup[id]) {
+    return fieldNameLookup[id];
+  }
+
+  return id.charAt(0).toUpperCase() + id.slice(1).replace(/_./g, s => ` ${s.charAt(1).toUpperCase()}`)
 }
 
 function requiredValidator(form, error) {
@@ -76,7 +96,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   // Validate your_experience
   if (!errors.your_experience.githubLink) {
     errors.your_experience.githubLink = validateLink(
-      'Github',
+      'GitHub',
       your_experience.githubLink,
     );
   }
@@ -90,7 +110,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
 
   if (!errors.your_experience.linkedinLink) {
     errors.your_experience.linkedinLink = validateLink(
-      'Linkedin',
+      'LinkedIn',
       your_experience.linkedinLink,
     );
   }
@@ -103,13 +123,6 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   }
 
   // Validate at_ht6
-  if (!errors.at_ht6.requestedWorkshops) {
-    const count = at_ht6.requestedWorkshops?.split(' ').filter(Boolean).length ?? 0;
-    if (count !== 0 && count < 50) {
-      errors.at_ht6.requestedWorkshops = `Workshop Essay must be atleast 50 words`;
-    }
-  }
-
   if (!errors.at_ht6.accomplishEssay) {
     const count = at_ht6.accomplishEssay?.split(' ').filter(Boolean).length ?? 0;
     if (count !== 0 && count < 50) {

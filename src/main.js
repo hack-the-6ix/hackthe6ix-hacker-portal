@@ -3,6 +3,8 @@ import router from './router';
 import App from './App.vue';
 import * as Sentry from "@sentry/vue";
 import { Vue as VueIntegration } from "@sentry/integrations";
+import VueLoading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 const app = createApp(App);
 
@@ -20,4 +22,4 @@ if (process.env.VUE_APP_SENTRY_DSN) {
   });
 }
 
-app.use(router).mount('#app');
+app.use(router).use(VueLoading).mount('#app');

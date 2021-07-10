@@ -26,7 +26,7 @@
             {{ index + 1 }}<span class="home__nav-text">. {{ tab.label }}</span>
           </Typography>
         </nav>
-        <form class="home__form" v-on:submit.prevent="submit" novalidate>
+        <form class="home__form" v-on:submit.prevent="submit" novalidate id="home-form">
           <TeamFormation
             v-show="selected === 'team-formation'"
             v-model:form="team"
@@ -169,7 +169,18 @@ export default {
         this.your_experience,
         this.at_ht6,
       );
-      if (hasErrors(this.errors)) return;
+      if (hasErrors(this.errors)) {
+
+        // Scroll user to disclaimer
+        let y = window.pageYOffset + document?.getElementById('home-form')?.getBoundingClientRect()?.top || 0;
+
+        window.scrollTo({
+          top: y || 0,
+          behavior: 'smooth',
+        });
+
+        return;
+      }
 
       const confirm = await swal({
         title: 'Confirm Submission',
@@ -366,9 +377,16 @@ export default {
       this.selected = window.location.hash.slice(1);
     }
 
+    const loader = this.$loading.show({
+      container: null,
+      opacity: 0,
+      color: 'white'
+    });
+
     Promise.all([this.fetchProfile(), this.fetchEnums()]).then(() => {
       console.log("Okay we're all loaded!");
       this.loaded = true;
+      loader.hide();
     });
   },
   computed: {
