@@ -142,6 +142,7 @@ import Input from '@/components/Input';
 import Button from '@/components/Button';
 import { uploadResume } from '../../utils/api';
 import swal from 'sweetalert';
+import { computePageLabel } from "../../utils/validateForm";
 
 export default {
   name: 'YourExperience',
@@ -188,7 +189,7 @@ export default {
       const fieldErrors = Object.values(this.errors).filter(Boolean);
       const pageErrors = this.pageErrors.filter(id => id !== 'your_experience').map(
         id => {
-          const label = id.charAt(0).toUpperCase() + id.slice(1).replace(/_./g, s => ` ${s.charAt(1).toUpperCase()}`);
+          const label = computePageLabel(id);
           return `<a class='your-experience__link' href="#${id.replace(/_/g, '-')}">${label}</a>`
         },
       );

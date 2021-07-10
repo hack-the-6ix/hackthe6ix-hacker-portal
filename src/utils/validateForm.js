@@ -3,6 +3,7 @@ const fieldNameLookup = {
   'mlhData': 'MLH Terms and Conditions',
   'GitHub': 'GitHub',
   'LinkedIn': 'LinkedIn',
+  'at_ht6': 'At HT6'
 };
 
 function displayKey(key) {
@@ -13,6 +14,14 @@ function displayKey(key) {
   return (
     key.charAt(0).toUpperCase() + key.slice(1).replace(/[A-Z]/g, (c) => ` ${c}`)
   );
+}
+
+export function computePageLabel(id) {
+  if (fieldNameLookup[id]) {
+    return fieldNameLookup[id];
+  }
+
+  return id.charAt(0).toUpperCase() + id.slice(1).replace(/_./g, s => ` ${s.charAt(1).toUpperCase()}`)
 }
 
 function requiredValidator(form, error) {
