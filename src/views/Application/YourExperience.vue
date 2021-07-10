@@ -14,7 +14,7 @@
       :disabled="!canEdit"
       required
     />
-    <Select
+    <Combobox
       label="Your Program of Study"
       placeholder="Select"
       v-bind="bindField('program', errors)"
@@ -220,10 +220,7 @@ export default {
       return this.enums?.school ?? [];
     },
     programs() {
-      return (this.enums?.programOfStudy || []).map((x) => ({
-        label: x,
-        value: x,
-      }));
+      return this.enums?.programOfStudy ?? [];
     },
     years() {
       return (this.enums?.yearsOfStudy || []).map((x) => ({
