@@ -167,6 +167,8 @@ export default {
             `Your resume could not be uploaded\n\n${result.data}`,
             'error',
           );
+
+          this.resume = null;
         }
       }
     },
