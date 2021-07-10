@@ -73,6 +73,7 @@ export default {
 
   &__icon {
     color: rgba(var(--form-disclaimer__color), 1);
+    width: units.spacing(10);
   }
 
   &__section {
