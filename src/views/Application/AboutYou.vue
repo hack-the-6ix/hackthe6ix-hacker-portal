@@ -234,7 +234,7 @@ export default {
     canEdit: Boolean,
     errors: Object,
   },
-  emits: ['update:form', 'update:modelTabSelected'],
+  emits: ['update:form', 'update:modelTabSelected', 'update:errors'],
   setup(props, { emit }) {
     return {
       ...useFormSection(props, {

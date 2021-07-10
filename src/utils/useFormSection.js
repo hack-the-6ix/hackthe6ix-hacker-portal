@@ -12,9 +12,9 @@ export default function useFormSection(props, initForm) {
           ...props.form,
           [field]: value,
         });
-        emit('update:error', {
+        emit('update:errors', {
           ...props.errors,
-
+          [field]: undefined,
         })
       },
     });

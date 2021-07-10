@@ -38,26 +38,26 @@
           <AboutYou
             v-show="selected === 'about-you'"
             v-model:form="about_you"
+            v-model:errors="errors.about_you"
             v-model:modelTabSelected="selected"
             :enums="enums"
             :canEdit="user?.status?.canApply"
-            :errors="errors.about_you"
           />
           <YourExperience
             v-show="selected === 'your-experience'"
             v-model:form="your_experience"
+            v-model:errors="errors.your_experience"
             v-model:modelTabSelected="selected"
             :enums="enums"
             :canEdit="user?.status?.canApply"
-            :errors="errors.your_experience"
           />
           <AtHT6
             v-show="selected === 'at-ht6'"
             v-model:form="at_ht6"
+            v-model:errors="errors.at_ht6"
             v-model:modelTabSelected="selected"
             :canEdit="user?.status?.canApply"
             @updateApplication="runUpdateApplication"
-            :errors="errors.at_ht6"
           />
         </form>
         <Typography
