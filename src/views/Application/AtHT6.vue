@@ -12,9 +12,6 @@
       :disabled="!canEdit"
       :rows="8"
       :maxLength="2056"
-      :lowerCaption="`Minimum 50 Words (Current count: ${
-        requestedWorkshops?.split(' ').filter(Boolean).length ?? 0
-      })`"
     />
     <Textarea
       label="What do you hope to accomplish by attending Hack the 6ix?"

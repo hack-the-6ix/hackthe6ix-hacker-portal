@@ -123,13 +123,6 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   }
 
   // Validate at_ht6
-  if (!errors.at_ht6.requestedWorkshops) {
-    const count = at_ht6.requestedWorkshops?.split(' ').filter(Boolean).length ?? 0;
-    if (count !== 0 && count < 50) {
-      errors.at_ht6.requestedWorkshops = `Workshop Essay must be atleast 50 words`;
-    }
-  }
-
   if (!errors.at_ht6.accomplishEssay) {
     const count = at_ht6.accomplishEssay?.split(' ').filter(Boolean).length ?? 0;
     if (count !== 0 && count < 50) {
