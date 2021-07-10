@@ -118,7 +118,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   if (!errors.your_experience.projectEssay) {
     const count = your_experience.projectEssay?.split(' ').filter(Boolean).length ?? 0;
     if (count !== 0 && count < 50) {
-      errors.your_experience.projectEssay = `Project Essay must be atleast 50 words`;
+      errors.your_experience.projectEssay = `Project Essay must be at least 50 words`;
     }
   }
 
@@ -126,7 +126,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   if (!errors.at_ht6.accomplishEssay) {
     const count = at_ht6.accomplishEssay?.split(' ').filter(Boolean).length ?? 0;
     if (count !== 0 && count < 50) {
-      errors.at_ht6.accomplishEssay = `Accomplish Essay must be atleast 50 words`;
+      errors.at_ht6.accomplishEssay = `Accomplish Essay must be at least 50 words`;
     }
   }
 
