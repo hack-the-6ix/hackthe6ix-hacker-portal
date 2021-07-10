@@ -4,6 +4,9 @@
     class="your-experience"
     label="Your Experience"
   >
+    <loading :active="loading"
+             :can-cancel="false"
+             :is-full-page="true"/>
     <Combobox
       label="Your School (Most Recently Attended)"
       placeholder="Select"
@@ -144,6 +147,8 @@ import Button from '@/components/Button';
 import { uploadResume } from '../../utils/api';
 import swal from 'sweetalert';
 import { computePageLabel } from "../../utils/validateForm";
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: 'YourExperience',
@@ -156,18 +161,33 @@ export default {
     Select,
     Input,
     Button,
+    Loading
+  },
+  data() {
+    return {
+      loading: false
+    }
+  },
+  methods: {
+    startLoading() {
+      return setTimeout(() => {
+        this.loading = true;
+      }, 100);
+    },
+    stopLoading(timeout) {
+      clearTimeout(timeout);
+      this.loading = false;
+    },
   },
   watch: {
     async resume(file) {
       if (file && !file.fakeFile) {
 
-        const loader = this.$loading.show({
-          container: null
-        });
+        const timeout = this.startLoading();
 
         const result = await uploadResume(file);
 
-        loader.hide();
+        this.stopLoading(timeout);
 
         if (result.success) {
           swal(
