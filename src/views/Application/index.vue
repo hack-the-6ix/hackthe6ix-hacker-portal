@@ -507,4 +507,8 @@ export default {
     margin-top: units.spacing(3);
   }
 }
+
+.swal-text {
+  text-align: center;
+}
 </style>
