@@ -83,7 +83,7 @@
     </div>
     <div class="your-experience__gap">
       <Input
-        label="Linkedin"
+        label="LinkedIn"
         placeholder="Ex: https://www.linkedin.com/company/hackthe6ixofficial"
         v-bind="bindField('linkedinLink', errors)"
         v-model="linkedinLink"
@@ -142,6 +142,7 @@ import Input from '@/components/Input';
 import Button from '@/components/Button';
 import { uploadResume } from '../../utils/api';
 import swal from 'sweetalert';
+import { computePageLabel } from "../../utils/validateForm";
 
 export default {
   name: 'YourExperience',
@@ -188,22 +189,30 @@ export default {
       const fieldErrors = Object.values(this.errors).filter(Boolean);
       const pageErrors = this.pageErrors.filter(id => id !== 'your_experience').map(
         id => {
-          const label = id.charAt(0).toUpperCase() + id.slice(1).replace(/_./g, s => ` ${s.charAt(1).toUpperCase()}`);
+          const label = computePageLabel(id);
           return `<a class='your-experience__link' href="#${id.replace(/_/g, '-')}">${label}</a>`
         },
       );
 
       if (!fieldErrors.length && !pageErrors.length) return;
-      return [
-        {
+
+      const disclaimerSections = [];
+
+      if (pageErrors?.length > 0) {
+        disclaimerSections.push({
           label: 'Please resolve the following pages before you submit.',
           items: pageErrors,
-        },
-        {
+        });
+      }
+
+      if (fieldErrors?.length > 0) {
+        disclaimerSections.push({
           label: 'Please resolve the following fields before you submit.',
           items: fieldErrors,
-        },
-      ];
+        })
+      }
+
+      return disclaimerSections;
     },
     schools() {
       return (this.enums?.school || []).map((x) => ({
