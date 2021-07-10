@@ -21,7 +21,7 @@
       v-model="program"
       :maxlength="256"
       :options="programs"
-      :disabled="!canEdit"
+      :disabled="!canEdit || yearsOfStudy === 'High School'"
       required
     />
     <Select
@@ -176,6 +176,12 @@ export default {
         }
       }
     },
+    yearsOfStudy(yos) {
+      // Force highschool students to pick highschool as their program
+      if (yos === 'High School' && this.program !== 'High School') {
+        this.program = 'High School';
+      }
+    }
   },
   computed: {
     disclaimer() {
