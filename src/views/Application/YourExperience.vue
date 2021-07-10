@@ -23,7 +23,7 @@
     <Select
       label="Year of Study"
       placeholder="Select"
-      v-bind="bindField('yearOfStudy', errors)"
+      v-bind="bindField('yearsOfStudy', errors)"
       v-model="yearsOfStudy"
       :options="years"
       :disabled="!canEdit"
