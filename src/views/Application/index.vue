@@ -1,81 +1,86 @@
 <template>
-  <div v-if="loaded">
-    <div v-if="user?.status?.canAmendTeam">
-      <ApplicationSubmitted
-        v-if="applicationSubmittedDialogOpen"
-        @closeApplicationSubmittedDialog="
-          applicationSubmittedDialogOpen = false
-        "
-      />
-      <Layout :title="title" :description="description" v-else>
-        <nav class="home__nav">
+  <div>
+    <loading :active="loading"
+             :can-cancel="false"
+             :is-full-page="true"/>
+    <div v-if="loaded">
+      <div v-if="user?.status?.canAmendTeam">
+        <ApplicationSubmitted
+          v-if="applicationSubmittedDialogOpen"
+          @closeApplicationSubmittedDialog="
+            applicationSubmittedDialogOpen = false
+          "
+        />
+        <Layout :title="title" :description="description" v-else>
+          <nav class="home__nav">
+            <Typography
+              v-for="(tab, index) in tabs"
+              @click="selected = tab.id"
+              :class="[
+                selected === tab.id && 'home__nav-item--active',
+                'home__nav-item',
+              ]"
+              transform="uppercase"
+              :href="`#${tab.id}`"
+              type="heading4"
+              align="center"
+              :key="tab.id"
+              as="a"
+            >
+              {{ index + 1 }}<span class="home__nav-text">. {{ tab.label }}</span>
+            </Typography>
+          </nav>
+          <form class="home__form" v-on:submit.prevent="submit" novalidate id="home-form">
+            <TeamFormation
+              v-show="selected === 'team-formation'"
+              v-model:form="team"
+              v-model:modelTabSelected="selected"
+              :dueDate="dueDate"
+              :canAmendTeam="user?.status?.canAmendTeam"
+              :pageErrors="pageErrors"
+              @updateTeam="updateTeam"
+            />
+            <AboutYou
+              v-show="selected === 'about-you'"
+              v-model:form="about_you"
+              v-model:errors="errors.about_you"
+              v-model:modelTabSelected="selected"
+              :pageErrors="pageErrors"
+              :enums="enums"
+              :canEdit="user?.status?.canApply"
+            />
+            <YourExperience
+              v-show="selected === 'your-experience'"
+              v-model:form="your_experience"
+              v-model:errors="errors.your_experience"
+              v-model:modelTabSelected="selected"
+              :pageErrors="pageErrors"
+              :enums="enums"
+              :canEdit="user?.status?.canApply"
+            />
+            <AtHT6
+              v-show="selected === 'at-ht6'"
+              v-model:form="at_ht6"
+              v-model:errors="errors.at_ht6"
+              v-model:modelTabSelected="selected"
+              :pageErrors="pageErrors"
+              :canEdit="user?.status?.canApply"
+              @updateApplication="runUpdateApplication"
+            />
+          </form>
           <Typography
-            v-for="(tab, index) in tabs"
-            @click="selected = tab.id"
-            :class="[
-              selected === tab.id && 'home__nav-item--active',
-              'home__nav-item',
-            ]"
-            transform="uppercase"
-            :href="`#${tab.id}`"
-            type="heading4"
-            align="center"
-            :key="tab.id"
-            as="a"
+            type="p"
+            color="white"
+            as="p"
+            v-if="lastSaved"
+            class="home__last-saved"
           >
-            {{ index + 1 }}<span class="home__nav-text">. {{ tab.label }}</span>
+            Last saved at {{ lastSaved }}
           </Typography>
-        </nav>
-        <form class="home__form" v-on:submit.prevent="submit" novalidate id="home-form">
-          <TeamFormation
-            v-show="selected === 'team-formation'"
-            v-model:form="team"
-            v-model:modelTabSelected="selected"
-            :dueDate="dueDate"
-            :canAmendTeam="user?.status?.canAmendTeam"
-            :pageErrors="pageErrors"
-            @updateTeam="updateTeam"
-          />
-          <AboutYou
-            v-show="selected === 'about-you'"
-            v-model:form="about_you"
-            v-model:errors="errors.about_you"
-            v-model:modelTabSelected="selected"
-            :pageErrors="pageErrors"
-            :enums="enums"
-            :canEdit="user?.status?.canApply"
-          />
-          <YourExperience
-            v-show="selected === 'your-experience'"
-            v-model:form="your_experience"
-            v-model:errors="errors.your_experience"
-            v-model:modelTabSelected="selected"
-            :pageErrors="pageErrors"
-            :enums="enums"
-            :canEdit="user?.status?.canApply"
-          />
-          <AtHT6
-            v-show="selected === 'at-ht6'"
-            v-model:form="at_ht6"
-            v-model:errors="errors.at_ht6"
-            v-model:modelTabSelected="selected"
-            :pageErrors="pageErrors"
-            :canEdit="user?.status?.canApply"
-            @updateApplication="runUpdateApplication"
-          />
-        </form>
-        <Typography
-          type="p"
-          color="white"
-          as="p"
-          v-if="lastSaved"
-          class="home__last-saved"
-        >
-          Last saved at {{ lastSaved }}
-        </Typography>
-      </Layout>
+        </Layout>
+      </div>
+      <ApplicationsClosed :applied="user.status.applied" v-else />
     </div>
-    <ApplicationsClosed :applied="user.status.applied" v-else />
   </div>
 </template>
 
@@ -96,6 +101,8 @@ import {
   updateApplication,
 } from '../../utils/api';
 import swal from 'sweetalert';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: 'Application',
@@ -108,6 +115,7 @@ export default {
     Layout,
     ApplicationsClosed,
     ApplicationSubmitted,
+    Loading
   },
   data() {
     return {
@@ -126,6 +134,7 @@ export default {
       lastSaved: '',
       unsavedChanges: false,
       loaded: false,
+      loading: false,
       applicationSubmittedDialogOpen: false,
     };
   },
@@ -163,6 +172,15 @@ export default {
         event.returnValue = `Are you sure you want to leave?`;
       }
     },
+    startLoading() {
+      return setTimeout(() => {
+        this.loading = true;
+      }, 100);
+    },
+    stopLoading(timeout) {
+      clearTimeout(timeout);
+      this.loading = false;
+    },
     async submit() {
       this.errors = validateForm(
         this.about_you,
@@ -191,7 +209,11 @@ export default {
       });
 
       if (!confirm) return;
+
+      const timeout = this.startLoading();
+
       this.runUpdateApplication(true, () => {
+        this.stopLoading(timeout);
         this.applicationSubmittedDialogOpen = true;
       });
     },
@@ -201,7 +223,6 @@ export default {
       if (result.success) {
         this.enums = result.data;
       } else {
-        // TODO: Replace with message that's always on screen
         swal('Unable to fetch enums', result.data, 'error');
       }
 
@@ -221,7 +242,6 @@ export default {
         this.loadApplication(result.data.hackerApplication || {});
         await this.loadTeam(result.data.hackerApplication?.teamCode);
       } else {
-        // TODO: Replace with message that's always on screen
         swal('Unable to fetch user', result.data, 'error');
       }
 
@@ -355,7 +375,6 @@ export default {
         if (teamResult) {
           this.team = teamResult.data;
         } else {
-          // TODO: Replace with message that's always on screen
           swal('Unable to fetch team', teamResult.data, 'error');
         }
       }
@@ -377,16 +396,12 @@ export default {
       this.selected = window.location.hash.slice(1);
     }
 
-    const loader = this.$loading.show({
-      container: null,
-      opacity: 0,
-      color: 'white'
-    });
+    const timeout = this.startLoading();
 
     Promise.all([this.fetchProfile(), this.fetchEnums()]).then(() => {
       console.log("Okay we're all loaded!");
+      this.stopLoading(timeout);
       this.loaded = true;
-      loader.hide();
     });
   },
   computed: {

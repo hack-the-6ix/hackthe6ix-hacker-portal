@@ -1,5 +1,8 @@
 <template>
   <FormSection class="team-formation" label="Team Formation">
+    <loading :active="loading"
+             :can-cancel="false"
+             :is-full-page="true"/>
     <div v-if="code">
       <Typography type="heading3" as="h3" align="center" color="dark-navy">
         Team Code
@@ -124,6 +127,8 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import swal from 'sweetalert';
 import { createTeam, joinTeam, leaveTeam } from '../../utils/api';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: 'TeamFormation',
@@ -132,6 +137,7 @@ export default {
     FormSection,
     Typography,
     Input,
+    Loading
   },
   props: {
     form: Object,
@@ -144,6 +150,7 @@ export default {
     return {
       joinTeamPage: false,
       temporaryCode: '',
+      loading: false
     };
   },
   setup(props, { emit }) {
@@ -159,6 +166,15 @@ export default {
     };
   },
   methods: {
+    startLoading() {
+      return setTimeout(() => {
+        this.loading = true;
+      }, 100);
+    },
+    stopLoading(timeout) {
+      clearTimeout(timeout);
+      this.loading = false;
+    },
     async triggerLeaveTeam() {
       swal({
         title: 'Confirm Leave Team',
@@ -168,7 +184,12 @@ export default {
         dangerMode: true,
       }).then(async (confirm) => {
         if (confirm) {
+
+          const timeout = this.startLoading();
+
           const result = await leaveTeam();
+
+          this.stopLoading(timeout);
 
           if (result.success) {
             this.$emit('updateTeam', '', []);
@@ -179,7 +200,12 @@ export default {
       });
     },
     async triggerCreateTeam() {
+
+      const timeout = this.startLoading();
+
       const result = await createTeam();
+
+      this.stopLoading(timeout);
 
       if (result.success) {
         this.$emit('updateTeam', result.data.code, result.data.memberNames);
@@ -188,7 +214,11 @@ export default {
       }
     },
     async triggerJoinTeam() {
+      const timeout = this.startLoading();
+
       const result = await joinTeam(this.temporaryCode);
+
+      this.stopLoading(timeout);
 
       if (result.success) {
         this.$emit('updateTeam', result.data.code, result.data.memberNames);

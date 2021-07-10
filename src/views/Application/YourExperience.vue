@@ -160,7 +160,14 @@ export default {
   watch: {
     async resume(file) {
       if (file && !file.fakeFile) {
+
+        const loader = this.$loading.show({
+          container: null
+        });
+
         const result = await uploadResume(file);
+
+        loader.hide();
 
         if (result.success) {
           swal(
