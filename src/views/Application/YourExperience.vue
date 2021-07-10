@@ -194,16 +194,24 @@ export default {
       );
 
       if (!fieldErrors.length && !pageErrors.length) return;
-      return [
-        {
+
+      const disclaimerSections = [];
+
+      if (pageErrors?.length > 0) {
+        disclaimerSections.push({
           label: 'Please resolve the following pages before you submit.',
           items: pageErrors,
-        },
-        {
+        });
+      }
+
+      if (fieldErrors?.length > 0) {
+        disclaimerSections.push({
           label: 'Please resolve the following fields before you submit.',
           items: fieldErrors,
-        },
-      ];
+        })
+      }
+
+      return disclaimerSections;
     },
     schools() {
       return (this.enums?.school || []).map((x) => ({

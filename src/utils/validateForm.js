@@ -2,7 +2,7 @@ const fieldNameLookup = {
   'mlhCOC': 'MLH Code of Conduct',
   'mlhData': 'MLH Terms and Conditions',
   'GitHub': 'GitHub',
-  'LinkedIn': 'LinkedIn'
+  'LinkedIn': 'LinkedIn',
 };
 
 function displayKey(key) {
