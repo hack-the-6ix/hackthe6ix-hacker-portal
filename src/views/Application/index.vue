@@ -377,9 +377,16 @@ export default {
       this.selected = window.location.hash.slice(1);
     }
 
+    const loader = this.$loading.show({
+      container: null,
+      opacity: 0,
+      color: 'white'
+    });
+
     Promise.all([this.fetchProfile(), this.fetchEnums()]).then(() => {
       console.log("Okay we're all loaded!");
       this.loaded = true;
+      loader.hide();
     });
   },
   computed: {

@@ -20,6 +20,7 @@
     "query-string": "^7.0.1",
     "sweetalert": "^2.1.2",
     "vue": "^3.1.4",
+    "vue-loading-overlay": "^4.0.3",
     "vue-router": "^4.0.10"
   },
   "devDependencies": {
