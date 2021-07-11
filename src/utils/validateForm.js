@@ -60,7 +60,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   };
 
   // Check required
-  ['phoneNumber', 'gender', 'ethnicity', 'timezone']
+  ['phoneNumber', 'gender', 'ethnicity', 'timezone', 'pronouns']
     .concat(
       about_you.wantSwag
         ? ['addressLine1', 'city', 'province', 'postalCode']

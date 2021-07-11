@@ -63,6 +63,7 @@
       v-model="pronouns"
       :options="pronounOptions"
       :disabled="!canEdit"
+      required
     />
     <div>
       <Select
