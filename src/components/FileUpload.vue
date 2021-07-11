@@ -1,11 +1,11 @@
 <template>
   <FieldLayout
-      :required="required"
-      :disabled="disabled"
-      :noOutline="true"
-      :error="error"
-      :label="label"
-      :id="id"
+    :required="required"
+    :disabled="disabled"
+    :noOutline="true"
+    :error="error"
+    :label="label"
+    :id="id"
   >
     <div class="file-upload">
       <div class="file-upload__body">
@@ -13,9 +13,9 @@
           :accept="serializedAccept"
           class="file-upload__field"
           :required="required"
-          :disabled='disabled'
+          :disabled="disabled"
           @input="upload"
-          :name='name'
+          :name="name"
           type="file"
           :id="id"
         />
@@ -33,7 +33,13 @@
                 Browse
               </Typography>
             </Typography>
-            <Typography v-else class="file-upload__name" type="heading4" as="p" color="teal">
+            <Typography
+              v-else
+              class="file-upload__name"
+              type="heading4"
+              as="p"
+              color="teal"
+            >
               {{ this.modelValue?.name }}
             </Typography>
             <Typography type="small" as="p" color="black">

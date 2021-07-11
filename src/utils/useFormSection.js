@@ -7,7 +7,7 @@ export default function useFormSection(props, initForm) {
   const fields = Object.keys(initForm).reduce((acc, field) => {
     acc[field] = computed({
       get: () => props.form[field],
-      set: value => {
+      set: (value) => {
         emit('update:form', {
           ...props.form,
           [field]: value,

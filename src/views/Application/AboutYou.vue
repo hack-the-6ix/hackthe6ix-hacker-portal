@@ -1,9 +1,5 @@
 <template>
-  <FormSection
-    :disclaimer="disclaimer"
-    class="about-you"
-    label="About you"
-  >
+  <FormSection :disclaimer="disclaimer" class="about-you" label="About you">
     <Input
       label="First Name"
       placeholder="Enter first name"
@@ -199,7 +195,7 @@ import Combobox from '@/components/Combobox';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
-import { computePageLabel } from "../../utils/validateForm";
+import { computePageLabel } from '../../utils/validateForm';
 
 export default {
   name: 'AboutYou',
@@ -215,12 +211,15 @@ export default {
   computed: {
     disclaimer() {
       const fieldErrors = Object.values(this.errors).filter(Boolean);
-      const pageErrors = this.pageErrors.filter(id => id !== 'about_you').map(
-        id => {
+      const pageErrors = this.pageErrors
+        .filter((id) => id !== 'about_you')
+        .map((id) => {
           const label = computePageLabel(id);
-          return `<a class='about-you__link' href="#${id.replace(/_/g, '-')}">${label}</a>`
-        },
-      );
+          return `<a class='about-you__link' href="#${id.replace(
+            /_/g,
+            '-',
+          )}">${label}</a>`;
+        });
 
       if (!fieldErrors.length && !pageErrors.length) return;
 
@@ -237,7 +236,7 @@ export default {
         disclaimerSections.push({
           label: 'Please resolve the following fields before you submit.',
           items: fieldErrors,
-        })
+        });
       }
       return disclaimerSections;
     },
@@ -288,7 +287,7 @@ export default {
       if (c !== 'Canada') {
         this.wantSwag = false;
       }
-    }
+    },
   },
   emits: ['update:form', 'update:modelTabSelected', 'update:errors'],
   setup(props, { emit }) {
@@ -309,7 +308,7 @@ export default {
         city: '',
         province: '',
         postalCode: '',
-        country: ''
+        country: '',
       }),
       tabSelected: computed({
         set: (value) => emit('update:modelTabSelected', value),
