@@ -1,33 +1,25 @@
 <template>
-  <div
-    :class='[
-      type && `form-disclaimer--${type}`,
-      "form-disclaimer",
-    ]'
-  >
-    <ErrorCircle class='form-disclaimer__icon'/>
-    <div class='form-disclaimer__section'>
-      <div
-        v-for='(section, i) in data'
-        :key='i'
-      >
+  <div :class="[type && `form-disclaimer--${type}`, 'form-disclaimer']">
+    <ErrorCircle class="form-disclaimer__icon" />
+    <div class="form-disclaimer__section">
+      <div v-for="(section, i) in data" :key="i">
         <Typography
-          class='form-disclaimer__label'
-          type='heading4'
-          color='black'
-          as='p'
+          class="form-disclaimer__label"
+          type="heading4"
+          color="black"
+          as="p"
         >
-          {{section.label}}
+          {{ section.label }}
         </Typography>
-        <ul class='form-disclaimer__list'>
+        <ul class="form-disclaimer__list">
           <Typography
-            class='form-disclaimer__list-item'
-            v-for='(item, j) in section.items'
-            type='heading4'
-            v-html='item'
-            color='navy'
-            :key='j'
-            as='li'
+            class="form-disclaimer__list-item"
+            v-for="(item, j) in section.items"
+            type="heading4"
+            v-html="item"
+            color="navy"
+            :key="j"
+            as="li"
           />
         </ul>
       </div>

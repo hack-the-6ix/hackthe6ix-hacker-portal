@@ -7,39 +7,39 @@
     :id="id"
   >
     <input
-      @focus='showOptions = !disabled && true'
-      @blur='reset'
+      @focus="showOptions = !disabled && true"
+      @blur="reset"
       :placeholder="placeholder"
-      v-model='displayText'
+      v-model="displayText"
       :disabled="disabled"
       :required="required"
-      class='combobox__el'
+      class="combobox__el"
       :name="name"
       :id="id"
     />
-    <ul class='combobox__options' v-if='showOptions'>
-      <li v-for='option in filteredOptions' :key='option'>
+    <ul ref="list" class="combobox__options" v-if="showOptions">
+      <li v-for="option in filteredOptions" :key="option">
         <Typography
-          @click='setValue(option)'
-          class='combobox__option'
-          htmlType='button'
-          color='dark-navy'
-          type='paragraph'
-          as='button'
+          @click="setValue(option)"
+          class="combobox__option"
+          htmlType="button"
+          color="dark-navy"
+          type="paragraph"
+          as="button"
         >
-          {{option}}
+          {{ option }}
         </Typography>
       </li>
       <li v-if="!disallowCustom">
         <Typography
-          @click='setValue(displayText)'
-          class='combobox__option'
-          htmlType='button'
-          color='dark-navy'
-          type='paragraph'
-          as='button'
+          @click="setValue(displayText)"
+          class="combobox__option"
+          htmlType="button"
+          color="dark-navy"
+          type="paragraph"
+          as="button"
         >
-          Add custom: "{{displayText}}"
+          Add custom: "{{ displayText }}"
         </Typography>
       </li>
     </ul>
@@ -69,22 +69,21 @@ export default {
     value(text) {
       this.displayText = text;
     },
+    displayText() {
+      this.$refs?.list?.scrollTo(0, 0);
+    },
   },
   methods: {
     setValue(value) {
-      this.changed = true;
       this.value = value;
       this.showOptions = false;
     },
-    reset() {
-      window.setTimeout(() => {
-        if (!this.changed) {
-          this.displayText = this.value;
-          this.showOptions = false;
-        }
-        this.changed = false;
-      }, 100);
-    }
+    reset(event) {
+      if (!this.$el.contains(event.relatedTarget)) {
+        this.displayText = this.value;
+        this.showOptions = false;
+      }
+    },
   },
   computed: {
     normalizedOptions() {
@@ -96,15 +95,22 @@ export default {
     filteredOptions() {
       if (this.displayText.length < 3) return this.options.slice(0, 10);
 
-      return stringSimilarity.findBestMatch(
-          this.displayText.toLowerCase(),
-          Object.keys(this.normalizedOptions),
-        ).ratings
-        // More we type, stricter the search
-        .filter(rating => rating.rating >= Math.min(0.1 + (this.displayText.length * 0.03), 0.8))
-        .sort((a, b) => b.rating - a.rating)
-        .slice(0, 10)
-        .map(rating => this.normalizedOptions[rating.target]);
+      return (
+        stringSimilarity
+          .findBestMatch(
+            this.displayText.toLowerCase(),
+            Object.keys(this.normalizedOptions),
+          )
+          .ratings// More we type, stricter the search
+          .filter(
+            (rating) =>
+              rating.rating >=
+              Math.min(0.1 + this.displayText.length * 0.03, 0.8),
+          )
+          .sort((a, b) => b.rating - a.rating)
+          .slice(0, 10)
+          .map((rating) => this.normalizedOptions[rating.target])
+      );
     },
   },
   props: {
@@ -131,7 +137,7 @@ export default {
       }),
     };
   },
-}
+};
 </script>
 
 <style lang="scss">
@@ -190,7 +196,9 @@ export default {
     border: none;
     width: 100%;
 
-    &:hover, &:focus, &--active {
+    &:hover,
+    &:focus,
+    &--active {
       background-color: colors.css-color(disabled, $alpha: 0.1);
     }
 

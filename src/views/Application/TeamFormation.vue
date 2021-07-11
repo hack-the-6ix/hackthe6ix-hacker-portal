@@ -1,8 +1,6 @@
 <template>
   <FormSection class="team-formation" label="Team Formation">
-    <loading :active="loading"
-             :can-cancel="false"
-             :is-full-page="true"/>
+    <loading :active="loading" :can-cancel="false" :is-full-page="true" />
     <div v-if="code">
       <Typography type="heading3" as="h3" align="center" color="dark-navy">
         Team Code
@@ -137,7 +135,7 @@ export default {
     FormSection,
     Typography,
     Input,
-    Loading
+    Loading,
   },
   props: {
     form: Object,
@@ -150,7 +148,7 @@ export default {
     return {
       joinTeamPage: false,
       temporaryCode: '',
-      loading: false
+      loading: false,
     };
   },
   setup(props, { emit }) {
@@ -184,7 +182,6 @@ export default {
         dangerMode: true,
       }).then(async (confirm) => {
         if (confirm) {
-
           const timeout = this.startLoading();
 
           const result = await leaveTeam();
@@ -200,7 +197,6 @@ export default {
       });
     },
     async triggerCreateTeam() {
-
       const timeout = this.startLoading();
 
       const result = await createTeam();

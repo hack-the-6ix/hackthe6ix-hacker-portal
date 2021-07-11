@@ -1,8 +1,6 @@
 <template>
   <div>
-    <loading :active="loading"
-             :can-cancel="false"
-             :is-full-page="true"/>
+    <loading :active="loading" :can-cancel="false" :is-full-page="true" />
     <div v-if="loaded">
       <div v-if="user?.status?.canAmendTeam">
         <ApplicationSubmitted
@@ -27,10 +25,16 @@
               :key="tab.id"
               as="a"
             >
-              {{ index + 1 }}<span class="home__nav-text">. {{ tab.label }}</span>
+              {{ index + 1
+              }}<span class="home__nav-text">. {{ tab.label }}</span>
             </Typography>
           </nav>
-          <form class="home__form" v-on:submit.prevent="submit" novalidate id="home-form">
+          <form
+            class="home__form"
+            v-on:submit.prevent="submit"
+            novalidate
+            id="home-form"
+          >
             <TeamFormation
               v-show="selected === 'team-formation'"
               v-model:form="team"
@@ -115,7 +119,7 @@ export default {
     Layout,
     ApplicationsClosed,
     ApplicationSubmitted,
-    Loading
+    Loading,
   },
   data() {
     return {
@@ -188,9 +192,11 @@ export default {
         this.at_ht6,
       );
       if (hasErrors(this.errors)) {
-
         // Scroll user to disclaimer
-        let y = window.pageYOffset + document?.getElementById('home-form')?.getBoundingClientRect()?.top || 0;
+        let y =
+          window.pageYOffset +
+            document?.getElementById('home-form')?.getBoundingClientRect()
+              ?.top || 0;
 
         window.scrollTo({
           top: y || 0,
@@ -428,9 +434,12 @@ export default {
               for your application results!`;
     },
     pageErrors() {
-      return Object.keys(this.errors).map(
-        key => Object.values(this.errors[key]).filter(Boolean).length && key,
-      ).filter(Boolean);
+      return Object.keys(this.errors)
+        .map(
+          (key) =>
+            Object.values(this.errors[key]).filter(Boolean).length && key,
+        )
+        .filter(Boolean);
     },
     dueDate() {
       return new Date(

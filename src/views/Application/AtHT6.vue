@@ -1,9 +1,5 @@
 <template>
-  <FormSection
-    :disclaimer="disclaimer"
-    class="at-ht6"
-    label="At HT6"
-  >
+  <FormSection :disclaimer="disclaimer" class="at-ht6" label="At HT6">
     <Textarea
       label="Which panels or workshops are you most interested in at Hack the 6ix?"
       class="at-ht6__full"
@@ -96,7 +92,7 @@ import Checkbox from '@/components/Checkbox';
 import Textarea from '@/components/Textarea';
 import Button from '@/components/Button';
 import swal from 'sweetalert';
-import { computePageLabel } from "../../utils/validateForm";
+import { computePageLabel } from '../../utils/validateForm';
 
 export default {
   name: 'AtHT6',
@@ -115,12 +111,15 @@ export default {
   computed: {
     disclaimer() {
       const fieldErrors = Object.values(this.errors).filter(Boolean);
-      const pageErrors = this.pageErrors.filter(id => id !== 'at_ht6').map(
-        id => {
+      const pageErrors = this.pageErrors
+        .filter((id) => id !== 'at_ht6')
+        .map((id) => {
           const label = computePageLabel(id);
-          return `<a class='at-ht6__disclaimer-link' href="#${id.replace(/_/g, '-')}">${label}</a>`
-        },
-      );
+          return `<a class='at-ht6__disclaimer-link' href="#${id.replace(
+            /_/g,
+            '-',
+          )}">${label}</a>`;
+        });
 
       if (!fieldErrors.length && !pageErrors.length) return;
       const disclaimerSections = [];
@@ -136,7 +135,7 @@ export default {
         disclaimerSections.push({
           label: 'Please resolve the following fields before you submit.',
           items: fieldErrors,
-        })
+        });
       }
 
       return disclaimerSections;
