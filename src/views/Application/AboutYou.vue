@@ -85,12 +85,22 @@
       :disabled="!canEdit"
       required
     />
+    <Combobox
+      label="Country"
+      placeholder="e.g. Canada"
+      v-bind="bindField('country', errors)"
+      v-model="country"
+      :options="countries"
+      :disabled="!canEdit"
+      :disallowCustom="true"
+      required
+    />
     <Checkbox
       label="I live in Canada <strong>and</strong> I want to receive Hack the 6ix swag."
       class="about-you__full"
       v-bind="bindField('wantSwag', errors)"
       v-model="wantSwag"
-      :disabled="!canEdit"
+      :disabled="!canEdit || country !== 'Canada'"
     />
     <template v-if="wantSwag">
       <div class="about-you__full">
@@ -152,7 +162,6 @@
         :maxlength="6"
         required
       />
-      <Input label="Country" modelValue="Canada" name="country" disabled />
     </template>
 
     <div class="about-you__full">
@@ -186,6 +195,7 @@ import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import Typography from '@/components/Typography';
 import Checkbox from '@/components/Checkbox';
+import Combobox from '@/components/Combobox';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
@@ -197,6 +207,7 @@ export default {
     FormSection,
     Typography,
     Checkbox,
+    Combobox,
     Select,
     Input,
     Button,
@@ -260,6 +271,9 @@ export default {
         value: x,
       }));
     },
+    countries() {
+      return this.enums?.countries || [];
+    },
   },
   props: {
     modelTabSelected: String,
@@ -268,6 +282,13 @@ export default {
     enums: Object,
     canEdit: Boolean,
     errors: Object,
+  },
+  watch: {
+    country(c) {
+      if (c !== 'Canada') {
+        this.wantSwag = false;
+      }
+    }
   },
   emits: ['update:form', 'update:modelTabSelected', 'update:errors'],
   setup(props, { emit }) {
@@ -288,6 +309,7 @@ export default {
         city: '',
         province: '',
         postalCode: '',
+        country: ''
       }),
       tabSelected: computed({
         set: (value) => emit('update:modelTabSelected', value),

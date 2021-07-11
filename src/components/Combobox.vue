@@ -30,7 +30,7 @@
           {{option}}
         </Typography>
       </li>
-      <li>
+      <li v-if="!disallowCustom">
         <Typography
           @click='setValue(displayText)'
           class='combobox__option'
@@ -108,6 +108,7 @@ export default {
     },
   },
   props: {
+    disallowCustom: Boolean,
     modelValue: String,
     label: String,
     required: Boolean,

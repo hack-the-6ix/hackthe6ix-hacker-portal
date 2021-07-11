@@ -324,6 +324,7 @@ export default {
           'pronouns',
           'ethnicity',
           'timezone',
+          'country',
           'wantSwag',
           'addressLine1',
           'addressLine2',
