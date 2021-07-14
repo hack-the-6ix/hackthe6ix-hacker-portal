@@ -5,6 +5,7 @@
     label="Your Experience"
   >
     <loading :active="loading" :can-cancel="false" :is-full-page="true" />
+    <!--
     <Combobox
       label="Your School (Most Recently Attended)"
       placeholder="Select"
@@ -14,13 +15,19 @@
       :options="schools"
       :disabled="!canEdit"
       required
+    />-->
+    <Input
+        label="Your School (Most Recently Attended)"
+        v-bind="bindField('school', errors)"
+        v-model="school"
+        :maxlength="256"
+        required
     />
-    <Combobox
+    <Select
       label="Your Program of Study"
       placeholder="Select"
       v-bind="bindField('program', errors)"
       v-model="program"
-      :maxlength="256"
       :options="programs"
       :disabled="!canEdit || yearsOfStudy === 'High School'"
       required
@@ -136,7 +143,6 @@ import { computed } from 'vue';
 import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import FileUpload from '@/components/FileUpload';
-import Combobox from '@/components/Combobox';
 import Checkbox from '@/components/Checkbox';
 import Textarea from '@/components/Textarea';
 import Select from '@/components/Select';
@@ -153,7 +159,6 @@ export default {
   components: {
     FormSection,
     FileUpload,
-    Combobox,
     Checkbox,
     Textarea,
     Select,
@@ -243,11 +248,11 @@ export default {
 
       return disclaimerSections;
     },
-    schools() {
-      return this.enums?.school ?? [];
-    },
     programs() {
-      return this.enums?.programOfStudy ?? [];
+      return (this.enums?.programOfStudy || []).map((x) => ({
+        label: x,
+        value: x,
+      }));
     },
     years() {
       return (this.enums?.yearsOfStudy || []).map((x) => ({
