@@ -81,6 +81,16 @@
       :disabled="!canEdit"
       required
     />
+    <Select
+      label="Country"
+      placeholder="e.g. Canada"
+      v-bind="bindField('country', errors)"
+      v-model="country"
+      :options="countries"
+      :disabled="!canEdit"
+      required
+    />
+    <!--
     <Combobox
       label="Country"
       placeholder="e.g. Canada"
@@ -91,7 +101,7 @@
       :disallowCustom="true"
       :hideDropdownUntilType="true"
       required
-    />
+    />-->
     <Checkbox
       label="I live in Canada <strong>and</strong> I want to receive Hack the 6ix swag."
       class="about-you__full"
@@ -192,7 +202,6 @@ import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import Typography from '@/components/Typography';
 import Checkbox from '@/components/Checkbox';
-import Combobox from '@/components/Combobox';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
@@ -204,7 +213,6 @@ export default {
     FormSection,
     Typography,
     Checkbox,
-    Combobox,
     Select,
     Input,
     Button,
@@ -272,7 +280,10 @@ export default {
       }));
     },
     countries() {
-      return this.enums?.countries || [];
+      return (this.enums?.countries || []).map((x) => ({
+        label: x,
+        value: x,
+      }));
     },
   },
   props: {
