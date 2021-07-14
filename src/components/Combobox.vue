@@ -17,7 +17,7 @@
       :name="name"
       :id="id"
     />
-    <ul ref="list" class="combobox__options" v-if="showOptions">
+    <ul ref="list" class="combobox__options" v-if="showOptions && (!hideDropdownUntilType || displayText?.length > 0)">
       <li v-for="option in filteredOptions" :key="option">
         <Typography
           @click="setValue(option)"
@@ -114,6 +114,7 @@ export default {
     },
   },
   props: {
+    hideDropdownUntilType: Boolean,
     disallowCustom: Boolean,
     modelValue: String,
     label: String,

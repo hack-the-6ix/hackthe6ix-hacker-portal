@@ -89,6 +89,7 @@
       :options="countries"
       :disabled="!canEdit"
       :disallowCustom="true"
+      :hideDropdownUntilType="true"
       required
     />
     <Checkbox
