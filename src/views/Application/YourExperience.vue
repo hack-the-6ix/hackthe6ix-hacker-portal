@@ -63,7 +63,7 @@
     <div class="your-experience__gap">
       <Input
         label="GitHub Link"
-        placeholder="Ex: https://github.com/fpunny"
+        placeholder="Ex: https://github.com/hackthe6ix"
         v-bind="bindField('githubLink', errors)"
         v-model="githubLink"
         type="url"
@@ -74,7 +74,7 @@
     <div class="your-experience__gap">
       <Input
         label="Personal Website or Portfolio"
-        placeholder="Ex: https://fpunny.xyz"
+        placeholder="Ex: https://hackthe6ix.com"
         v-bind="bindField('portfolioLink', errors)"
         v-model="portfolioLink"
         type="url"
