@@ -315,7 +315,7 @@ export default {
             'error',
           );
         } else {
-          swal('Unable to save application', result.data, 'error');
+          swal('Unable to save application', result.data + "\n\nWe are sorry something unexpected happened -- if you believe that you lost work, contact us at hello@hackthe6ix.com and we'll try to help you", 'error');
         }
       }
     },
