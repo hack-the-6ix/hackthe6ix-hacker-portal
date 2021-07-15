@@ -1,7 +1,7 @@
 <template>
   <FormSection :disclaimer="disclaimer" class="at-ht6" label="At HT6">
     <Textarea
-      label="Which panels or workshops are you most interested in at Hack the 6ix?"
+      label="Which panels or workshops are you most interested in seeing at Hack the 6ix?"
       class="at-ht6__full"
       v-bind="bindField('requestedWorkshops', errors)"
       v-model="requestedWorkshops"
