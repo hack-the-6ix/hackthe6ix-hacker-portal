@@ -17,11 +17,13 @@
       required
     />-->
     <Input
-        label="Your School (Most Recently Attended)"
-        v-bind="bindField('school', errors)"
-        v-model="school"
-        :maxlength="256"
-        required
+      label="Your School (Most Recently Attended)"
+      v-bind="bindField('school', errors)"
+      placeholder="e.g. University of 6ix"
+      :datalist="schools"
+      v-model="school"
+      :maxlength="256"
+      required
     />
     <Select
       label="Your Program of Study"
@@ -259,6 +261,9 @@ export default {
         label: x,
         value: x,
       }));
+    },
+    schools() {
+      return this.enums?.school ?? [];
     },
     hackathonsOptions() {
       return (this.enums?.hackathonsAttended || []).map((x) => ({

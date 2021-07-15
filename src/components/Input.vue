@@ -8,6 +8,7 @@
   >
     <input
       :class="[error && 'input__el--error', 'input__el']"
+      :list='datalist ? `${name}--datalist` : undefined'
       :autocomplete="autocomplete"
       :placeholder="placeholder"
       :disabled="disabled"
@@ -17,6 +18,13 @@
       :id="id"
       :maxlength="maxlength"
     />
+    <datalist v-if='datalist' :id='`${name}--datalist`'>
+      <option
+        v-for='option in datalist'
+        :value='option'
+        :key='option'
+      />
+    </datalist>
   </FieldLayout>
 </template>
 
@@ -42,6 +50,7 @@ export default {
       type: String,
       default: () => uuid().slice(-8),
     },
+    datalist: Array,
     autocomplete: String,
     placeholder: String,
     modelValue: String,
@@ -80,12 +89,17 @@ export default {
     color: colors.css-color(black);
     font-family: units.$font;
     box-sizing: border-box;
+    appearance: none;
     border: none;
     width: 100%;
     margin: 0;
 
     &--error {
       padding-right: units.spacing(6.75);
+    }
+
+    &::-webkit-calendar-picker-indicator {
+      display: none !important;
     }
 
     &:disabled {
