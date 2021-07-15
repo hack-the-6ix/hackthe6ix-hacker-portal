@@ -25,12 +25,12 @@
       :maxlength="256"
       required
     />
-    <Select
+    <Input
       label="Your Program of Study"
-      placeholder="Select"
+      placeholder="e.g. OwO Science"
       v-bind="bindField('program', errors)"
       v-model="program"
-      :options="programs"
+      :datalist="programs"
       :disabled="!canEdit || yearsOfStudy === 'High School'"
       required
     />
@@ -251,10 +251,11 @@ export default {
       return disclaimerSections;
     },
     programs() {
-      return (this.enums?.programOfStudy || []).map((x) => ({
+      return this.enums?.programOfStudy ?? [];
+      /*return (this.enums?.programOfStudy || []).map((x) => ({
         label: x,
         value: x,
-      }));
+      }));*/
     },
     years() {
       return (this.enums?.yearsOfStudy || []).map((x) => ({

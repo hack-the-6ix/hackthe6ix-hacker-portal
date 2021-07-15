@@ -81,12 +81,12 @@
       :disabled="!canEdit"
       required
     />
-    <Select
+    <Input
       label="Country"
       placeholder="e.g. Canada"
       v-bind="bindField('country', errors)"
       v-model="country"
-      :options="countries"
+      :datalist="countries"
       :disabled="!canEdit"
       required
     />
@@ -280,10 +280,11 @@ export default {
       }));
     },
     countries() {
-      return (this.enums?.countries || []).map((x) => ({
+      return this.enums?.countries ?? [];
+      /*return (this.enums?.countries || []).map((x) => ({
         label: x,
         value: x,
-      }));
+      }));*/
     },
   },
   props: {
