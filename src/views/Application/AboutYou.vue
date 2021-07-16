@@ -88,6 +88,7 @@
       v-model="country"
       :datalist="countries"
       :disabled="!canEdit"
+      :maxlength="256"
       required
     />
     <!--
