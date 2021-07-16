@@ -23,6 +23,7 @@
       :datalist="schools"
       v-model="school"
       :maxlength="256"
+      :disabled="!canEdit"
       required
     />
     <Input
