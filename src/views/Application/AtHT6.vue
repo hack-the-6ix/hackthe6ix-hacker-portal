@@ -22,6 +22,15 @@
         accomplishEssay?.split(' ').filter(Boolean).length ?? 0
       })`"
     />
+    <Select
+        label="Would you be interested in attending introductory workshops the week prior to the hackathon?"
+        placeholder="Select"
+        v-bind="bindField('preEventWorkshops', errors)"
+        v-model="preEventWorkshops"
+        :options="preEventWorkshopsOptions"
+        :disabled="!canEdit"
+        required
+    />
     <Checkbox
       label='I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
       target="_blank" rel="noreferrer noopener" class="at-ht6__link">MLH Code of Conduct</a>.'
@@ -90,6 +99,7 @@ import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import Checkbox from '@/components/Checkbox';
 import Textarea from '@/components/Textarea';
+import Select from '@/components/Select';
 import Button from '@/components/Button';
 import swal from 'sweetalert';
 import { computePageLabel } from '../../utils/validateForm';
@@ -101,12 +111,14 @@ export default {
     Checkbox,
     Textarea,
     Button,
+    Select
   },
   props: {
     form: Object,
     canEdit: Boolean,
     errors: Object,
     pageErrors: Array,
+    enums: Object,
   },
   computed: {
     disclaimer() {
@@ -140,6 +152,12 @@ export default {
 
       return disclaimerSections;
     },
+    preEventWorkshopsOptions() {
+      return (this.enums?.preEventWorkshops || []).map((x) => ({
+        label: x,
+        value: x,
+      }));
+    },
   },
   methods: {
     save() {
@@ -158,6 +176,7 @@ export default {
       ...useFormSection(props, {
         requestedWorkshops: '',
         accomplishEssay: '',
+        preEventWorkshops: '',
         mlhCOC: false,
         mlhEmail: false,
         mlhData: false,
