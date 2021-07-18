@@ -68,6 +68,7 @@
               v-model:errors="errors.at_ht6"
               v-model:modelTabSelected="selected"
               :pageErrors="pageErrors"
+              :enums="enums"
               :canEdit="user?.status?.canApply"
               @updateApplication="runUpdateApplication"
             />
@@ -218,9 +219,12 @@ export default {
 
       const timeout = this.startLoading();
 
-      this.runUpdateApplication(true, () => {
+      this.runUpdateApplication(true, (success) => {
         this.stopLoading(timeout);
-        this.applicationSubmittedDialogOpen = true;
+
+        if (success) {
+          this.applicationSubmittedDialogOpen = true;
+        }
       });
     },
     async fetchEnums() {
@@ -301,7 +305,7 @@ export default {
         }
 
         if (callback) {
-          callback();
+          callback(true);
         }
       } else {
         if (result.error && result.message) {
@@ -316,6 +320,10 @@ export default {
           );
         } else {
           swal('Unable to save application', result.data, 'error');
+        }
+
+        if (callback) {
+          callback(false);
         }
       }
     },
@@ -352,6 +360,7 @@ export default {
         ],
         at_ht6: [
           'requestedWorkshops',
+          'preEventWorkshops',
           'accomplishEssay',
           'mlhCOC',
           'mlhEmail',
