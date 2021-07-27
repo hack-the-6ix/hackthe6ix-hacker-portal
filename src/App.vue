@@ -15,10 +15,23 @@
       </Typography>
     </span>
     <span style="margin-left: auto">
-      <Button color="black" @click="confirmRunLogout"> Sign Out </Button>
+      <Button color="black" @click="confirmRunLogout">Sign Out</Button>
     </span>
   </div>
-  <router-view />
+  <router-view v-slot="{ Component }">
+    <template v-if="Component">
+      <keep-alive>
+        <suspense>
+          <component :is="Component"></component>
+          <template #fallback>
+            <Typography color="white" type="heading3" as="h1">
+              Loading...
+            </Typography>
+          </template>
+        </suspense>
+      </keep-alive>
+    </template>
+  </router-view>
 </template>
 
 <script>

@@ -19,6 +19,11 @@ const routes = [
       import(/* webpackChunkName: "Application" */ './views/Application'),
   },
   {
+    path: '/dashboard',
+    component: () =>
+      import(/* webpackChunkName: "Dashboard" */ './views/Dashboard'),
+  },
+  {
     path: '/callback',
     component: handleCallback,
     meta: {
@@ -46,6 +51,7 @@ router.beforeEach(async (to, from, next) => {
     // oops we need to go to SSO page to get our tokens
 
     // Ensure that our redirect is never back to the callback again (prevent infinite loops)
+    console.log(to.fullPath);
     const redirectTo = to.path === '/callback' ? '/' : to.fullPath;
 
     // If we last redirected the user less than 5 seconds ago, we will halt and assume that the user is stuck in a login loop.
