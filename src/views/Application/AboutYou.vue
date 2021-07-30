@@ -215,7 +215,6 @@ import Select from '@/components/Select';
 import Input from '@/components/Input';
 import { computePageLabel } from "../../utils/validateForm";
 import InfoPrompt from "@/components/InfoPrompt";
-import { computePageLabel } from '../../utils/validateForm';
 
 export default {
   name: 'AboutYou',
@@ -228,10 +227,10 @@ export default {
     Button,
     InfoPrompt,
   },
-  data () {
+  data() {
     return {
       isVisible: true,
-    }
+    };
   },
   methods: {
     close() {
@@ -378,7 +377,7 @@ export default {
     }
     @include mixins.media(phone) {
       width: 100%;
-      top: 70%
+      top: 70%;
     }
   }
 

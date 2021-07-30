@@ -1,15 +1,13 @@
 <template>
-  <Layout>
-    <Tabs
-      v-model='selected'
-      :tabs='tabs'
-    />
+  <Layout :loading="!loaded">
+    <Tabs v-model="selected" :tabs="tabs" />
   </Layout>
 </template>
 
 <script>
-import {ref} from 'vue';
-import { useStore } from 'vuex';
+import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import useUserInfo from '@/utils/useUserInfo';
 import Layout from '@/components/Layout';
 import Tabs from '@/components/Tabs';
 import HackerInfo from './HackerInfo';
@@ -22,11 +20,26 @@ export default {
     Tabs,
   },
   async setup() {
-    const store = useStore();
-    await store.dispatch('getUserInfo');
+    const userInfo = useUserInfo();
+    const router = useRouter();
+    const loaded = ref(false);
+
+    const checkStatus = (value) => {
+      if (value?.status) {
+        if (!value.status.confirmed) {
+          router.replace('/acceptance');
+        }
+        loaded.value = true;
+      }
+    };
+
+    checkStatus(userInfo.value);
+    watch(userInfo, checkStatus);
 
     return {
       selected: ref(0),
+      userInfo,
+      loaded,
       tabs: [
         {
           component: HackerInfo,

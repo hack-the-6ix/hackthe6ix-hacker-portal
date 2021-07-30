@@ -1,28 +1,26 @@
 <template>
-  <div class='tabs'>
-    <ul class='tabs__nav'>
+  <div class="tabs">
+    <ul class="tabs__nav">
       <li
-        :class='[
-          index === modelValue && "tabs__nav-item--selected",
-          "tabs__nav-item",
-        ]'
-        v-for='(tab, index) in tabs'
-        :key='index'
+        :class="[
+          index === modelValue && 'tabs__nav-item--selected',
+          'tabs__nav-item',
+        ]"
+        v-for="(tab, index) in tabs"
+        :key="index"
       >
         <Typography
-          @click='$emit("update:modelValue", index)'
-          class='tabs__nav-btn'
-          type='paragraph'
-          as='button'
+          @click="$emit('update:modelValue', index)"
+          class="tabs__nav-btn"
+          type="paragraph"
+          as="button"
         >
           {{ tab.label }}
         </Typography>
       </li>
     </ul>
-    <div class='tabs__body'>
-      <component
-        :is="selected.component"
-      />
+    <div class="tabs__body">
+      <component :is="selected.component" />
     </div>
   </div>
 </template>
@@ -69,7 +67,6 @@ export default {
     flex-grow: 1;
 
     &--selected {
-
     }
   }
 
