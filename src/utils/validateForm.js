@@ -1,9 +1,9 @@
 const fieldNameLookup = {
-  'mlhCOC': 'MLH Code of Conduct',
-  'mlhData': 'MLH Terms and Conditions',
-  'GitHub': 'GitHub',
-  'LinkedIn': 'LinkedIn',
-  'at_ht6': 'At HT6'
+  mlhCOC: 'MLH Code of Conduct',
+  mlhData: 'MLH Terms and Conditions',
+  GitHub: 'GitHub',
+  LinkedIn: 'LinkedIn',
+  at_ht6: 'At HT6',
 };
 
 function displayKey(key) {
@@ -21,7 +21,10 @@ export function computePageLabel(id) {
     return fieldNameLookup[id];
   }
 
-  return id.charAt(0).toUpperCase() + id.slice(1).replace(/_./g, s => ` ${s.charAt(1).toUpperCase()}`)
+  return (
+    id.charAt(0).toUpperCase() +
+    id.slice(1).replace(/_./g, (s) => ` ${s.charAt(1).toUpperCase()}`)
+  );
 }
 
 function requiredValidator(form, error) {
@@ -67,9 +70,14 @@ export default function validateForm(about_you, your_experience, at_ht6) {
         : [],
     )
     .forEach(requiredValidator(about_you, errors.about_you));
-  ['school', 'program', 'yearsOfStudy', 'resume', 'hackathonsAttended', 'projectEssay'].forEach(
-    requiredValidator(your_experience, errors.your_experience),
-  );
+  [
+    'school',
+    'program',
+    'yearsOfStudy',
+    'resume',
+    'hackathonsAttended',
+    'projectEssay',
+  ].forEach(requiredValidator(your_experience, errors.your_experience));
   ['accomplishEssay', 'mlhCOC', 'mlhData'].forEach(
     requiredValidator(at_ht6, errors.at_ht6),
   );
@@ -77,7 +85,8 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   // Validate about_you data
   if (
     !errors.about_you.phoneNumber &&
-    (!about_you.phoneNumber.match(/\d/g) || about_you.phoneNumber.match(/\d/g).length === 0)
+    (!about_you.phoneNumber.match(/\d/g) ||
+      about_you.phoneNumber.match(/\d/g).length === 0)
   ) {
     errors.about_you.phoneNumber = 'Invalid phone number';
   }
@@ -116,7 +125,8 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   }
 
   if (!errors.your_experience.projectEssay) {
-    const count = your_experience.projectEssay?.split(' ').filter(Boolean).length ?? 0;
+    const count =
+      your_experience.projectEssay?.split(' ').filter(Boolean).length ?? 0;
     if (count !== 0 && count < 50) {
       errors.your_experience.projectEssay = `Project Essay must be at least 50 words`;
     }
@@ -124,7 +134,8 @@ export default function validateForm(about_you, your_experience, at_ht6) {
 
   // Validate at_ht6
   if (!errors.at_ht6.accomplishEssay) {
-    const count = at_ht6.accomplishEssay?.split(' ').filter(Boolean).length ?? 0;
+    const count =
+      at_ht6.accomplishEssay?.split(' ').filter(Boolean).length ?? 0;
     if (count !== 0 && count < 50) {
       errors.at_ht6.accomplishEssay = `Accomplish Essay must be at least 50 words`;
     }

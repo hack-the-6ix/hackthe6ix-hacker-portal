@@ -26,7 +26,12 @@
             {{ index + 1 }}<span class="home__nav-text">. {{ tab.label }}</span>
           </Typography>
         </nav>
-        <form class="home__form" v-on:submit.prevent="submit" novalidate id="home-form">
+        <form
+          class="home__form"
+          v-on:submit.prevent="submit"
+          novalidate
+          id="home-form"
+        >
           <TeamFormation
             v-show="selected === 'team-formation'"
             v-model:form="team"
@@ -170,9 +175,11 @@ export default {
         this.at_ht6,
       );
       if (hasErrors(this.errors)) {
-
         // Scroll user to disclaimer
-        let y = window.pageYOffset + document?.getElementById('home-form')?.getBoundingClientRect()?.top || 0;
+        let y =
+          window.pageYOffset +
+            document?.getElementById('home-form')?.getBoundingClientRect()
+              ?.top || 0;
 
         window.scrollTo({
           top: y || 0,
@@ -380,7 +387,7 @@ export default {
     const loader = this.$loading.show({
       container: null,
       opacity: 0,
-      color: 'white'
+      color: 'white',
     });
 
     Promise.all([this.fetchProfile(), this.fetchEnums()]).then(() => {
@@ -412,9 +419,12 @@ export default {
               for your application results!`;
     },
     pageErrors() {
-      return Object.keys(this.errors).map(
-        key => Object.values(this.errors[key]).filter(Boolean).length && key,
-      ).filter(Boolean);
+      return Object.keys(this.errors)
+        .map(
+          (key) =>
+            Object.values(this.errors[key]).filter(Boolean).length && key,
+        )
+        .filter(Boolean);
     },
     dueDate() {
       return new Date(

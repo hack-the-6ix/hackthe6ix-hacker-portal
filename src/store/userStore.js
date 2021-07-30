@@ -1,4 +1,4 @@
-import { getProfile } from "../utils/api";
+import { getProfile } from '../utils/api';
 
 const userStore = {
   state() {

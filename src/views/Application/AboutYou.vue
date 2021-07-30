@@ -1,9 +1,5 @@
 <template>
-  <FormSection
-    :disclaimer="disclaimer"
-    class="about-you"
-    label="About you"
-  >
+  <FormSection :disclaimer="disclaimer" class="about-you" label="About you">
     <Input
       label="First Name"
       placeholder="Enter first name"
@@ -85,11 +81,7 @@
       required
     />
     <div class="about-you__prompt">
-      <InfoPrompt
-        class="about-you__info"
-        v-show="isVisible"
-        @close="close()"
-      />
+      <InfoPrompt class="about-you__info" v-show="isVisible" @close="close()" />
     </div>
     <Checkbox
       label="I live in Canada <strong>and</strong> I want to receive Hack the 6ix swag."
@@ -195,8 +187,8 @@ import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
-import { computePageLabel } from "../../utils/validateForm";
-import InfoPrompt from "@/components/InfoPrompt";
+import { computePageLabel } from '../../utils/validateForm';
+import InfoPrompt from '@/components/InfoPrompt';
 
 export default {
   name: 'AboutYou',
@@ -209,10 +201,10 @@ export default {
     Button,
     InfoPrompt,
   },
-  data () {
+  data() {
     return {
       isVisible: true,
-    }
+    };
   },
   methods: {
     close() {
@@ -222,12 +214,15 @@ export default {
   computed: {
     disclaimer() {
       const fieldErrors = Object.values(this.errors).filter(Boolean);
-      const pageErrors = this.pageErrors.filter(id => id !== 'about_you').map(
-        id => {
+      const pageErrors = this.pageErrors
+        .filter((id) => id !== 'about_you')
+        .map((id) => {
           const label = computePageLabel(id);
-          return `<a class='about-you__link' href="#${id.replace(/_/g, '-')}">${label}</a>`
-        },
-      );
+          return `<a class='about-you__link' href="#${id.replace(
+            /_/g,
+            '-',
+          )}">${label}</a>`;
+        });
 
       if (!fieldErrors.length && !pageErrors.length) return;
 
@@ -244,7 +239,7 @@ export default {
         disclaimerSections.push({
           label: 'Please resolve the following fields before you submit.',
           items: fieldErrors,
-        })
+        });
       }
       return disclaimerSections;
     },
@@ -341,7 +336,7 @@ export default {
     }
     @include mixins.media(phone) {
       width: 100%;
-      top: 70%
+      top: 70%;
     }
   }
 

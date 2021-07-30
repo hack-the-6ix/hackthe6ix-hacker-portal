@@ -6,9 +6,9 @@
       </legend>
       <FormDisclaimer
         class="form-section__disclaimer"
-        :type='disclaimerType'
-        :data='disclaimer'
-        v-if='disclaimer'
+        :type="disclaimerType"
+        :data="disclaimer"
+        v-if="disclaimer"
       />
       <div v-bind="$attrs">
         <slot />

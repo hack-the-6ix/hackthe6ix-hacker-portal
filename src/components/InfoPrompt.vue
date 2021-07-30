@@ -61,7 +61,8 @@ export default {
   }
 
   &__body {
-    padding: units.spacing(10) units.spacing(6) units.spacing(7) units.spacing(8);
+    padding: units.spacing(10) units.spacing(6) units.spacing(7)
+      units.spacing(8);
     background-color: var(--info-prompt__background);
   }
 

@@ -15,7 +15,9 @@
     >
       <span v-html="label" />{{ required ? '*' : '' }}
     </Typography>
-    <div :class="['field-layout__main', !noOutline && 'field-layout--outlined']">
+    <div
+      :class="['field-layout__main', !noOutline && 'field-layout--outlined']"
+    >
       <slot />
       <WarningIcon v-if="error" class="field-layout__error-icon" />
     </div>
