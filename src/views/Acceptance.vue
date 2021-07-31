@@ -2,7 +2,7 @@
   <Layout :loading="loading">
     <div class="acceptance">
       <div class="acceptance__content">
-        <Typography type="heading4" color="grey" as="p">
+        <Typography type="heading4" color="dark-grey" as="p">
           Hack the 6ix 2021
         </Typography>
         <Typography
@@ -26,7 +26,7 @@
         </template>
         <Typography v-else type="heading4" color="black" as="p">
           Looks like the confirmation period has passed. If this is a mistake,
-          or you wish to confirm pass this period - please contact us at
+          or you wish to confirm past this period - please contact us at
           <a class="acceptance__link" href="mailto:hello@hackthe6ix.com"
             >hello@hackthe6ix.com</a
           >
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { ref, watch } from '@vue/reactivity';
+import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import useUserInfo from '@/utils/useUserInfo';
 import Typography from '@/components/Typography';
@@ -71,12 +71,13 @@ export default {
       }
     };
 
-    const userInfo = await useUserInfo();
+    const userInfo = useUserInfo();
     watch(userInfo, check);
     check();
 
     return {
       userInfo,
+      loading,
     };
   },
   computed: {
@@ -108,8 +109,8 @@ export default {
 
   &__buttons {
     display: flex;
-    gap: units.spacing(17.5);
-    margin-top: units.spacing(13.5);
+    gap: units.spacing(3);
+    margin-top: units.spacing(3);
 
     @include mixins.media(phone) {
       margin-top: units.spacing(8);
