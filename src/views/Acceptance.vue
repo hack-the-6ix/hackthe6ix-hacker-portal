@@ -64,14 +64,20 @@ export default {
 
     const check = (val) => {
       if (val?.status) {
+        if (!val.status.applied) {
+          router.replace('/application');
+          return;
+        }
+
         if (val.status.confirmed) {
           router.replace('/dashboard');
+          return;
         }
         loading.value = false;
       }
     };
 
-    const userInfo = useUserInfo();
+    const { userInfo } = useUserInfo();
     watch(userInfo, check);
     check();
 

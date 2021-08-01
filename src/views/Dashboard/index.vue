@@ -20,14 +20,20 @@ export default {
     Tabs,
   },
   async setup() {
-    const userInfo = useUserInfo();
+    const { userInfo } = useUserInfo();
     const router = useRouter();
     const loaded = ref(false);
 
     const checkStatus = (value) => {
       if (value?.status) {
+        if (!value.status.applied) {
+          router.replace('/application');
+          return;
+        }
+
         if (!value.status.confirmed) {
           router.replace('/acceptance');
+          return;
         }
         loaded.value = true;
       }
@@ -43,18 +49,39 @@ export default {
       tabs: [
         {
           component: HackerInfo,
-          label: 'Hacker Info',
+          label: '<i class="dashboard__tab-icon fas fa-info-circle"></i><span class="dashboard__tab-text">Hacker Info</span>',
         },
         {
           component: Schedule,
-          label: 'Schedule',
+          label: '<i class="dashboard__tab-icon fas fa-calendar-alt"></i><span class="dashboard__tab-text">Schedule</span>',
         },
         {
           component: Resources,
-          label: 'Resources',
+          label: '<i class="dashboard__tab-icon fas fa-book"></i><span class="dashboard__tab-text">Resources</span>',
         },
       ],
     };
   },
 };
 </script>
+
+<style lang="scss">
+@use '@/styles/mixins';
+@use '@/styles/units';
+
+.dashboard {
+  &__tab-icon {
+    display: none;
+    @include mixins.media(tablet) {
+      display: inline-block;
+    }
+  }
+
+  &__tab-text {
+    display: inline-block;
+    @include mixins.media(tablet) {
+      display: none;
+    }
+  }
+}
+</style>

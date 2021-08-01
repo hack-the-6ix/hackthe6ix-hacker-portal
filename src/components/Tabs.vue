@@ -12,11 +12,10 @@
         <Typography
           @click="$emit('update:modelValue', index)"
           class="tabs__nav-btn"
+          v-html="tab.label"
           type="paragraph"
           as="button"
-        >
-          {{ tab.label }}
-        </Typography>
+        />
       </li>
     </ul>
     <div class="tabs__body">
@@ -65,9 +64,6 @@ export default {
   &__nav-item {
     flex-basis: 1px;
     flex-grow: 1;
-
-    &--selected {
-    }
   }
 
   &__nav-btn {
@@ -75,6 +71,7 @@ export default {
     border-top-right-radius: units.spacing(5);
     border-top-left-radius: units.spacing(5);
     background: transparent;
+    height: 100%;
     border: none;
     width: 100%;
 
