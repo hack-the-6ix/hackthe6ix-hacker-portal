@@ -16,7 +16,7 @@
         <template v-if="canConfirm">
           <Typography type="heading4" color="black" as="p">
             Congratulations and welcome to Hack the 6ix 2021! We are excited to
-            offer you the opportunitiy to hack with us! To confirm your
+            offer you the opportunity to hack with us! To confirm your
             attendance, please RSVP below!
           </Typography>
           <div class="acceptance__buttons">
