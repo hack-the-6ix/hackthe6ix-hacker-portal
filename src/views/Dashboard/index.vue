@@ -27,7 +27,7 @@ export default {
     const checkStatus = (value) => {
       if (value?.status) {
         console.log(router);
-        /*if (!value.status.applied) {
+        if (!value.status.applied) {
           router.replace('/application');
           return;
         }
@@ -35,7 +35,7 @@ export default {
         if (!value.status.confirmed) {
           router.replace('/prompt');
           return;
-        }*/
+        }
         loaded.value = true;
       }
     };

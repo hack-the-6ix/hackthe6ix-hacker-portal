@@ -154,7 +154,7 @@ export default {
   },
   watch: {
     userIsLoaded() {
-      if (!this.userInfo.status.canApply) {
+      if (!this.userInfo.status.canAmendTeam) {
         this.$router.replace('/prompt');
       }
     },

@@ -5,15 +5,15 @@
         <Typography type="heading4" color="dark-grey" as="p">
           Hack the 6ix 2021
         </Typography>
-        <Typography
-          class="acceptance__heading"
-          type="heading2"
-          color="dark-navy"
-          as="h1"
-        >
-          Hacker Invitation
-        </Typography>
-        <template v-if="canConfirm">
+        <template v-if="invitationOpen">
+          <Typography
+              class="acceptance__heading"
+              type="heading2"
+              color="dark-navy"
+              as="h1"
+          >
+            Hacker Invitation
+          </Typography>
           <div class="acceptance__prompt">
             <Typography type="heading4" color="black" as="p">
               Congratulations and welcome to Hack the 6ix 2021! We are excited
@@ -30,6 +30,14 @@
           </div>
         </template>
         <div class="acceptance__prompt" v-else>
+          <Typography
+              class="acceptance__heading"
+              type="heading2"
+              color="dark-navy"
+              as="h1"
+          >
+            Application Status
+          </Typography>
           <Typography
             v-for="(line, index) in prompt"
             :key="index"
@@ -190,6 +198,9 @@ export default {
     },
     canConfirm() {
       return this.userInfo?.status?.canConfirm;
+    },
+    invitationOpen() {
+      return this.canConfirm && this.userInfo?.accepted;
     },
   },
 };
