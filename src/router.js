@@ -19,7 +19,7 @@ const routes = [
       import(/* webpackChunkName: "Application" */ './views/Application'),
   },
   {
-    path: '/acceptance',
+    path: '/prompt',
     component: () =>
       import(/* webpackChunkName: "Acceptance" */ './views/Acceptance'),
   },

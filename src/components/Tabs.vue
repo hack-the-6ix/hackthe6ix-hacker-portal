@@ -62,12 +62,13 @@ export default {
   }
 
   &__nav-item {
+    margin-bottom: units.spacing(-5);
     flex-basis: 1px;
     flex-grow: 1;
   }
 
   &__nav-btn {
-    padding: units.spacing(5) units.spacing(14);
+    padding: units.spacing(5) units.spacing(14) units.spacing(10);
     border-top-right-radius: units.spacing(5);
     border-top-left-radius: units.spacing(5);
     background: transparent;
@@ -84,8 +85,7 @@ export default {
 
   &__body {
     background-color: colors.css-color(white);
-    border-bottom-right-radius: units.spacing(3);
-    border-bottom-left-radius: units.spacing(3);
+    border-radius: units.spacing(3);
   }
 }
 </style>

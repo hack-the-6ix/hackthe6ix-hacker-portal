@@ -4,81 +4,81 @@
     <div v-if="loaded">
       <div v-if="user?.status?.canAmendTeam">
         <ApplicationSubmitted
-          v-if="applicationSubmittedDialogOpen"
-          @closeApplicationSubmittedDialog="
+            v-if="applicationSubmittedDialogOpen"
+            @closeApplicationSubmittedDialog="
             applicationSubmittedDialogOpen = false
           "
         />
         <Layout :title="title" :description="description" v-else>
           <nav class="home__nav">
             <Typography
-              v-for="(tab, index) in tabs"
-              @click="selected = tab.id"
-              :class="[
+                v-for="(tab, index) in tabs"
+                @click="selected = tab.id"
+                :class="[
                 selected === tab.id && 'home__nav-item--active',
                 'home__nav-item',
               ]"
-              transform="uppercase"
-              :href="`#${tab.id}`"
-              type="heading4"
-              align="center"
-              :key="tab.id"
-              as="a"
+                transform="uppercase"
+                :href="`#${tab.id}`"
+                type="heading4"
+                align="center"
+                :key="tab.id"
+                as="a"
             >
               {{ index + 1
               }}<span class="home__nav-text">. {{ tab.label }}</span>
             </Typography>
           </nav>
           <form
-            class="home__form"
-            v-on:submit.prevent="submit"
-            novalidate
-            id="home-form"
+              class="home__form"
+              v-on:submit.prevent="submit"
+              novalidate
+              id="home-form"
           >
             <TeamFormation
-              v-show="selected === 'team-formation'"
-              v-model:form="team"
-              v-model:modelTabSelected="selected"
-              :dueDate="dueDate"
-              :canAmendTeam="user?.status?.canAmendTeam"
-              :pageErrors="pageErrors"
-              @updateTeam="updateTeam"
+                v-show="selected === 'team-formation'"
+                v-model:form="team"
+                v-model:modelTabSelected="selected"
+                :dueDate="dueDate"
+                :canAmendTeam="user?.status?.canAmendTeam"
+                :pageErrors="pageErrors"
+                @updateTeam="updateTeam"
             />
             <AboutYou
-              v-show="selected === 'about-you'"
-              v-model:form="about_you"
-              v-model:errors="errors.about_you"
-              v-model:modelTabSelected="selected"
-              :pageErrors="pageErrors"
-              :enums="enums"
-              :canEdit="user?.status?.canApply"
+                v-show="selected === 'about-you'"
+                v-model:form="about_you"
+                v-model:errors="errors.about_you"
+                v-model:modelTabSelected="selected"
+                :pageErrors="pageErrors"
+                :enums="enums"
+                :canEdit="user?.status?.canApply"
             />
             <YourExperience
-              v-show="selected === 'your-experience'"
-              v-model:form="your_experience"
-              v-model:errors="errors.your_experience"
-              v-model:modelTabSelected="selected"
-              :pageErrors="pageErrors"
-              :enums="enums"
-              :canEdit="user?.status?.canApply"
+                v-show="selected === 'your-experience'"
+                v-model:form="your_experience"
+                v-model:errors="errors.your_experience"
+                v-model:modelTabSelected="selected"
+                :pageErrors="pageErrors"
+                :enums="enums"
+                :canEdit="user?.status?.canApply"
             />
             <AtHT6
-              v-show="selected === 'at-ht6'"
-              v-model:form="at_ht6"
-              v-model:errors="errors.at_ht6"
-              v-model:modelTabSelected="selected"
-              :pageErrors="pageErrors"
-              :enums="enums"
-              :canEdit="user?.status?.canApply"
-              @updateApplication="runUpdateApplication"
+                v-show="selected === 'at-ht6'"
+                v-model:form="at_ht6"
+                v-model:errors="errors.at_ht6"
+                v-model:modelTabSelected="selected"
+                :pageErrors="pageErrors"
+                :enums="enums"
+                :canEdit="user?.status?.canApply"
+                @updateApplication="runUpdateApplication"
             />
           </form>
           <Typography
-            type="p"
-            color="white"
-            as="p"
-            v-if="lastSaved"
-            class="home__last-saved"
+              type="p"
+              color="white"
+              as="p"
+              v-if="lastSaved"
+              class="home__last-saved"
           >
             Last saved at {{ lastSaved }}
           </Typography>
@@ -98,6 +98,7 @@ import ApplicationsClosed from '@/views/Application/ApplicationsClosed';
 import ApplicationSubmitted from '@/views/Application/ApplicationSubmitted';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
+import useUserInfo from '@/utils/useUserInfo';
 import validateForm, { hasErrors } from '@/utils/validateForm';
 import {
   getApplicationEnums,
@@ -143,7 +144,20 @@ export default {
       applicationSubmittedDialogOpen: false,
     };
   },
+  setup() {
+    const { userInfo, loaded } = useUserInfo();
+
+    return {
+      userInfo,
+      userIsLoaded: loaded,
+    };
+  },
   watch: {
+    userIsLoaded() {
+      if (!this.userInfo.status.canApply) {
+        this.$router.replace('/prompt');
+      }
+    },
     async selected() {
       if (this.user?.status?.canApply && this.unsavedChanges && this.loaded) {
         await this.runUpdateApplication(false);

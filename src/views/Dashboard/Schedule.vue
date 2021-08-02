@@ -10,11 +10,7 @@
       >
         Schedule
       </Typography>
-      <Typography
-        color="black"
-        type="paragraph"
-        as="p"
-      >
+      <Typography color="black" type="paragraph" as="p">
         Coming soon. Stay tuned for more information!
       </Typography>
     </div>

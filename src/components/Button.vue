@@ -71,6 +71,7 @@ export default {
   padding: calc(#{units.spacing(2)} - 1px) calc(#{units.spacing(4)} - 1px);
   letter-spacing: units.spacing(0.5);
   border-radius: units.spacing(0.5);
+  text-decoration: none;
   justify-content: center;
   display: inline-flex;
   align-items: center;

@@ -1,32 +1,44 @@
 <template>
   <div class="resources">
     <div class="resources__content">
-      <Typography
-        color="dark-navy"
-        transform="uppercase"
-        type="heading3"
-        as="h1"
-      >
-        Notion
-      </Typography>
+      <div class="resources__header">
+        <Typography
+          color="dark-navy"
+          transform="uppercase"
+          type="heading3"
+          as="h1"
+        >
+          Notion
+        </Typography>
+        <Button as="a" :href="notion" target="_blank" rel="noopener noreferrer">
+          Open link
+        </Button>
+      </div>
       <iframe
         class="resources__notion"
         allowtransparency
         frameborder="0"
-        src="https://hackthe6ix2021.notion.site/hackthe6ix2021/Hack-the-6ix-Hacker-Guide-12ce5072583f487cac5c6e2bb128b599"
+        :src="notion"
       />
     </div>
   </div>
 </template>
 
 <script>
-import Typography from "@/components/Typography";
+import Typography from '@/components/Typography';
+import Button from '@/components/Button';
 
-export default ({
+export default {
   components: {
-    Typography
-  }
-})
+    Typography,
+    Button,
+  },
+  computed: {
+    notion() {
+      return 'https://hackthe6ix2021.notion.site/hackthe6ix2021/Hack-the-6ix-Hacker-Guide-12ce5072583f487cac5c6e2bb128b599';
+    },
+  },
+};
 </script>
 
 <style lang="scss">
@@ -42,6 +54,11 @@ export default ({
     padding: units.spacing(16) units.spacing(12);
   }
 
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
+
   &__content {
     max-width: 900px;
     margin: 0 auto;
@@ -55,5 +72,4 @@ export default ({
     width: 100%;
   }
 }
-
 </style>

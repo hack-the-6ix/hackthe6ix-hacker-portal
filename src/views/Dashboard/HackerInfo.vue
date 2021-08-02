@@ -17,7 +17,8 @@
           type="paragraph"
           as="p"
         >
-          Welcome to Hack the 6ix 2021! Thanks for confirming your status as a hacker!
+          Welcome to Hack the 6ix 2021! Thanks for confirming your status as a
+          hacker!
         </Typography>
         <Typography
           class="hacker-info__text"
@@ -25,8 +26,8 @@
           type="paragraph"
           as="p"
         >
-          If you can no longer attend Hack The 6ix, please let us know so
-          we can pass this opportunity to a waitlisted participant.
+          If you can no longer attend Hack The 6ix, please let us know so we can
+          pass this opportunity to a waitlisted participant.
         </Typography>
         <Button @click="unaccept" type="secondary">
           I can no longer attend HT6
@@ -48,8 +49,10 @@
           type="paragraph"
           as="p"
         >
-          Join our Discord server to get the latest updates and meet fellow hackers!<br/>
-          Issue the following command in the #verification channel to gain access:
+          Join our Discord server to get the latest updates and meet fellow
+          hackers!<br />
+          Issue the following command in the #verification channel to gain
+          access:
         </Typography>
         <Typography
           class="hacker-info__verify"
@@ -80,19 +83,18 @@
               :href="link.link"
               target="_blank"
             >
-              <img class="hacker-info__asset" width='30' height='30' :alt="`Logo of ${link.label}`" :src="link.asset"/>
+              <img
+                class="hacker-info__asset"
+                width="30"
+                height="30"
+                :alt="`Logo of ${link.label}`"
+                :src="link.asset"
+              />
               <div class="hacker-info__info">
-                <Typography
-                  type="heading4"
-                  color="black"
-                  as="h3"
-                >
+                <Typography type="heading4" color="black" as="h3">
                   {{ link.label }}
                 </Typography>
-                <Typography
-                  color="black"
-                  type="paragraph"
-                >
+                <Typography color="black" type="paragraph">
                   {{ link.content }}
                 </Typography>
               </div>
@@ -105,14 +107,14 @@
 </template>
 
 <script>
-import Typography from "@/components/Typography";
-import useUserInfo from "@/utils/useUserInfo";
-import Button from "@/components/Button";
+import Typography from '@/components/Typography';
+import useUserInfo from '@/utils/useUserInfo';
+import Button from '@/components/Button';
 
-export default ({
+export default {
   components: {
     Typography,
-    Button
+    Button,
   },
   methods: {
     unaccept() {
@@ -131,24 +133,24 @@ export default ({
           link: 'https://hopin.hackthe6ix.com',
           asset: require('@/assets/hacker-info/hopin.png'),
           label: 'Hopin',
-          content: "All our live events and workshops are here!"
+          content: 'All our live events and workshops are here!',
         },
         {
           link: 'https://discord.hackthe6ix.com',
           asset: require('@/assets/hacker-info/discord.png'),
           label: 'Discord',
-          content: "Connect with hackers, mentors and sponsors!"
+          content: 'Connect with hackers, mentors and sponsors!',
         },
         {
           link: 'https://hackthe6ix2021.devpost.com/',
           asset: require('@/assets/hacker-info/devpost.png'),
           label: 'Devpost',
-          content: "Submit your projects here!"
+          content: 'Submit your projects here!',
         },
-      ]
-    }
+      ];
+    },
   },
-})
+};
 </script>
 
 <style lang="scss">
@@ -237,5 +239,4 @@ export default ({
     }
   }
 }
-
 </style>

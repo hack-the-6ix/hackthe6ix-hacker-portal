@@ -6,7 +6,7 @@ export default function useUserInfo() {
   const userInfo = computed(() => store.state.userInfo);
   const loaded = ref(true);
 
-  watch(userInfo, val => {
+  watch(userInfo, (val) => {
     if (val !== null) {
       loaded.value = true;
     }

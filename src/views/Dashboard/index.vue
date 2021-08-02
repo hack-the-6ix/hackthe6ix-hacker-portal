@@ -26,15 +26,16 @@ export default {
 
     const checkStatus = (value) => {
       if (value?.status) {
-        if (!value.status.applied) {
+        console.log(router);
+        /*if (!value.status.applied) {
           router.replace('/application');
           return;
         }
 
         if (!value.status.confirmed) {
-          router.replace('/acceptance');
+          router.replace('/prompt');
           return;
-        }
+        }*/
         loaded.value = true;
       }
     };
@@ -49,15 +50,18 @@ export default {
       tabs: [
         {
           component: HackerInfo,
-          label: '<i class="dashboard__tab-icon fas fa-info-circle"></i><span class="dashboard__tab-text">Hacker Info</span>',
+          label:
+            '<i class="dashboard__tab-icon fas fa-info-circle"></i><span class="dashboard__tab-text">Hacker Info</span>',
         },
         {
           component: Schedule,
-          label: '<i class="dashboard__tab-icon fas fa-calendar-alt"></i><span class="dashboard__tab-text">Schedule</span>',
+          label:
+            '<i class="dashboard__tab-icon fas fa-calendar-alt"></i><span class="dashboard__tab-text">Schedule</span>',
         },
         {
           component: Resources,
-          label: '<i class="dashboard__tab-icon fas fa-book"></i><span class="dashboard__tab-text">Resources</span>',
+          label:
+            '<i class="dashboard__tab-icon fas fa-book"></i><span class="dashboard__tab-text">Resources</span>',
         },
       ],
     };
