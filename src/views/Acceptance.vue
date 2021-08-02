@@ -193,7 +193,7 @@ export default {
             ];
           }
         default:
-          return ['owo'];
+          return ['Sorry an error occurred.'];
       }
     },
     canConfirm() {
