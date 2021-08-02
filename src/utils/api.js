@@ -118,3 +118,10 @@ export const leaveTeam = async () =>
   sendRequest('/api/action/leaveTeam', 'POST');
 export const createTeam = async () =>
   sendRequest('/api/action/createTeam', 'POST');
+
+export const rsvp = async (attending) =>
+  sendRequest('/api/action/rsvp', 'POST', {
+    rsvp: {
+      attending: attending
+    }
+  });

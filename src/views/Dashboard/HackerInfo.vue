@@ -20,18 +20,20 @@
           Welcome to Hack the 6ix 2021! Thanks for confirming your status as a
           hacker!
         </Typography>
-        <Typography
-          class="hacker-info__text"
-          color="black"
-          type="paragraph"
-          as="p"
-        >
-          If you can no longer attend Hack The 6ix, please let us know so we can
-          pass this opportunity to a waitlisted participant.
-        </Typography>
-        <Button @click="unaccept" type="secondary">
-          I can no longer attend HT6
-        </Button>
+        <template v-if="userInfo.status.canConfirm">
+          <Typography
+            class="hacker-info__text"
+            color="black"
+            type="paragraph"
+            as="p"
+          >
+            If you can no longer attend Hack the 6ix, please let us know so we can
+            pass this opportunity to a waitlisted participant.
+          </Typography>
+          <Button @click="unaccept" type="secondary">
+            I can no longer attend HT6
+          </Button>
+        </template>
       </div>
       <div class="hacker-info__section">
         <Typography
@@ -51,7 +53,7 @@
         >
           Join our Discord server to get the latest updates and meet fellow
           hackers!<br />
-          Issue the following command in the #verification channel to gain
+          Issue the following command in the <b>#verification</b> channel to gain
           access:
         </Typography>
         <Typography
@@ -110,6 +112,8 @@
 import Typography from '@/components/Typography';
 import useUserInfo from '@/utils/useUserInfo';
 import Button from '@/components/Button';
+import { rsvp } from "../../utils/api";
+import swal from 'sweetalert';
 
 export default {
   components: {
@@ -117,8 +121,24 @@ export default {
     Button,
   },
   methods: {
-    unaccept() {
-      // TODO: unaccept
+    async unaccept() {
+      const confirm = await swal({
+        title: 'Confirm Action',
+        text: 'Are you sure you want to decline your invitation?\n\nYou will not be able to reverse this decision.',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+      });
+
+      if (confirm) {
+        const result = await rsvp(false);
+
+        if (result.success) {
+          document.location.reload();
+        } else {
+          swal('Error', result.data, 'error');
+        }
+      }
     },
   },
   setup() {
@@ -130,16 +150,16 @@ export default {
     links() {
       return [
         {
-          link: 'https://hopin.hackthe6ix.com',
-          asset: require('@/assets/hacker-info/hopin.png'),
-          label: 'Hopin',
-          content: 'All our live events and workshops are here!',
-        },
-        {
           link: 'https://discord.hackthe6ix.com',
           asset: require('@/assets/hacker-info/discord.png'),
           label: 'Discord',
           content: 'Connect with hackers, mentors and sponsors!',
+        },
+        {
+          link: 'https://hopin.hackthe6ix.com',
+          asset: require('@/assets/hacker-info/hopin.png'),
+          label: 'Hopin',
+          content: 'All our live events and workshops are here!',
         },
         {
           link: 'https://hackthe6ix2021.devpost.com/',

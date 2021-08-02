@@ -67,6 +67,8 @@ import useUserInfo from '@/utils/useUserInfo';
 import Typography from '@/components/Typography';
 import Button from '@/components/Button';
 import Layout from '@/components/Layout';
+import swal from 'sweetalert';
+import { rsvp } from "../utils/api";
 
 export default {
   components: {
@@ -75,11 +77,33 @@ export default {
     Layout,
   },
   methods: {
-    accept() {
-      // TODO: Accept
+    async accept() {
+      const result = await rsvp(true);
+
+      if (result.success) {
+        document.location.reload();
+      } else {
+        swal('Error', result.data, 'error');
+      }
     },
-    decline() {
-      // TODO: Decline
+    async decline() {
+      const confirm = await swal({
+        title: 'Confirm Action',
+        text: 'Are you sure you want to decline your invitation?\n\nYou will not be able to reverse this decision.',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+      });
+
+      if (confirm) {
+        const result = await rsvp(false);
+
+        if (result.success) {
+          document.location.reload();
+        } else {
+          swal('Error', result.data, 'error');
+        }
+      }
     },
   },
   async setup() {
