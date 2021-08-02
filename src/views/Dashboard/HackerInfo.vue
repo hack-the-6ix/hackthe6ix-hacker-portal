@@ -20,7 +20,7 @@
           Welcome to Hack the 6ix 2021! Thanks for confirming your status as a
           hacker!
         </Typography>
-        <template v-if="userInfo.status.canConfirm">
+        <template v-if="userInfo.status.isRSVPOpen">
           <Typography
             class="hacker-info__text"
             color="black"

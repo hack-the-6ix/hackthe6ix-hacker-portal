@@ -5,7 +5,7 @@
         <Typography type="heading4" color="dark-grey" as="p">
           Hack the 6ix 2021
         </Typography>
-        <template v-if="invitationOpen">
+        <template v-if="canRSVP">
           <Typography
               class="acceptance__heading"
               type="heading2"
@@ -140,17 +140,18 @@ export default {
         REJECTED: 'REJECTED',
         APPLIED: 'APPLIED',
         NOT_APPLIED: 'NOT_APPLIED',
+        EXPIRED: 'EXPIRED',
       };
     },
     userStatus() {
       if (this.userInfo?.status.declined) {
         return this.statusEnum.DECLINED;
-      } else if (this.userInfo?.status.checkedIn) {
-        return this.statusEnum.CHECKED_IN;
       } else if (this.userInfo?.status.confirmed) {
         return this.statusEnum.CONFIRMED;
       } else if (this.userInfo?.status.accepted) {
-        return this.statusEnum.ACCEPTED;
+        return !this.userInfo?.status?.canRSVP
+          ? this.statusEnum.ACCEPTED
+          : this.statusEnum.EXPIRED;
       } else if (this.userInfo?.status.waitlisted) {
         return this.statusEnum.WAITLISTED;
       } else if (this.userInfo?.status.rejected) {
@@ -205,26 +206,21 @@ export default {
             `Stay up to date with our socials and we'll look forward to seeing you at Hack the 6ix 2022!`,
           ];
         case this.statusEnum.APPLIED:
-          if (this.canConfirm) {
-            return [
-              `Thank you for applying to Hack the 6ix! Your application is currently being reviewed by our HT6 team.`,
-              `Keep an eye on your inbox within the next few weeks for your application results.`,
-            ];
-          } else {
-            return [
-              `Thank you for your interest in applying for Hack the 6ix 2021. Unfortunately,
-              the confirmation period has passed.`,
-            ];
-          }
+          return [
+            `Thank you for applying to Hack the 6ix! Your application is currently being reviewed by our HT6 team.`,
+            `Keep an eye on your inbox within the next few weeks for your application results.`,
+          ];
+        case this.statusEnum.EXPIRED:
+          return [
+            `Thank you for your interest in applying for Hack the 6ix 2021. Unfortunately,
+            the confirmation period has passed.`,
+          ];
         default:
           return ['Sorry an error occurred.'];
       }
     },
-    canConfirm() {
-      return this.userInfo?.status?.canConfirm;
-    },
-    invitationOpen() {
-      return this.canConfirm && this.userInfo?.status?.accepted;
+    canRSVP() {
+      return this.userInfo?.status?.canRSVP;
     },
   },
 };
