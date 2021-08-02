@@ -200,7 +200,7 @@ export default {
       return this.userInfo?.status?.canConfirm;
     },
     invitationOpen() {
-      return this.canConfirm && this.userInfo?.accepted;
+      return this.canConfirm && this.userInfo?.status?.accepted;
     },
   },
 };
