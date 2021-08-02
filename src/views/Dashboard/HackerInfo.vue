@@ -1,5 +1,6 @@
 <template>
   <div class="hacker-info">
+    <loading :active="loading" :can-cancel="false" :is-full-page="true" />
     <div class="hacker-info__content">
       <div class="hacker-info__section">
         <Typography
@@ -112,6 +113,8 @@
 import Typography from '@/components/Typography';
 import useUserInfo from '@/utils/useUserInfo';
 import Button from '@/components/Button';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 import { rsvp } from "../../utils/api";
 import swal from 'sweetalert';
 
@@ -119,8 +122,23 @@ export default {
   components: {
     Typography,
     Button,
+    Loading
+  },
+  data() {
+    return {
+      loading: false
+    }
   },
   methods: {
+    startLoading() {
+      return setTimeout(() => {
+        this.loading = true;
+      }, 100);
+    },
+    stopLoading(timeout) {
+      clearTimeout(timeout);
+      this.loading = false;
+    },
     async unaccept() {
       const confirm = await swal({
         title: 'Confirm Action',
@@ -131,12 +149,16 @@ export default {
       });
 
       if (confirm) {
+        const timeout = this.startLoading();
+
         const result = await rsvp(false);
+
 
         if (result.success) {
           document.location.reload();
         } else {
           swal('Error', result.data, 'error');
+          this.stopLoading(timeout);
         }
       }
     },

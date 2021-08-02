@@ -1,63 +1,66 @@
 <template>
-  <Layout :loading="loading">
-    <div class="acceptance">
-      <div class="acceptance__content">
-        <Typography type="heading4" color="dark-grey" as="p">
-          Hack the 6ix 2021
-        </Typography>
-        <template v-if="canRSVP">
-          <Typography
-              class="acceptance__heading"
-              type="heading2"
-              color="dark-navy"
-              as="h1"
-          >
-            Hacker Invitation
+  <div>
+    <loading :active="loading" :can-cancel="false" :is-full-page="true" />
+    <Layout :loading="loading">
+      <div class="acceptance">
+        <div class="acceptance__content">
+          <Typography type="heading4" color="dark-grey" as="p">
+            Hack the 6ix 2021
           </Typography>
-          <div class="acceptance__prompt">
-            <Typography type="heading4" color="black" as="p">
-              Congratulations and welcome to Hack the 6ix 2021! We are excited
-              to offer you the opportunity to hack with us!
-            </Typography>
-            <Typography type="heading4" color="black" as="p">
-              To confirm your attendance, please RSVP below by
-              {{ confirmationDateTime }}!
-            </Typography>
-          </div>
-          <div class="acceptance__buttons">
-            <Button @click="accept"> Accept Invitation </Button>
-            <Button @click="decline" type="secondary"> Decline </Button>
-          </div>
-        </template>
-        <div class="acceptance__prompt" v-else>
-          <Typography
-              class="acceptance__heading"
-              type="heading2"
-              color="dark-navy"
-              as="h1"
-          >
-            Application Status
-          </Typography>
-          <Typography
-            v-for="(line, index) in prompt"
-            :key="index"
-            type="heading4"
-            color="black"
-            as="p"
-          >
-            {{ line }}
-          </Typography>
-          <Typography type="heading4" color="black" as="p">
-            If this is a mistake, or you require assistance. Please contact us
-            at
-            <a class="acceptance__link" href="mailto:hello@hackthe6ix.com"
-              >hello@hackthe6ix.com</a
+          <template v-if="canRSVP">
+            <Typography
+                class="acceptance__heading"
+                type="heading2"
+                color="dark-navy"
+                as="h1"
             >
-          </Typography>
+              Hacker Invitation
+            </Typography>
+            <div class="acceptance__prompt">
+              <Typography type="heading4" color="black" as="p">
+                Congratulations and welcome to Hack the 6ix 2021! We are excited
+                to offer you the opportunity to hack with us!
+              </Typography>
+              <Typography type="heading4" color="black" as="p">
+                To confirm your attendance, please RSVP below by
+                {{ confirmationDateTime }}!
+              </Typography>
+            </div>
+            <div class="acceptance__buttons">
+              <Button @click="accept"> Accept Invitation </Button>
+              <Button @click="decline" type="secondary"> Decline </Button>
+            </div>
+          </template>
+          <div class="acceptance__prompt" v-else>
+            <Typography
+                class="acceptance__heading"
+                type="heading2"
+                color="dark-navy"
+                as="h1"
+            >
+              Application Status
+            </Typography>
+            <Typography
+                v-for="(line, index) in prompt"
+                :key="index"
+                type="heading4"
+                color="black"
+                as="p"
+            >
+              {{ line }}
+            </Typography>
+            <Typography type="heading4" color="black" as="p">
+              If this is a mistake, or you require assistance. Please contact us
+              at
+              <a class="acceptance__link" href="mailto:hello@hackthe6ix.com"
+              >hello@hackthe6ix.com</a
+              >
+            </Typography>
+          </div>
         </div>
       </div>
-    </div>
-  </Layout>
+    </Layout>
+  </div>
 </template>
 
 <script>
@@ -69,21 +72,35 @@ import Button from '@/components/Button';
 import Layout from '@/components/Layout';
 import swal from 'sweetalert';
 import { rsvp } from "../utils/api";
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   components: {
     Typography,
     Button,
     Layout,
+    Loading
   },
   methods: {
+    startLoading() {
+      return setTimeout(() => {
+        this.loading = true;
+      }, 100);
+    },
+    stopLoading(timeout) {
+      clearTimeout(timeout);
+      this.loading = false;
+    },
     async accept() {
+      const timeout = this.startLoading();
       const result = await rsvp(true);
 
       if (result.success) {
         document.location.reload();
       } else {
         swal('Error', result.data, 'error');
+        this.stopLoading(timeout);
       }
     },
     async decline() {
@@ -96,12 +113,14 @@ export default {
       });
 
       if (confirm) {
+        const timeout = this.startLoading();
         const result = await rsvp(false);
 
         if (result.success) {
           document.location.reload();
         } else {
           swal('Error', result.data, 'error');
+          this.stopLoading(timeout);
         }
       }
     },
@@ -116,6 +135,12 @@ export default {
           router.replace('/dashboard');
           return;
         }
+
+        if (val.status.canAmendTeam) {
+          router.replace('/application');
+          return;
+        }
+
         loading.value = false;
       }
     };

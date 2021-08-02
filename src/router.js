@@ -11,7 +11,7 @@ import {
 const routes = [
   {
     path: '/',
-    redirect: '/application',
+    redirect: '/dashboard',
   },
   {
     path: '/application',

@@ -1,14 +1,12 @@
 import { Vue as VueIntegration } from '@sentry/integrations';
 import * as Sentry from '@sentry/vue';
-import { createStore } from 'vuex';
 import { createApp } from 'vue';
+import 'vue-loading-overlay/dist/vue-loading.css';
+import { createStore } from 'vuex';
+import App from './App.vue';
+import router from './router';
 
 import userStore from './store/userStore';
-import router from './router';
-import App from './App.vue';
-
-import VueLoading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
 
 const app = createApp(App);
 
