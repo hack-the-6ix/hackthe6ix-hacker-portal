@@ -28,8 +28,8 @@
             type="paragraph"
             as="p"
           >
-            If you can no longer attend Hack the 6ix, please let us know so we can
-            pass this opportunity to a waitlisted participant.
+            If you can no longer attend Hack the 6ix, please let us know so we
+            can pass this opportunity to a waitlisted participant.
           </Typography>
           <Button @click="unaccept" type="secondary">
             I can no longer attend HT6
@@ -54,8 +54,8 @@
         >
           Join our Discord server to get the latest updates and meet fellow
           hackers!<br />
-          Issue the following command in the <b>#verification</b> channel to gain
-          access:
+          Issue the following command in the <b>#verification</b> channel to
+          gain access:
         </Typography>
         <Typography
           class="hacker-info__verify"
@@ -115,19 +115,19 @@ import useUserInfo from '@/utils/useUserInfo';
 import Button from '@/components/Button';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
-import { rsvp } from "../../utils/api";
+import { rsvp } from '../../utils/api';
 import swal from 'sweetalert';
 
 export default {
   components: {
     Typography,
     Button,
-    Loading
+    Loading,
   },
   data() {
     return {
-      loading: false
-    }
+      loading: false,
+    };
   },
   methods: {
     startLoading() {
@@ -152,7 +152,6 @@ export default {
         const timeout = this.startLoading();
 
         const result = await rsvp(false);
-
 
         if (result.success) {
           document.location.reload();

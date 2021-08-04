@@ -8,10 +8,10 @@
             Hack the 6ix 2021
           </Typography>
           <Typography
-              class="acceptance__heading"
-              type="heading2"
-              color="dark-navy"
-              as="h1"
+            class="acceptance__heading"
+            type="heading2"
+            color="dark-navy"
+            as="h1"
           >
             {{ title }}
           </Typography>
@@ -33,11 +33,11 @@
           </template>
           <div class="acceptance__prompt" v-else>
             <Typography
-                v-for="(line, index) in prompt"
-                :key="index"
-                type="heading4"
-                color="black"
-                as="p"
+              v-for="(line, index) in prompt"
+              :key="index"
+              type="heading4"
+              color="black"
+              as="p"
             >
               {{ line }}
             </Typography>
@@ -45,7 +45,7 @@
               If this is a mistake, or you require assistance. Please contact us
               at
               <a class="acceptance__link" href="mailto:hello@hackthe6ix.com"
-              >hello@hackthe6ix.com</a
+                >hello@hackthe6ix.com</a
               >
             </Typography>
           </div>
@@ -63,7 +63,7 @@ import Typography from '@/components/Typography';
 import Button from '@/components/Button';
 import Layout from '@/components/Layout';
 import swal from 'sweetalert';
-import { rsvp } from "../utils/api";
+import { rsvp } from '../utils/api';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
@@ -72,7 +72,7 @@ export default {
     Typography,
     Button,
     Layout,
-    Loading
+    Loading,
   },
   methods: {
     startLoading() {
@@ -195,7 +195,7 @@ export default {
         return 'Hacker Invitation';
       }
 
-      switch(this.userStatus) {
+      switch (this.userStatus) {
         case this.statusEnum.DECLINED:
           return 'You have declined';
         case this.statusEnum.WAITLISTED:

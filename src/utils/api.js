@@ -122,6 +122,6 @@ export const createTeam = async () =>
 export const rsvp = async (attending) =>
   sendRequest('/api/action/rsvp', 'POST', {
     rsvp: {
-      attending: attending
-    }
+      attending: attending,
+    },
   });

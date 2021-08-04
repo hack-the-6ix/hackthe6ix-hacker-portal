@@ -1,10 +1,9 @@
 <template>
   <iframe
-    referrerpolicy="no-referrer"
     class="sandbox__notion"
     allowtransparency
     frameborder="0"
-    src="https://hackthe6ix2021.notion.site/hackthe6ix2021/Hack-the-6ix-Hacker-Guide-12ce5072583f487cac5c6e2bb128b599"
+    src="https://ht6-notion.netlify.app/12ce5072583f487cac5c6e2bb128b599"
   />
 </template>
 

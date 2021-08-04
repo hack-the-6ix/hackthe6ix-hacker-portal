@@ -15,11 +15,10 @@
         </Button>
       </div>
       <iframe
-        referrerpolicy="no-referrer"
         class="resources__notion"
         allowtransparency
         frameborder="0"
-        :src="notion"
+        :src="notionFrame"
       />
     </div>
   </div>
@@ -38,6 +37,9 @@ export default {
     notion() {
       return 'https://hackthe6ix2021.notion.site/hackthe6ix2021/Hack-the-6ix-Hacker-Guide-12ce5072583f487cac5c6e2bb128b599';
     },
+    notionFrame() {
+      return 'https://ht6-notion.netlify.app/12ce5072583f487cac5c6e2bb128b599';
+    }
   },
 };
 </script>

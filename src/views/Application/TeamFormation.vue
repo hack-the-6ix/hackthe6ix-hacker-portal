@@ -83,11 +83,12 @@
         </Typography>
         <Typography type="heading4" as="p" align="center" color="black">
           Don't have a team? No worries! You can go solo or decide after
-          submitting your application. We are only using this information to help
-          us review applications, which means you can still form a team during the event!
+          submitting your application. We are only using this information to
+          help us review applications, which means you can still form a team
+          during the event!
 
-          <br/>
-          <br/>
+          <br />
+          <br />
           If you have a team, remember to submit it by
           {{ dueDate }}.
         </Typography>

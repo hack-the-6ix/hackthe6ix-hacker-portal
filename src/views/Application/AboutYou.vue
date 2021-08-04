@@ -209,7 +209,7 @@ import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
-import { computePageLabel } from "../../utils/validateForm";
+import { computePageLabel } from '../../utils/validateForm';
 // import InfoPrompt from '@/components/InfoPrompt';
 
 export default {
