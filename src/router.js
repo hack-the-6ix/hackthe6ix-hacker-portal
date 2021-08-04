@@ -27,6 +27,9 @@ const routes = [
     path: '/dashboard',
     component: () =>
       import(/* webpackChunkName: "Dashboard" */ './views/Dashboard'),
+    meta: {
+      noAuth: process.env.NODE_ENV === 'development',
+    },
   },
   {
     path: '/callback',
