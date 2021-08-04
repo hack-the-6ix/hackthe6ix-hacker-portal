@@ -25,11 +25,6 @@ export default {
     const loaded = ref(true);
 
     const checkStatus = (value) => {
-      if (process.env.NODE_ENV === 'development') {
-        loaded.value = true;
-        return;
-      }
-
       if (value?.status) {
         if (!value.status.applied && value.status.canApply) {
           router.replace('/application');

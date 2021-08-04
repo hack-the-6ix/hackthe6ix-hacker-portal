@@ -1,5 +1,6 @@
 import swal from 'sweetalert';
 import { createRouter, createWebHistory } from 'vue-router';
+import SandBox from '@/views/Sandbox';
 import {
   clearTokens,
   handleCallback,
@@ -27,9 +28,6 @@ const routes = [
     path: '/dashboard',
     component: () =>
       import(/* webpackChunkName: "Dashboard" */ './views/Dashboard'),
-    meta: {
-      noAuth: process.env.NODE_ENV === 'development',
-    },
   },
   {
     path: '/callback',
@@ -38,11 +36,18 @@ const routes = [
       noAuth: true,
     },
   },
+  process.env.VUE_APP_IS_TEST_ENVIRONMENT === 'true' && {
+    path: '/sandbox',
+    component: SandBox,
+    meta: {
+      noAuth: true,
+    },
+  },
   {
     path: '/:catchAll(.*)',
     redirect: '/',
   },
-];
+].filter(Boolean);
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
