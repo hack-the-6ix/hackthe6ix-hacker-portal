@@ -7,15 +7,15 @@
           <Typography type="heading4" color="dark-grey" as="p">
             Hack the 6ix 2021
           </Typography>
+          <Typography
+              class="acceptance__heading"
+              type="heading2"
+              color="dark-navy"
+              as="h1"
+          >
+            {{ title }}
+          </Typography>
           <template v-if="canRSVP">
-            <Typography
-                class="acceptance__heading"
-                type="heading2"
-                color="dark-navy"
-                as="h1"
-            >
-              Hacker Invitation
-            </Typography>
             <div class="acceptance__prompt">
               <Typography type="heading4" color="black" as="p">
                 Congratulations and welcome to Hack the 6ix 2021! We are excited
@@ -32,14 +32,6 @@
             </div>
           </template>
           <div class="acceptance__prompt" v-else>
-            <Typography
-                class="acceptance__heading"
-                type="heading2"
-                color="dark-navy"
-                as="h1"
-            >
-              Application Status
-            </Typography>
             <Typography
                 v-for="(line, index) in prompt"
                 :key="index"
@@ -198,6 +190,28 @@ export default {
         timeZoneName: 'short',
       }).format(dt);
     },
+    title() {
+      if (this.canRSVP) {
+        return 'Hacker Invitation';
+      }
+
+      switch(this.userStatus) {
+        case this.statusEnum.DECLINED:
+          return 'You have declined';
+        case this.statusEnum.WAITLISTED:
+          return 'You have been waitlisted';
+        case this.statusEnum.REJECTED:
+          return 'You have been rejected';
+        case this.statusEnum.NOT_APPLIED:
+          return 'You have not applied';
+        case this.statusEnum.APPLIED:
+          return 'You have applied';
+        case this.statusEnum.EXPIRED:
+          return 'Confirmation period is over';
+        default:
+          return 'Application Status';
+      }
+    },
     prompt() {
       switch (this.userStatus) {
         case this.statusEnum.DECLINED:
@@ -267,7 +281,7 @@ export default {
   }
 
   &__heading {
-    margin: units.spacing(1) 0 units.spacing(3);
+    margin: units.spacing(1) 0 units.spacing(6);
   }
 
   &__buttons {

@@ -15,6 +15,7 @@
         </Button>
       </div>
       <iframe
+        referrerpolicy="no-referrer"
         class="resources__notion"
         allowtransparency
         frameborder="0"

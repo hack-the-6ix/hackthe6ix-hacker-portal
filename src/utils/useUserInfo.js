@@ -4,7 +4,7 @@ import { computed, ref, watch } from 'vue';
 export default function useUserInfo() {
   const store = useStore();
   const userInfo = computed(() => store.state.userInfo);
-  const loaded = ref(true);
+  const loaded = ref(false);
 
   watch(userInfo, (val) => {
     if (val !== null) {
@@ -14,7 +14,6 @@ export default function useUserInfo() {
 
   if (!userInfo.value) {
     store.dispatch('getUserInfo');
-    loaded.value = false;
   }
 
   return {

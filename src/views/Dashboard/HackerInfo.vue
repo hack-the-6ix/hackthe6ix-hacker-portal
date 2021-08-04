@@ -178,15 +178,15 @@ export default {
           content: 'Connect with hackers, mentors and sponsors!',
         },
         {
-          link: 'https://hopin.hackthe6ix.com',
+          link: '#', // https://hopin.hackthe6ix.com',
           asset: require('@/assets/hacker-info/hopin.png'),
-          label: 'Hopin',
+          label: 'Hopin (Soon)',
           content: 'All our live events and workshops are here!',
         },
         {
-          link: 'https://hackthe6ix2021.devpost.com/',
+          link: '#', // 'https://hackthe6ix2021.devpost.com/',
           asset: require('@/assets/hacker-info/devpost.png'),
-          label: 'Devpost',
+          label: 'Devpost (Soon)',
           content: 'Submit your projects here!',
         },
       ];

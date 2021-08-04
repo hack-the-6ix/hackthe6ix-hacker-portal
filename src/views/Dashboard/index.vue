@@ -22,12 +22,16 @@ export default {
   async setup() {
     const { userInfo } = useUserInfo();
     const router = useRouter();
-    const loaded = ref(false);
+    const loaded = ref(true);
 
     const checkStatus = (value) => {
+      if (process.env.NODE_ENV === 'development') {
+        loaded.value = true;
+        return;
+      }
+
       if (value?.status) {
-        console.log(router);
-        if (!value.status.applied) {
+        if (!value.status.applied && value.status.canApply) {
           router.replace('/application');
           return;
         }
