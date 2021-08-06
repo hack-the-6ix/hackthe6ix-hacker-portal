@@ -166,7 +166,7 @@ export default {
       } else if (this.userInfo?.status.confirmed) {
         return this.statusEnum.CONFIRMED;
       } else if (this.userInfo?.status.accepted) {
-        return !this.userInfo?.status?.canRSVP
+        return this.userInfo?.status?.canRSVP
           ? this.statusEnum.ACCEPTED
           : this.statusEnum.EXPIRED;
       } else if (this.userInfo?.status.waitlisted) {
@@ -199,7 +199,7 @@ export default {
         case this.statusEnum.DECLINED:
           return 'You have declined';
         case this.statusEnum.WAITLISTED:
-          return 'Application Status';
+          return 'You\'re on the waitlist';
         case this.statusEnum.REJECTED:
           return 'Application Status';
         case this.statusEnum.NOT_APPLIED:
@@ -207,7 +207,7 @@ export default {
         case this.statusEnum.APPLIED:
           return 'You have applied';
         case this.statusEnum.EXPIRED:
-          return 'Confirmation period is over';
+          return 'Invitation Expired';
         default:
           return 'Application Status';
       }
@@ -251,8 +251,7 @@ export default {
           ];
         case this.statusEnum.EXPIRED:
           return [
-            `Thank you for your interest in applying for Hack the 6ix 2021. Unfortunately,
-            the confirmation period has passed.`,
+            `Sorry, your invitation has expired.`,
           ];
         default:
           return ['Sorry an error occurred.'];
