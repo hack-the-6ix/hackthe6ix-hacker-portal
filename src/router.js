@@ -1,5 +1,6 @@
 import swal from 'sweetalert';
 import { createRouter, createWebHistory } from 'vue-router';
+import SandBox from '@/views/Sandbox';
 import {
   clearTokens,
   handleCallback,
@@ -11,12 +12,22 @@ import {
 const routes = [
   {
     path: '/',
-    redirect: '/application',
+    redirect: '/dashboard',
   },
   {
     path: '/application',
     component: () =>
       import(/* webpackChunkName: "Application" */ './views/Application'),
+  },
+  {
+    path: '/prompt',
+    component: () =>
+      import(/* webpackChunkName: "Acceptance" */ './views/Acceptance'),
+  },
+  {
+    path: '/dashboard',
+    component: () =>
+      import(/* webpackChunkName: "Dashboard" */ './views/Dashboard'),
   },
   {
     path: '/callback',
@@ -25,11 +36,18 @@ const routes = [
       noAuth: true,
     },
   },
+  process.env.VUE_APP_IS_TEST_ENVIRONMENT === 'true' && {
+    path: '/sandbox',
+    component: SandBox,
+    meta: {
+      noAuth: true,
+    },
+  },
   {
     path: '/:catchAll(.*)',
     redirect: '/',
   },
-];
+].filter(Boolean);
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -46,6 +64,7 @@ router.beforeEach(async (to, from, next) => {
     // oops we need to go to SSO page to get our tokens
 
     // Ensure that our redirect is never back to the callback again (prevent infinite loops)
+    console.log(to.fullPath);
     const redirectTo = to.path === '/callback' ? '/' : to.fullPath;
 
     // If we last redirected the user less than 5 seconds ago, we will halt and assume that the user is stuck in a login loop.

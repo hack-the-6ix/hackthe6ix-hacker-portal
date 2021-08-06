@@ -1,12 +1,12 @@
 <template>
   <div class="info-prompt">
-    <button @click="$emit('close')" class="message__close" type="button">
+    <button @click="$emit('close')" class="info-prompt__close" type="button">
       <Close />
     </button>
-    <div class="message__body">
+    <div class="info-prompt__body">
       <slot name="body">
         <Typography
-          class="message__label"
+          class="info-prompt__label"
           color="black"
           type="paragraph"
           as="p"
@@ -46,8 +46,8 @@ export default {
 @use '@/styles/units';
 
 .info-prompt {
-  --message__color: #{colors.css-color('grey')};
-  --message__background: transparent;
+  --info-prompt__color: #{colors.css-color('grey')};
+  --info-prompt__background: colors.css-color('white');
   display: block;
   position: relative;
 
@@ -61,11 +61,12 @@ export default {
   }
 
   &__body {
-    padding: units.spacing(10) units.spacing(12) units.spacing(10)
-      units.spacing(12);
+    padding: units.spacing(10) units.spacing(6) units.spacing(7)
+      units.spacing(8);
+    background-color: var(--info-prompt__background);
   }
 
-  background-color: var(--message__background);
-  border: 1px solid var(--message__color);
+  background-color: var(--info-prompt__background);
+  border: 1px solid var(--info-prompt__color);
 }
 </style>

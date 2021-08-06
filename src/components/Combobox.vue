@@ -17,7 +17,11 @@
       :name="name"
       :id="id"
     />
-    <ul ref="list" class="combobox__options" v-if="showOptions && (!hideDropdownUntilType || displayText?.length > 0)">
+    <ul
+      ref="list"
+      class="combobox__options"
+      v-if="showOptions && (!hideDropdownUntilType || displayText?.length > 0)"
+    >
       <li v-for="option in filteredOptions" :key="option">
         <Typography
           @click="setValue(option)"
@@ -95,22 +99,20 @@ export default {
     filteredOptions() {
       if (this.displayText.length < 3) return this.options.slice(0, 10);
 
-      return (
-        stringSimilarity
-          .findBestMatch(
-            this.displayText.toLowerCase(),
-            Object.keys(this.normalizedOptions),
-          )
-          .ratings// More we type, stricter the search
-          .filter(
-            (rating) =>
-              rating.rating >=
-              Math.min(0.1 + this.displayText.length * 0.03, 0.8),
-          )
-          .sort((a, b) => b.rating - a.rating)
-          .slice(0, 10)
-          .map((rating) => this.normalizedOptions[rating.target])
-      );
+      return stringSimilarity
+        .findBestMatch(
+          this.displayText.toLowerCase(),
+          Object.keys(this.normalizedOptions),
+        )
+        .ratings // More we type, stricter the search
+        .filter(
+          (rating) =>
+            rating.rating >=
+            Math.min(0.1 + this.displayText.length * 0.03, 0.8),
+        )
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, 10)
+        .map((rating) => this.normalizedOptions[rating.target]);
     },
   },
   props: {

@@ -81,6 +81,9 @@
       :disabled="!canEdit"
       required
     />
+    <!--<div class="about-you__prompt">
+      <InfoPrompt class="about-you__info" v-show="isVisible" @close="close()" />
+    </div>-->
     <Input
       label="Country"
       placeholder="e.g. Canada"
@@ -207,6 +210,7 @@ import Button from '@/components/Button';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
 import { computePageLabel } from '../../utils/validateForm';
+// import InfoPrompt from '@/components/InfoPrompt';
 
 export default {
   name: 'AboutYou',
@@ -217,6 +221,17 @@ export default {
     Select,
     Input,
     Button,
+    // InfoPrompt,
+  },
+  data() {
+    return {
+      isVisible: true,
+    };
+  },
+  methods: {
+    close() {
+      this.isVisible = false;
+    },
   },
   computed: {
     disclaimer() {
@@ -343,6 +358,24 @@ export default {
   grid-gap: units.spacing(6);
   align-items: start;
   display: grid;
+  position: relative;
+
+  &__prompt {
+    position: absolute;
+    top: 75%;
+    width: 60%;
+    background-color: white;
+    z-index: 1;
+
+    @include mixins.media(tablet) {
+      width: 60%;
+      top: 71%;
+    }
+    @include mixins.media(phone) {
+      width: 100%;
+      top: 70%;
+    }
+  }
 
   @include mixins.media(tablet) {
     grid-template-columns: minmax(1px, 1fr);
