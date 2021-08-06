@@ -199,11 +199,11 @@ export default {
         case this.statusEnum.DECLINED:
           return 'You have declined';
         case this.statusEnum.WAITLISTED:
-          return 'You have been waitlisted';
+          return 'Application Status';
         case this.statusEnum.REJECTED:
-          return 'You have been rejected';
+          return 'Application Status';
         case this.statusEnum.NOT_APPLIED:
-          return 'You have not applied';
+          return 'Application Closed';
         case this.statusEnum.APPLIED:
           return 'You have applied';
         case this.statusEnum.EXPIRED:

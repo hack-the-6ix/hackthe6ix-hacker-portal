@@ -81,9 +81,13 @@
         <ul class="hacker-info__links">
           <li v-for="(link, index) in links" :key="index">
             <a
-              class="hacker-info__link"
+              :class="[
+                link.disabled && 'hacker-info__link--disabled',
+                'hacker-info__link',
+              ]"
+              @click="e => link.disabled && e.preventDefault()"
+              :href="link.disabled ? '#' : link.link"
               rel="noreferrer noopener"
-              :href="link.link"
               target="_blank"
             >
               <img
@@ -181,12 +185,14 @@ export default {
           asset: require('@/assets/hacker-info/hopin.png'),
           label: 'Hopin (Soon)',
           content: 'All our live events and workshops are here!',
+          disabled: true,
         },
         {
           link: '#', // 'https://hackthe6ix2021.devpost.com/',
           asset: require('@/assets/hacker-info/devpost.png'),
           label: 'Devpost (Soon)',
           content: 'Submit your projects here!',
+          disabled: true,
         },
       ];
     },
@@ -257,6 +263,12 @@ export default {
     grid-gap: units.spacing(2.5);
     text-decoration: none;
     display: grid;
+
+    &--disabled {
+      filter: grayscale(100%);
+      cursor: not-allowed;
+      opacity: 0.2;
+    }
   }
 
   &__asset {
@@ -265,8 +277,8 @@ export default {
     width: 100%;
     height: auto;
 
-    #{$self}__link:hover &,
-    #{$self}__link:focus & {
+    #{$self}__link:hover:not(#{$self}__link--disabled) &,
+    #{$self}__link:focus:not(#{$self}__link--disabled) & {
       transform: scale(0.9);
     }
   }
