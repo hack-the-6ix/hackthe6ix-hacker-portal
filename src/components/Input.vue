@@ -8,7 +8,7 @@
   >
     <input
       :class="[error && 'input__el--error', 'input__el']"
-      :list='datalist ? `${name}--datalist` : undefined'
+      :list="datalist ? `${name}--datalist` : undefined"
       :autocomplete="autocomplete"
       :placeholder="placeholder"
       :disabled="disabled"
@@ -18,12 +18,8 @@
       :id="id"
       :maxlength="maxlength"
     />
-    <datalist v-if='datalist' :id='`${name}--datalist`'>
-      <option
-        v-for='option in datalist'
-        :value='option'
-        :key='option'
-      />
+    <datalist v-if="datalist" :id="`${name}--datalist`">
+      <option v-for="option in datalist" :value="option" :key="option" />
     </datalist>
   </FieldLayout>
 </template>

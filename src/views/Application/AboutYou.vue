@@ -81,13 +81,9 @@
       :disabled="!canEdit"
       required
     />
-    <div class="about-you__prompt">
-      <InfoPrompt
-          class="about-you__info"
-          v-show="isVisible"
-          @close="close()"
-      />
-    </div>
+    <!--<div class="about-you__prompt">
+      <InfoPrompt class="about-you__info" v-show="isVisible" @close="close()" />
+    </div>-->
     <Input
       label="Country"
       placeholder="e.g. Canada"
@@ -213,9 +209,8 @@ import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
 import Input from '@/components/Input';
-import { computePageLabel } from "../../utils/validateForm";
-import InfoPrompt from "@/components/InfoPrompt";
 import { computePageLabel } from '../../utils/validateForm';
+// import InfoPrompt from '@/components/InfoPrompt';
 
 export default {
   name: 'AboutYou',
@@ -226,12 +221,12 @@ export default {
     Select,
     Input,
     Button,
-    InfoPrompt,
+    // InfoPrompt,
   },
-  data () {
+  data() {
     return {
       isVisible: true,
-    }
+    };
   },
   methods: {
     close() {
@@ -378,7 +373,7 @@ export default {
     }
     @include mixins.media(phone) {
       width: 100%;
-      top: 70%
+      top: 70%;
     }
   }
 

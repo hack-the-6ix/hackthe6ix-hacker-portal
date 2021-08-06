@@ -98,6 +98,7 @@ import ApplicationsClosed from '@/views/Application/ApplicationsClosed';
 import ApplicationSubmitted from '@/views/Application/ApplicationSubmitted';
 import Typography from '@/components/Typography';
 import Layout from '@/components/Layout';
+import useUserInfo from '@/utils/useUserInfo';
 import validateForm, { hasErrors } from '@/utils/validateForm';
 import {
   getApplicationEnums,
@@ -143,7 +144,20 @@ export default {
       applicationSubmittedDialogOpen: false,
     };
   },
+  setup() {
+    const { userInfo, loaded } = useUserInfo();
+
+    return {
+      userInfo,
+      userIsLoaded: loaded,
+    };
+  },
   watch: {
+    userIsLoaded() {
+      if (!this.userInfo.status.canAmendTeam) {
+        this.$router.replace('/prompt');
+      }
+    },
     async selected() {
       if (this.user?.status?.canApply && this.unsavedChanges && this.loaded) {
         await this.runUpdateApplication(false);
@@ -319,7 +333,12 @@ export default {
             'error',
           );
         } else {
-          swal('Unable to save application', result.data + "\n\nWe are sorry something unexpected happened -- if you believe that you lost work, contact us at hello@hackthe6ix.com and we'll try to help you", 'error');
+          swal(
+            'Unable to save application',
+            result.data +
+              "\n\nWe are sorry something unexpected happened -- if you believe that you lost work, contact us at hello@hackthe6ix.com and we'll try to help you",
+            'error',
+          );
         }
 
         if (callback) {

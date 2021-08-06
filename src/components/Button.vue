@@ -2,6 +2,7 @@
   <Typography
     :class="[
       disabled && 'button--disabled',
+      type && `button--type--${type}`,
       `button--color--${color}`,
       'button',
     ]"
@@ -40,6 +41,10 @@ export default {
     rightIcon: [String, Array],
     leftIcon: [String, Array],
     disabled: Boolean,
+    type: {
+      type: String,
+      default: () => 'primary',
+    },
     htmlType: {
       type: String,
       default: () => 'button',
@@ -66,6 +71,7 @@ export default {
   padding: calc(#{units.spacing(2)} - 1px) calc(#{units.spacing(4)} - 1px);
   letter-spacing: units.spacing(0.5);
   border-radius: units.spacing(0.5);
+  text-decoration: none;
   justify-content: center;
   display: inline-flex;
   align-items: center;
@@ -78,9 +84,30 @@ export default {
   text-transform: uppercase;
 
   &:hover,
-  &:focus {
+  &:focus,
+  &--type--secondary {
     background-color: colors.css-color(white);
     color: colors.css-color('dark-navy');
+  }
+
+  &:active {
+    background-color: colors.css-color('dark-navy', $alpha: 0.04);
+    color: colors.css-color('dark-navy');
+  }
+
+  &--type {
+    &--secondary {
+      &:hover,
+      &:focus {
+        background-color: colors.css-color('dark-navy', $alpha: 0.04);
+        color: colors.css-color('dark-navy');
+      }
+
+      &:active {
+        background-color: colors.css-color('dark-navy', $alpha: 0.08);
+        color: colors.css-color('dark-navy');
+      }
+    }
   }
 
   @each $color, $_ in colors.$colors {

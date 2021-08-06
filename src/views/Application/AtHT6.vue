@@ -23,13 +23,13 @@
       })`"
     />
     <Select
-        label="Would you be interested in attending introductory workshops the week prior to the hackathon?"
-        placeholder="Select"
-        v-bind="bindField('preEventWorkshops', errors)"
-        v-model="preEventWorkshops"
-        :options="preEventWorkshopsOptions"
-        :disabled="!canEdit"
-        required
+      label="Would you be interested in attending introductory workshops the week prior to the hackathon?"
+      placeholder="Select"
+      v-bind="bindField('preEventWorkshops', errors)"
+      v-model="preEventWorkshops"
+      :options="preEventWorkshopsOptions"
+      :disabled="!canEdit"
+      required
     />
     <Checkbox
       label='I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
@@ -111,7 +111,7 @@ export default {
     Checkbox,
     Textarea,
     Button,
-    Select
+    Select,
   },
   props: {
     form: Object,

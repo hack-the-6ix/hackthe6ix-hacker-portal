@@ -1,10 +1,20 @@
-import { createApp } from 'vue';
-import router from './router';
-import App from './App.vue';
-import * as Sentry from '@sentry/vue';
 import { Vue as VueIntegration } from '@sentry/integrations';
+import * as Sentry from '@sentry/vue';
+import { createApp } from 'vue';
+import 'vue-loading-overlay/dist/vue-loading.css';
+import { createStore } from 'vuex';
+import App from './App.vue';
+import router from './router';
+
+import userStore from './store/userStore';
 
 const app = createApp(App);
+
+app.use(
+  createStore({
+    ...userStore,
+  }),
+);
 
 if (process.env.VUE_APP_SENTRY_DSN) {
   Sentry.init({
