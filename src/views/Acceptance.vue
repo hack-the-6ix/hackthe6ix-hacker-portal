@@ -180,7 +180,7 @@ export default {
       return this.statusEnum.NOT_APPLIED;
     },
     confirmationDateTime() {
-      const dt = new Date(this.userInfo?.computedConfirmationDeadline);
+      const dt = new Date(this.userInfo?.computedRSVPDeadline);
       return new Intl.DateTimeFormat('en-US', {
         year: 'numeric',
         day: 'numeric',
