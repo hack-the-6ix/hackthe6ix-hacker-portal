@@ -1,15 +1,15 @@
 <template>
   <div class="owo">
-    <Resources/>
+    <Calendar/>
   </div>
 </template>
 
 <script>
-import Resources from '@/views/Dashboard/Resources';
+import Calendar from '@/components/Calendar';
 
 export default {
   components: {
-    Resources,
+    Calendar,
   },
 }
 </script>

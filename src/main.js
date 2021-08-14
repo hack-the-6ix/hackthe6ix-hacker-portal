@@ -1,6 +1,7 @@
 import { Vue as VueIntegration } from '@sentry/integrations';
 import * as Sentry from '@sentry/vue';
 import { createApp } from 'vue';
+import Airtable from 'airtable';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import { createStore } from 'vuex';
 import App from './App.vue';
@@ -31,5 +32,10 @@ if (process.env.VUE_APP_SENTRY_DSN) {
     tracesSampleRate: 1.0,
   });
 }
+
+Airtable.configure({
+  apiKey: process.env.VUE_APP_AIRTABLE_API_KEY,
+  endpointUrl: 'https://api.airtable.com',
+});
 
 app.use(router).mount('#app');
