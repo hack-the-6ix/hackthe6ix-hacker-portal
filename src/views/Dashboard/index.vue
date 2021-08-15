@@ -24,7 +24,7 @@ export default {
     const router = useRouter();
     const loaded = ref(true);
 
-    const checkStatus = (value) => {
+   const checkStatus = (value) => {
       if (value?.status) {
         if (!value.status.applied && value.status.canApply) {
           router.replace('/application');

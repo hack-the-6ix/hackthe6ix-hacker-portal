@@ -10,19 +10,19 @@
       >
         Schedule
       </Typography>
-      <Typography color="black" type="paragraph" as="p">
-        Coming soon. Stay tuned for more information!
-      </Typography>
+      <Calendar/>
     </div>
   </div>
 </template>
 
 <script>
 import Typography from '@/components/Typography';
+import Calendar from '@/components/Calendar';
 
 export default {
   components: {
     Typography,
+    Calendar,
   },
 };
 </script>

@@ -1,23 +1,23 @@
 <template>
-  <div v-if='!loading' class='schedule'>
+  <div v-if='!loading' class='calendar'>
     <div
       :style='{
         // TODO: Calculate based on sum of columns of each day
         "--columns": (scheduleInfo.dates.size * 48) + 2,
         "--rows": types.size,
       }'
-      class='schedule__body'
+      class='calendar__body'
       ref='body'
     >
       <div
         v-for='i in (scheduleInfo.dates.size * 24) - 1'
-        class='schedule__col-line schedule__col-line--vertical'
+        class='calendar__col-line calendar__col-line--vertical'
         :style='{ "--offset": (i * 2) + 3 }'
         :key='i'
       />
       <div
         v-for='i in types.size'
-        class='schedule__col-line schedule__col-line--horizontal'
+        class='calendar__col-line calendar__col-line--horizontal'
         :style='{ "--offset": i + 2 }'
         :key='i'
       />
@@ -26,7 +26,7 @@
           col: (i * 48) + 3,
           span: 48,
         })'
-        class='schedule__col schedule__col--date'
+        class='calendar__col calendar__col--date'
         v-for='(date, i) in scheduleInfo.dates'
         color='dark-navy'
         type='heading4'
@@ -37,7 +37,7 @@
       </Typography>
       <div
         v-for='i in (scheduleInfo.dates.size * 24)'
-        class='schedule__col schedule__col--time'
+        class='calendar__col calendar__col--time'
         :style='cssPosStyle({
           col: (i * 2) + 1,
           span: 2,
@@ -52,7 +52,7 @@
         :key='id'
       >
         <div
-          class='schedule__col schedule__col--type'
+          class='calendar__col calendar__col--type'
           :style='{
             ...cssPosStyle({
               row: i + 3,
@@ -65,19 +65,22 @@
           {{ info['Name'] }}
         </div>
           <div
-            class='schedule__col schedule__col--event'
-            v-for='event in scheduleInfo.byType[id]'
+            class='calendar__col calendar__col--event'
+            v-for='(event, j) in scheduleInfo.byType[id]'
             :style='{
               ...getEventPosition(event, i + 3),
+              "--max-span": j + 1 === scheduleInfo.byType[id].length
+                ? 999
+                : getDatePosition(scheduleInfo.byType[id][j + 1].get("Start")) - getDatePosition(event.get("Start")),
               "--background-color": getEventSpan(event) ? info.BackgroundColor : "transparent",
               "--color": info.Color,
             }'
             :key='event.id'
           >
-          <button class='schedule__col-frame'>
-            <div class='schedule__col-content'>
+          <button class='calendar__col-frame'>
+            <div class='calendar__col-content'>
               <Typography
-                class='schedule__text--truncated'
+                class='calendar__text--truncated'
                 color='dark-navy'
                 type='small'
                 as='p'
@@ -85,15 +88,15 @@
                 {{ event.get('Name') }}
               </Typography>
               <Typography
-                class='schedule__info'
+                class='calendar__info'
                 color='disabled'
                 type='xsmall'
                 as='p'
               >
-                <span class='schedule__text--truncated'>
-                  {{ getHost(event) }}
+                <span>
+                  {{ getDateRange(event) }}
                 </span>
-                <span class='schedule__info-platform'>
+                <span class='calendar__info-platform'>
                   &nbsp;| {{ event.get('Platform') ?? 'N/A' }}
                 </span>
               </Typography>
@@ -102,9 +105,9 @@
         </div>
       </template>
     </div>
-    <div class='schedule__controls'>
+    <div class='calendar__controls'>
       <Typography
-        class='schedule__button'
+        class='calendar__button'
         :disabled='!hasPrev'
         color='dark-navy'
         @click='prev'
@@ -114,7 +117,7 @@
         <i class="fas fa-angle-left"/> Yesterday
       </Typography>
       <Typography
-        class='schedule__button'
+        class='calendar__button'
         :disabled='!hasNext'
         color='dark-navy'
         @click='next'
@@ -187,7 +190,7 @@ export default {
       if (val !== null) {
         const idx = [ ...this.scheduleInfo.dates ].indexOf(val);
         const body = this.$refs.body;
-        const elements = [ ...body.getElementsByClassName('schedule__col--date') ];
+        const elements = [ ...body.getElementsByClassName('calendar__col--date') ];
         body.scrollTo({
           left: elements[idx].offsetLeft - elements[0].offsetLeft + 1,
           behavior: 'smooth',
@@ -236,7 +239,7 @@ export default {
   methods: {
     onScroll() {
       const body = this.$refs.body;
-      const dateElements = [ ...body.getElementsByClassName('schedule__col--date') ];
+      const dateElements = [ ...body.getElementsByClassName('calendar__col--date') ];
       const offset = body.offsetLeft + body.scrollLeft + dateElements[0].offsetLeft;
       let dateIndex = [ ...dateElements ].findIndex(el => {
         return el.offsetLeft + el.offsetWidth >= offset;
@@ -304,13 +307,30 @@ export default {
         row,
       });
     },
-    displayHour(offset) {
+    displayHour(offset, isHalf) {
       const period = (offset % 24) >= 12 ? 'pm' : 'am';
       const hour = (offset % 12) || 12;
-      return `${hour}:00 ${period}`;
+      return `${hour}:${isHalf ? '30' : '00'}${period}`;
     },
-    getHost(event) {
-      return this.hosts.get(event.get('Host')?.[0])?.['Name'] ?? 'HT6';
+    getDateRange(event) {
+      let startTime = this.displayHour(
+        ...event.get('Start').split('T')[1].split(':')
+          .map(_ => parseInt(_)),
+      );
+      const endTime = this.displayHour(
+        ...event.get('End').split('T')[1].split(':')
+          .map(_ => parseInt(_)),
+      );
+
+      const span = this.getEventSpan(event);
+
+      console.log(event.get('Name'), startTime, endTime);
+
+      if (startTime.slice(-2)[0] === endTime.slice(-2)[0]) {
+        startTime = startTime.slice(0, -2);
+      }
+      return `${span ? `${startTime} - ` : ''}${endTime}`.replace(/:00/g, '');
+
     },
   },
 }
@@ -323,7 +343,7 @@ export default {
 
 $_col-width: units.spacing(25);
 
-.schedule {
+.calendar {
   &__body {
     grid-template-columns: repeat(var(--columns), $_col-width);
     grid-template-rows: repeat(var(--rows), auto);
@@ -402,7 +422,7 @@ $_col-width: units.spacing(25);
   }
 
   &__col-content {
-    max-width: $_col-width * 2;
+    min-width: calc(min(var(--max-span), max(var(--span), 2)) * #{$_col-width - units.spacing(4)});
     box-sizing: border-box;
   }
 
