@@ -1,4 +1,23 @@
 <template>
+  <div class="app">
+    <Logo width="24" class="app__logo" />
+    <span>
+      <Typography color="teal" type="heading3" as="span" transform="uppercase">
+        HT6
+      </Typography>
+      <Typography
+        color="yellow"
+        type="heading3"
+        as="span"
+        transform="uppercase"
+      >
+        Digital
+      </Typography>
+    </span>
+    <span style="margin-left: auto">
+      <Button color="black" @click="confirmRunLogout">Sign Out</Button>
+    </span>
+  </div>
   <main class="layout">
     <div class="layout__content">
       <template v-if="!loading">
@@ -25,11 +44,13 @@
 
 <script>
 import Typography from '@/components/Typography';
+import Button from '@/components/Button';
 
 export default {
   name: 'Layout',
   components: {
     Typography,
+    Button,
   },
   props: {
     title: String,
@@ -46,7 +67,7 @@ export default {
   padding: units.spacing(18) units.spacing(12);
 
   &__content {
-    max-width: units.spacing(320);
+    max-width: units.spacing(380);
     margin: 0 auto;
   }
 

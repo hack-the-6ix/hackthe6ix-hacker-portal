@@ -44,6 +44,14 @@ const routes = [
     },
   },
   {
+    path: '/calendar',
+    component: () =>
+      import(/* webpackChunkName: "Calendar" */ './views/Calendar'),
+    meta: {
+      noAuth: true,
+    },
+  },
+  {
     path: '/:catchAll(.*)',
     redirect: '/',
   },

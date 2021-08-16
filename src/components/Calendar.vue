@@ -12,7 +12,7 @@
       <div
         v-for='i in (scheduleInfo.dates.size * 24) - 1'
         class='calendar__col-line calendar__col-line--vertical'
-        :style='{ "--offset": (i * 2) + 3 }'
+        :style='{ "--offset": (i * 2) + 1 }'
         :key='i'
       />
       <div
@@ -21,23 +21,37 @@
         :style='{ "--offset": i + 2 }'
         :key='i'
       />
-      <Typography
-        :style='cssPosStyle({
-          col: (i * 48) + 3,
-          span: 48,
-        })'
-        class='calendar__col calendar__col--date'
-        v-for='(date, i) in scheduleInfo.dates'
-        color='dark-navy'
-        type='heading4'
-        :key='date'
-        as='p'
-      >
-        {{ formatDate(date) }}
-      </Typography>
+      <template v-for='(date, i) in scheduleInfo.dates' :key='date'>
+        <Typography
+          :style='cssPosStyle({
+            col: (i * 48) + 3,
+            span: scheduleInfo.dates.size === i + 1 ? 2 : 48,
+          })'
+          :class='[
+            "calendar__col calendar__col--date",
+            i || "calendar__col--pure",
+          ]'
+          :data-idx='i'
+          color='dark-navy'
+          type='heading4'
+          as='p'
+        >
+          {{ formatDate(date) }}
+        </Typography>
+        <div
+          :class='`calendar__col calendar__col--anchor calendar__col--anchor--${i}`'
+          :style='cssPosStyle({
+            col: (i * 48) + 3,
+            span: scheduleInfo.dates.size === i + 1 ? 2 : 48,
+          })'
+        />
+      </template>
       <div
         v-for='i in (scheduleInfo.dates.size * 24)'
-        class='calendar__col calendar__col--time'
+        :class='[
+          "calendar__col calendar__col--time",
+          i === 1 && "calendar__col--pure",
+        ]'
         :style='cssPosStyle({
           col: (i * 2) + 1,
           span: 2,
@@ -45,7 +59,7 @@
         })'
         :key='i'
       >
-        {{ displayHour(i) }}
+        {{ displayHour(i - 1) }}
       </div>
       <template
         v-for='([id, info], i) in types'
@@ -77,7 +91,10 @@
             }'
             :key='event.id'
           >
-          <button class='calendar__col-frame'>
+          <button
+            @click='currentEvent = event'
+            class='calendar__col-frame'
+          >
             <div class='calendar__col-content'>
               <Typography
                 class='calendar__text--truncated'
@@ -104,35 +121,56 @@
           </button>
         </div>
       </template>
+      <div class='calendar__col--cover'/>
     </div>
     <div class='calendar__controls'>
+      <div class='calendar__buttons'>
+        <Typography
+          class='calendar__button'
+          :disabled='!hasPrev'
+          color='dark-navy'
+          @click='prev'
+          type='small'
+          as='button'
+        >
+          <i class="fas fa-angle-left"/> Yesterday
+        </Typography>
+        <Typography
+          class='calendar__button'
+          :disabled='!hasNext'
+          color='dark-navy'
+          @click='next'
+          type='small'
+          as='button'
+        >
+          Tomorrow <i class="fas fa-angle-right"/>
+        </Typography>
+      </div>
       <Typography
+        ref='noopener noreferrer'
         class='calendar__button'
-        :disabled='!hasPrev'
+        :href='calendarLink'
         color='dark-navy'
-        @click='prev'
+        target='_blank'
         type='small'
-        as='button'
+        as='href'
       >
-        <i class="fas fa-angle-left"/> Yesterday
-      </Typography>
-      <Typography
-        class='calendar__button'
-        :disabled='!hasNext'
-        color='dark-navy'
-        @click='next'
-        type='small'
-        as='button'
-      >
-        Tomorrow <i class="fas fa-angle-right"/>
+        <i class="fas fa-download"/> Download
       </Typography>
     </div>
+    <CalendarModal
+      v-model='currentEvent'
+      v-if='currentEvent'
+      :types='types'
+      :hosts='hosts'
+    />
   </div>
 </template>
 
 <script>
 import Airtable from 'airtable';
 import Color from 'color';
+import CalendarModal from '@/components/CalendarModal';
 import Typography from '@/components/Typography';
 
 function mapRecords(data, transform = v => v) {
@@ -145,12 +183,14 @@ function mapRecords(data, transform = v => v) {
 export default {
   name: 'Calendar',
   components: {
+    CalendarModal,
     Typography,
   },
   data() {
     return {
       airtable: Airtable.base(process.env.VUE_APP_AIRTABLE_BASE),
       currentDate: new Date().toISOString().split('Z')[0],
+      currentEvent: null,
       awaitDate: null,
       loading: true,
       events: null,
@@ -182,7 +222,21 @@ export default {
     loading(val) {
       if (!val) {
         this.$nextTick(() => {
-          this.$refs.body.addEventListener('scroll', this.onScroll, { passive: true });
+          const observer = new IntersectionObserver(
+            ([ event ]) => {
+              const idx = event.target.getAttribute('data-idx');
+              const currentDate = [ ...this.scheduleInfo.dates ][idx];
+              if (!currentDate) return;
+              if (!this.awaitDate || currentDate === this.awaitDate) {
+                this.currentDate = currentDate;
+                this.awaitDate = null;
+              }
+            },
+            [1],
+          );
+          this.$refs.body.getElementsByClassName('calendar__col--date').forEach(el => {
+            observer.observe(el);
+          });
         });
       }
     },
@@ -190,18 +244,25 @@ export default {
       if (val !== null) {
         const idx = [ ...this.scheduleInfo.dates ].indexOf(val);
         const body = this.$refs.body;
-        const elements = [ ...body.getElementsByClassName('calendar__col--date') ];
+        const element = body.getElementsByClassName(`calendar__col--anchor--${idx}`)[0];
+        const padding = body.getElementsByClassName('calendar__col--cover')[0];
         body.scrollTo({
-          left: elements[idx].offsetLeft - elements[0].offsetLeft + 1,
+          left: element.offsetLeft - padding.offsetWidth - body.offsetLeft,
           behavior: 'smooth',
         });
+        window.setTimeout(() => {
+          if (this.awaitDate) {
+            this.currentDate = this.awaitDate;
+            this.awaitDate = null;
+          }
+        }, 1500);
       }
-    }
-  },
-  beforeUnmount() {
-    this.$refs.body?.removeEventListener('scroll', this.onScroll, { passive: true });
+    },
   },
   computed: {
+    calendarLink() {
+      return process.env.VUE_APP_AIRTABLE_CALENDAR;
+    },
     hasPrev() {
       return this.currentDate !== [ ...this.scheduleInfo.dates ][0];
     },
@@ -237,23 +298,6 @@ export default {
     },
   },
   methods: {
-    onScroll() {
-      const body = this.$refs.body;
-      const dateElements = [ ...body.getElementsByClassName('calendar__col--date') ];
-      const offset = body.offsetLeft + body.scrollLeft + dateElements[0].offsetLeft;
-      let dateIndex = [ ...dateElements ].findIndex(el => {
-        return el.offsetLeft + el.offsetWidth >= offset;
-      });
-      if (dateIndex === -1) {
-        dateIndex = 0;
-      }
-
-      const date = [ ...this.scheduleInfo.dates][dateIndex];
-      if (this.awaitDate === null || this.awaitDate === date) {
-        this.currentDate = [ ...this.scheduleInfo.dates][dateIndex];
-        this.awaitDate = null;
-      }
-    },
     next() {
       if (this.awaitDate) return;
       const dates = [ ...this.scheduleInfo.dates ];
@@ -266,12 +310,28 @@ export default {
       const idx = dates.indexOf(this.currentDate);
       this.awaitDate = dates[idx - 1];
     },
-    formatDate(date) {
-      return new Intl.DateTimeFormat('en-US', {
+    formatDate(_date) {
+      const _d = new Date(_date);
+      const date = new Intl.DateTimeFormat('en-US', {
         weekday: 'short',
         month: 'short',
         day: 'numeric',
-      }).format(new Date(date));
+      }).format(_d);
+
+      let dateTH = 'th';
+      switch(_d.getDate().toString().charAt(1)) {
+        case '1':
+          dateTH = 'st';
+          break;
+        case '2':
+          dateTH = 'nd';
+          break;
+        case '3':
+          dateTH = 'rd';
+          break;
+      }
+
+      return date + dateTH;
     },
     cssPosStyle(config = {}) {
       return {
@@ -302,7 +362,7 @@ export default {
       const start = event.get('Start');
 
       return this.cssPosStyle({
-        col: this.getDatePosition(start) + 2,
+        col: this.getDatePosition(start) + 3,
         span: this.getEventSpan(event),
         row,
       });
@@ -323,8 +383,6 @@ export default {
       );
 
       const span = this.getEventSpan(event);
-
-      console.log(event.get('Name'), startTime, endTime);
 
       if (startTime.slice(-2)[0] === endTime.slice(-2)[0]) {
         startTime = startTime.slice(0, -2);
@@ -352,13 +410,24 @@ $_col-width: units.spacing(25);
   }
 
   &__col {
-    grid-column: var(--col) / span var(--span);
+    grid-column: var(--col) / var(--span) span;
     box-sizing: border-box;
     grid-row: var(--row);
+
+    &--cover {
+      background-color: colors.css-color(white);
+      grid-column: 1 / 2 span;
+      grid-row: 1 / 2 span;
+      position: sticky;
+      left: 0;
+    }
 
     &--date {
       border-left: 1px solid colors.css-color(light-teal, $alpha: 0.5);
       padding: 0 units.spacing(4) units.spacing(1);
+      background-color: colors.css-color(white);
+      left: $_col-width * 2;
+      position: sticky;
     }
 
     &--time {
@@ -366,8 +435,11 @@ $_col-width: units.spacing(25);
       padding: 0 units.spacing(4) units.spacing(3);
     }
 
+    &--pure {
+      border-left: 0;
+    }
+
     &--type {
-      border-right: 1px solid colors.css-color(light-teal, $alpha: 0.5);
       border-top: 1px solid colors.css-color(light-teal, $alpha: 0.5);
       background-color: colors.css-color(white);
       padding: units.spacing(6) units.spacing(2);
@@ -390,6 +462,12 @@ $_col-width: units.spacing(25);
       padding: units.spacing(1);
       padding-left: 0;
     }
+
+    &--anchor {
+      width: 0;
+      height: 0;
+      opacity: 0;
+    }
   }
 
   &__col-line {
@@ -399,6 +477,13 @@ $_col-width: units.spacing(25);
       grid-column: var(--offset);
       height: 100%;
       width: 1px;
+
+      &:first-of-type {
+        left: $_col-width * 2;
+        grid-row: 1 / calc(var(--rows) + 2) span;
+        position: sticky;
+        z-index: 1;
+      }
     }
 
     &--horizontal {
@@ -417,6 +502,7 @@ $_col-width: units.spacing(25);
     background-color: var(--background-color);
     padding: units.spacing(3) units.spacing(2);
     text-align: start;
+    cursor: pointer;
     height: 100%;
     width: 100%;
   }
@@ -442,10 +528,25 @@ $_col-width: units.spacing(25);
     }
   }
 
+  &__buttons {
+    grid-template-columns: 1fr 1fr;
+    grid-gap: units.spacing(4);
+    display: grid;
+
+    @include mixins.media(phone) {
+      grid-template-columns: 1fr;
+      margin-bottom: units.spacing(4);
+    }
+  }
+
   &__controls {
     justify-content: space-between;
     padding-top: units.spacing(6);
     display: flex;
+
+    @include mixins.media(phone) {
+      flex-direction: column;
+    }
   }
 
   &__button {
@@ -454,6 +555,7 @@ $_col-width: units.spacing(25);
     padding: units.spacing(1) units.spacing(5);
     background-color: transparent;
     border-radius: 999px;
+    text-align: center;
     cursor: pointer;
 
     &:disabled {

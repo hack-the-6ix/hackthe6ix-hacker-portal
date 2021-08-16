@@ -63,7 +63,7 @@ export default {
   }
 
   &__content {
-    max-width: 900px;
+    max-width: units.spacing(225);
     margin: 0 auto;
   }
 
