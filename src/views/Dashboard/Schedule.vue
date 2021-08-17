@@ -12,7 +12,7 @@
           Schedule
         </Typography>
         <Button
-          href='https://hackthe6ix.com#schedule'
+          href='/calendar'
           rel='noreferrer noopener'
           class='schedule__btn'
           target='_blank'
