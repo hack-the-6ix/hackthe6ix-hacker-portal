@@ -26,7 +26,7 @@
             as="li"
           >
             <i :class="[info.icon, 'calendar-modal__icon']" />
-            <span>{{ info.content }}</span>
+            <span v-html="info.content" />
           </Typography>
         </template>
       </ul>
@@ -36,6 +36,7 @@
 
 <script>
 import Typography from '@/components/Typography';
+import marked from 'marked';
 
 export default {
   components: {
@@ -66,7 +67,7 @@ export default {
         },
         {
           icon: 'fas fa-sticky-note',
-          content: this.modelValue.get('Description'),
+          content: marked(this.modelValue.get('Description')),
         },
       ];
     },
@@ -92,11 +93,11 @@ export default {
       }
 
       const processTime = (time) => {
-        const dt = new Date(time);
+        const dt = new Date(time.split('Z')[0]);
         const m = dt.getMinutes();
         const h = dt.getHours();
 
-        return `${h % 12 ?? 12}${m ? ':30' : ''}${h < 12 ? 'am' : 'pm'}`;
+        return `${h % 12 || 12}${m ? ':30' : ''}${h < 12 ? 'am' : 'pm'}`;
       };
 
       const start = processTime(this.modelValue?.get('Start'));
@@ -125,6 +126,7 @@ export default {
   display: flex;
   height: 100%;
   margin: auto;
+  z-index: 10;
   width: 100%;
   inset: 0;
 
@@ -137,12 +139,15 @@ export default {
     width: units.spacing(160);
     box-sizing: border-box;
     height: fit-content;
+    max-height: 100%;
+    min-height: 1px;
     overflow: auto;
   }
 
   &__header {
     grid-template-columns: auto units.spacing(5.5);
     grid-gap: units.spacing(2) units.spacing(4);
+    align-items: start;
     display: grid;
   }
 
@@ -187,9 +192,18 @@ export default {
   }
 
   &__item {
-    grid-template-columns: units.spacing(4) auto;
+    grid-template-columns: units.spacing(4) minmax(1px, auto);
     grid-gap: units.spacing(4);
+    line-height: 1.7;
     display: grid;
+
+    & p {
+      margin-top: 0;
+    }
+
+    & a {
+      word-break: break-all;
+    }
   }
 
   &__icon {

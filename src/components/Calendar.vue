@@ -172,7 +172,7 @@
         color="dark-navy"
         target="_blank"
         type="small"
-        as="href"
+        as="a"
       >
         <i class="fas fa-download" /> Download
       </Typography>
@@ -692,6 +692,7 @@ $_col-width: units.spacing(25);
     border: 1px solid colors.css-color(dark-navy);
     padding: units.spacing(1) units.spacing(5);
     background-color: transparent;
+    text-decoration: none;
     border-radius: 999px;
     text-align: center;
     cursor: pointer;
