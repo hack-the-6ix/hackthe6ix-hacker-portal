@@ -371,9 +371,15 @@ export default {
     },
     totalColumns() {
       const { timeInfo } = this.scheduleInfo;
-      return [...timeInfo.values()].reduce((acc, info) => {
-        return acc + (info.end - info.start) + (info.offset && info.offset + 1);
-      }, 0);
+      return [...timeInfo.values()].reduce(
+        (acc, info) =>
+          acc +
+          info.end -
+          info.start +
+          info.offset +
+          Boolean(info.offset || info.end !== 23),
+        0,
+      );
     },
     // This is where the math pain happens...
     setNow() {
