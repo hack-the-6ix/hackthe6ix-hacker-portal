@@ -12,16 +12,16 @@
           Schedule
         </Typography>
         <Button
-          href='https://hackthe6ix.com#schedule'
-          rel='noreferrer noopener'
-          class='schedule__btn'
-          target='_blank'
-          as='a'
+          href="https://hackthe6ix.com#schedule"
+          rel="noreferrer noopener"
+          class="schedule__btn"
+          target="_blank"
+          as="a"
         >
           View Expanded
         </Button>
       </div>
-      <Calendar/>
+      <Calendar />
     </div>
   </div>
 </template>

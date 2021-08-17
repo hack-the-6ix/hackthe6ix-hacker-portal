@@ -1,6 +1,6 @@
 <template>
   <div class="owo">
-    <Calendar/>
+    <Calendar />
   </div>
 </template>
 
@@ -11,7 +11,7 @@ export default {
   components: {
     Calendar,
   },
-}
+};
 </script>
 
 <style lang="scss">

@@ -1,5 +1,5 @@
 <template>
-  <Calendar/>
+  <Calendar class="calendar-page" />
 </template>
 
 <script>
@@ -13,6 +13,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use '@/styles/units';
+
 html {
   background: white;
 }

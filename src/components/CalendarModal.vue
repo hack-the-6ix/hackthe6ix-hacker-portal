@@ -1,31 +1,31 @@
 <template>
-  <div class='calendar-modal'>
-    <div class='calendar-modal__box'>
-      <div class='calendar-modal__header'>
-        <Typography color='dark-navy' type='heading3' as='h2'>
+  <div class="calendar-modal">
+    <div class="calendar-modal__box">
+      <div class="calendar-modal__header">
+        <Typography color="dark-navy" type="heading3" as="h2">
           {{ modelValue.get('Name') }}
         </Typography>
         <button
-          @click='$emit("update:modelValue", null)'
-          class='calendar-modal__close'
+          @click="$emit('update:modelValue', null)"
+          class="calendar-modal__close"
         >
-          <i class='fas fa-times'/>
+          <i class="fas fa-times" />
         </button>
         <hr
-          :style='{ "--color": eventType?.Color }'
-          class='calendar-modal__line'
+          :style="{ '--color': eventType?.Color }"
+          class="calendar-modal__line"
         />
       </div>
-      <ul class='calendar-modal__content'>
-        <template v-for='(info, i) in eventContent' :key='i'>
+      <ul class="calendar-modal__content">
+        <template v-for="(info, i) in eventContent" :key="i">
           <Typography
-            class='calendar-modal__item'
-            v-if='info.content'
-            color='black'
-            type='body1'
-            as='li'
+            class="calendar-modal__item"
+            v-if="info.content"
+            color="black"
+            type="body1"
+            as="li"
           >
-            <i :class='[info.icon, "calendar-modal__icon"]'/>
+            <i :class="[info.icon, 'calendar-modal__icon']" />
             <span>{{ info.content }}</span>
           </Typography>
         </template>
@@ -79,7 +79,7 @@ export default {
       }).format(s);
 
       let dateTH = 'th';
-      switch(s.getDate().toString().charAt(1)) {
+      switch (s.getDate().toString().charAt(1)) {
         case '1':
           dateTH = 'st';
           break;
@@ -91,12 +91,12 @@ export default {
           break;
       }
 
-      const processTime = time => {
+      const processTime = (time) => {
         const dt = new Date(time);
         const m = dt.getMinutes();
         const h = dt.getHours();
 
-        return `${(h % 12) ?? 12}${m ? ':30' : ''}${h < 12 ? 'am' : 'pm'}`;
+        return `${h % 12 ?? 12}${m ? ':30' : ''}${h < 12 ? 'am' : 'pm'}`;
       };
 
       const start = processTime(this.modelValue?.get('Start'));
@@ -104,9 +104,7 @@ export default {
       return `${date}${dateTH} | ${start} - ${end}`;
     },
     eventType() {
-      return this.types.get(
-        this.modelValue?.get('Type of Event')?.[0],
-      );
+      return this.types.get(this.modelValue?.get('Type of Event')?.[0]);
     },
   },
 };
@@ -131,7 +129,8 @@ export default {
   inset: 0;
 
   &__box {
-    box-shadow: units.spacing(1) units.spacing(1) units.spacing(10) units.spacing(3) rgba(0, 0, 0, 0.2);
+    box-shadow: units.spacing(1) units.spacing(1) units.spacing(10)
+      units.spacing(3) rgba(0, 0, 0, 0.2);
     background-color: colors.css-color(white);
     border-radius: units.spacing(3);
     padding: units.spacing(10);
@@ -165,7 +164,8 @@ export default {
     border: none;
     padding: 0;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       color: colors.css-color(dark-navy, hover);
     }
 

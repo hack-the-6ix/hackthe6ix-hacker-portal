@@ -85,7 +85,7 @@
                 link.disabled && 'hacker-info__link--disabled',
                 'hacker-info__link',
               ]"
-              @click="e => link.disabled && e.preventDefault()"
+              @click="(e) => link.disabled && e.preventDefault()"
               :href="link.disabled ? '#' : link.link"
               rel="noreferrer noopener"
               target="_blank"
