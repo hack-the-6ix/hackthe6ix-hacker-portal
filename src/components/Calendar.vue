@@ -643,10 +643,7 @@ $_col-width: units.spacing(25);
   }
 
   &__col-content {
-    min-width: calc(
-      min(var(--max-span), max(var(--span), 2)) * #{$_col-width -
-        units.spacing(4)}
-    );
+    min-width: calc(min(var(--max-span), max(var(--span), 2)) * #{$_col-width - units.spacing(4)});
     box-sizing: border-box;
   }
 
