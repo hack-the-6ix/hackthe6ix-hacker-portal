@@ -1,23 +1,4 @@
 <template>
-  <div class="app">
-    <Logo width="24" class="app__logo" />
-    <span>
-      <Typography color="teal" type="heading3" as="span" transform="uppercase">
-        HT6
-      </Typography>
-      <Typography
-        color="yellow"
-        type="heading3"
-        as="span"
-        transform="uppercase"
-      >
-        Digital
-      </Typography>
-    </span>
-    <span style="margin-left: auto">
-      <Button color="black" @click="confirmRunLogout">Sign Out</Button>
-    </span>
-  </div>
   <router-view v-slot="{ Component }">
     <template v-if="Component">
       <keep-alive>

@@ -21,7 +21,7 @@
           Welcome to Hack the 6ix 2021! Thanks for confirming your status as a
           hacker!
         </Typography>
-        <template v-if="userInfo.status.isRSVPOpen">
+        <template v-if="userInfo?.status?.isRSVPOpen">
           <Typography
             class="hacker-info__text"
             color="black"
@@ -65,7 +65,7 @@
           weight="700"
           as="p"
         >
-          !verify {{ userInfo.email }}
+          !verify {{ userInfo?.email }}
         </Typography>
       </div>
       <div class="hacker-info__section">
@@ -85,7 +85,7 @@
                 link.disabled && 'hacker-info__link--disabled',
                 'hacker-info__link',
               ]"
-              @click="e => link.disabled && e.preventDefault()"
+              @click="(e) => link.disabled && e.preventDefault()"
               :href="link.disabled ? '#' : link.link"
               rel="noreferrer noopener"
               target="_blank"
@@ -214,7 +214,7 @@ export default {
   }
 
   &__content {
-    max-width: 900px;
+    max-width: units.spacing(225);
     margin: 0 auto;
   }
 

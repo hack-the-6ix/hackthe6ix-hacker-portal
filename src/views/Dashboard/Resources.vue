@@ -39,7 +39,7 @@ export default {
     },
     notionFrame() {
       return 'https://ht6-notion.netlify.app/12ce5072583f487cac5c6e2bb128b599';
-    }
+    },
   },
 };
 </script>
@@ -63,7 +63,7 @@ export default {
   }
 
   &__content {
-    max-width: 900px;
+    max-width: units.spacing(225);
     margin: 0 auto;
   }
 

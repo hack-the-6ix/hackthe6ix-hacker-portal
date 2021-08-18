@@ -1,4 +1,7 @@
 module.exports = {
+  transpileDependencies: [
+    'color',
+  ],
   chainWebpack: (config) => {
     const svgRule = config.module.rule('svg');
 
