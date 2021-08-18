@@ -13,6 +13,7 @@ import Tabs from '@/components/Tabs';
 import HackerInfo from './HackerInfo';
 import Schedule from './Schedule';
 import Resources from './Resources';
+import MailInfo from './MailInfo';
 
 export default {
   components: {
@@ -27,7 +28,7 @@ export default {
     const checkStatus = (value) => {
       if (value?.status) {
         if (!value.status.applied && value.status.canApply) {
-          router.replace('/application');
+          router.replace('/dashboard');
           return;
         }
 
@@ -42,7 +43,37 @@ export default {
     checkStatus(userInfo.value);
     watch(userInfo, checkStatus);
 
-    return {
+    if (userInfo.wantSwag) {
+      return {
+        selected: ref(0),
+        userInfo,
+        loaded,
+        tabs: [
+          {
+            component: HackerInfo,
+            label:
+              '<i class="dashboard__tab-icon fas fa-info-circle"></i><span class="dashboard__tab-text">Hacker Info</span>',
+          },
+          {
+            component: Schedule,
+            label:
+              '<i class="dashboard__tab-icon fas fa-calendar-alt"></i><span class="dashboard__tab-text">Schedule</span>',
+          },
+          {
+            component: Resources,
+            label:
+              '<i class="dashboard__tab-icon fas fa-book"></i><span class="dashboard__tab-text">Resources</span>',
+          },
+          {
+            component: MailInfo,
+            label:
+              '<i class="dashboard__tab-icon fas fa-envelope"></i><span class="dashboard__tab-text">Mail Address</span>',
+          },
+        ],
+      };
+    }
+    else {
+      return {
       selected: ref(0),
       userInfo,
       loaded,
@@ -64,6 +95,7 @@ export default {
         },
       ],
     };
+    }
   },
 };
 </script>
