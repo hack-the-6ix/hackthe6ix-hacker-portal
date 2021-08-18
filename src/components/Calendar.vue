@@ -340,6 +340,8 @@ export default {
         byType[type].push(event);
       });
 
+      console.log(timeInfo, dates);
+
       this.events.forEach((event) => {
         const type = event.get('Type of Event')?.[0];
         if (!type) return;
@@ -357,8 +359,7 @@ export default {
 
         // Different date, add offset to next day
         if (_end.getDate() !== _start.getDate()) {
-          const tmr = `${_end.toISOString().split('T')[0]}T00:00:00`;
-          const tmrInfo = timeInfo.get(tmr);
+          const tmrInfo = timeInfo.get(`${_end.toISOString().split('T')[0]}T00:00:00`);
           tmrInfo.offset = Math.max(tmrInfo.offset, _end.getHours());
         }
       });
@@ -643,7 +644,8 @@ $_col-width: units.spacing(25);
   }
 
   &__col-content {
-    min-width: calc(min(var(--max-span), max(var(--span), 2)) * #{$_col-width - units.spacing(4)});
+    --owo: min(var(--max-span), max(var(--span), 2));
+    min-width: calc(var(--owo) * #{$_col-width - units.spacing(4)});
     box-sizing: border-box;
   }
 
