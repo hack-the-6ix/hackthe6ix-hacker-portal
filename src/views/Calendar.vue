@@ -1,7 +1,5 @@
 <template>
-  <div class="owo">
-    <Calendar />
-  </div>
+  <Calendar class="calendar-page" />
 </template>
 
 <script>
@@ -15,11 +13,9 @@ export default {
 </script>
 
 <style lang="scss">
-@use '@/styles/mixins';
-@use '@/styles/colors';
 @use '@/styles/units';
 
-.owo {
-  background-color: white;
+html {
+  background: white;
 }
 </style>

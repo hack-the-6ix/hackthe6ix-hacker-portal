@@ -199,7 +199,7 @@ export default {
         case this.statusEnum.DECLINED:
           return 'You have declined';
         case this.statusEnum.WAITLISTED:
-          return 'You\'re on the waitlist';
+          return "You're on the waitlist";
         case this.statusEnum.REJECTED:
           return 'Application Status';
         case this.statusEnum.NOT_APPLIED:
@@ -250,9 +250,7 @@ export default {
             `Keep an eye on your inbox within the next few weeks for your application results.`,
           ];
         case this.statusEnum.EXPIRED:
-          return [
-            `Sorry, your invitation has expired.`,
-          ];
+          return [`Sorry, your invitation has expired.`];
         default:
           return ['Sorry an error occurred.'];
       }
