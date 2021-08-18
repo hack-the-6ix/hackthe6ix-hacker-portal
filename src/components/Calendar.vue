@@ -237,6 +237,7 @@ export default {
       this.airtable
         .table('Type of Events')
         .select({
+          filterByFormula: 'Hidden=FALSE()',
           fields: ['Name', 'Color'],
         })
         .all()
@@ -250,7 +251,10 @@ export default {
         (date) => date === this.currentDate || now < new Date(this.currentDate),
       ) ?? (now < new Date(dates[0]) ? dates[0] : dates.slice(-1));
     this.loading = false;
+  },
+  mounted() {
     setTimeout(() => (this.now = new Date()), 60000);
+    this.now = new Date();
   },
   watch: {
     loading(val) {
@@ -324,7 +328,7 @@ export default {
       // Sort events and infer info in a single loop for SPEED *Plays running in the 90s*
       this.events.forEach((event) => {
         const type = event.get('Type of Event')?.[0];
-        if (!type) return;
+        if (!type || !byType[type]) return;
 
         const date = event.get('Start').split('T')[0];
         const serializedDate = `${date}T00:00:00`;
@@ -339,8 +343,6 @@ export default {
 
         byType[type].push(event);
       });
-
-      console.log(timeInfo, dates);
 
       this.events.forEach((event) => {
         const type = event.get('Type of Event')?.[0];
