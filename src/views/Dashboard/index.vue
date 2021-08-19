@@ -28,7 +28,7 @@ export default {
     const checkStatus = (value) => {
       if (value?.status) {
         if (!value.status.applied && value.status.canApply) {
-          router.replace('/dashboard');
+          router.replace('/application');
           return;
         }
 
@@ -43,59 +43,46 @@ export default {
     checkStatus(userInfo.value);
     watch(userInfo, checkStatus);
 
-    if (userInfo.wantSwag) {
-      return {
-        selected: ref(0),
-        userInfo,
-        loaded,
-        tabs: [
-          {
-            component: HackerInfo,
-            label:
-              '<i class="dashboard__tab-icon fas fa-info-circle"></i><span class="dashboard__tab-text">Hacker Info</span>',
-          },
-          {
-            component: Schedule,
-            label:
-              '<i class="dashboard__tab-icon fas fa-calendar-alt"></i><span class="dashboard__tab-text">Schedule</span>',
-          },
-          {
-            component: Resources,
-            label:
-              '<i class="dashboard__tab-icon fas fa-book"></i><span class="dashboard__tab-text">Resources</span>',
-          },
-          {
-            component: MailInfo,
-            label:
-              '<i class="dashboard__tab-icon fas fa-envelope"></i><span class="dashboard__tab-text">Mail Address</span>',
-          },
-        ],
-      };
+    var tabs = [
+      {
+        component: HackerInfo,
+        label:
+          '<i class="dashboard__tab-icon fas fa-info-circle"></i><span class="dashboard__tab-text">Hacker Info</span>',
+      },
+      {
+        component: Schedule,
+        label:
+          '<i class="dashboard__tab-icon fas fa-calendar-alt"></i><span class="dashboard__tab-text">Schedule</span>',
+      },
+      {
+        component: Resources,
+        label:
+          '<i class="dashboard__tab-icon fas fa-book"></i><span class="dashboard__tab-text">Resources</span>',
+      },
+    ];
+
+    const mail = {
+      component: MailInfo,
+        label:
+          '<i class="dashboard__tab-icon fas fa-envelope"></i><span class="dashboard__tab-text">Mailing Address</span>',
+    };
+
+    const add = (value) => {
+      if (value?.wantSwag) {
+        tabs.push(mail);
+        return tabs;
+      }
     }
-    else {
-      return {
+
+    add(userInfo.value);
+    watch(userInfo, add);
+
+    return {
       selected: ref(0),
       userInfo,
       loaded,
-      tabs: [
-        {
-          component: HackerInfo,
-          label:
-            '<i class="dashboard__tab-icon fas fa-info-circle"></i><span class="dashboard__tab-text">Hacker Info</span>',
-        },
-        {
-          component: Schedule,
-          label:
-            '<i class="dashboard__tab-icon fas fa-calendar-alt"></i><span class="dashboard__tab-text">Schedule</span>',
-        },
-        {
-          component: Resources,
-          label:
-            '<i class="dashboard__tab-icon fas fa-book"></i><span class="dashboard__tab-text">Resources</span>',
-        },
-      ],
+      tabs
     };
-    }
   },
 };
 </script>

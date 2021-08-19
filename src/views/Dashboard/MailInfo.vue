@@ -15,31 +15,73 @@
           type="paragraph"
           as="p"
         >
-          You have indicated that you are interested in receiving swag, you may review the mailing address that you
+          You have indicated that you are interested in receiving swag. You may review the mailing address that you
           provided during the application process below.
         </Typography>
-        <template v-if="userInfo.wantSwag">
+        <Typography
+          class="mail-info__name"
+          color="black"
+          weight="700"
+          type="pararaph"
+          as="p"
+        > 
+          {{ userInfo.firstName }} {{ userInfo.lastName }}
+        </Typography>
+        <Typography
+          class="mail-info__addressLine1"
+          color="black"
+          weight="700"
+          type="pararaph"
+          as="p"
+        > 
+          {{ userInfo.addressLine1 }}
+        </Typography>
+        <template v-if="userInfo.addressLine2">
           <Typography
-            class="mail-info__address"
+            class="mail-info__addressLine2"
             color="black"
-            align="center"
             weight="700"
             type="pararaph"
             as="p"
           > 
-            {{ userInfo.addressLine1 }} {{ userInfo.addressLine2 }} {{userInfo.city }}, {{ userInfo.province }} {{ userInfo.postalCode }}
-          </Typography> 
+            {{ userInfo.addressLine2 }}
+          </Typography>
         </template>
+        <Typography
+          class="mail-info__area"
+          color="black"
+          weight="700"
+          type="pararaph"
+          as="p"
+        > 
+          {{ userInfo.city }}, {{ userInfo.province }} {{ userInfo.postalCode }}
+        </Typography> 
+        <Typography
+          class="mail-info__country"
+          color="black"
+          transform="uppercase"
+          weight="700"
+          type="pararaph"
+          as="p"
+        > 
+          {{ userInfo.country }}
+        </Typography>    
       </div>
     </div>
 </template>
 
 <script>
 import Typography from '@/components/Typography';
+import useUserInfo from '@/utils/useUserInfo';
 
 export default ({
     components: {
         Typography,
+    },
+    setup() {
+      return {
+        ...useUserInfo(),
+      };
     },
 })
 </script>
