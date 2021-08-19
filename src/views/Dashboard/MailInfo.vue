@@ -69,6 +69,14 @@
           >
             {{ userInfo?.hackerApplication?.country }}
           </Typography>
+          <Typography
+              class="mail-info__email"
+              color="black"
+              type="paragraph"
+              as="p"
+          >
+            If you want to make amendments, please send us an email at <a class="mail-info__link" href="mailto:hello@hackthe6ix.com">hello@hackthe6ix.com</a>.
+          </Typography>
         </template>
         <template v-else>
 
@@ -123,6 +131,10 @@ export default ({
 
   &__heading {
     margin-bottom: units.spacing(3);
+  }
+
+  &__email {
+    margin-top: units.spacing(10);
   }
 
   &__description {
