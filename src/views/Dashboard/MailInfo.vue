@@ -9,63 +9,80 @@
         >
           Mailing Address
         </Typography>
-        <Typography
-          class="mail-info__description"
-          color="black"
-          type="paragraph"
-          as="p"
-        >
-          You have indicated that you are interested in receiving swag. You may review the mailing address that you
-          provided during the application process below.
-        </Typography>
-        <Typography
-          class="mail-info__name"
-          color="black"
-          weight="700"
-          type="pararaph"
-          as="p"
-        > 
-          {{ userInfo.firstName }} {{ userInfo.lastName }}
-        </Typography>
-        <Typography
-          class="mail-info__addressLine1"
-          color="black"
-          weight="700"
-          type="pararaph"
-          as="p"
-        > 
-          {{ userInfo.addressLine1 }}
-        </Typography>
-        <template v-if="userInfo.addressLine2">
+
+        <template v-if="userInfo?.hackerApplication?.wantSwag">
+
           <Typography
-            class="mail-info__addressLine2"
-            color="black"
-            weight="700"
-            type="pararaph"
-            as="p"
-          > 
-            {{ userInfo.addressLine2 }}
+              class="mail-info__description"
+              color="black"
+              type="paragraph"
+              as="p"
+          >
+            You have indicated that you are interested in receiving swag. You may review the mailing address that you
+            provided during the application process below.
+          </Typography>
+          <Typography
+              class="mail-info__name"
+              color="black"
+              weight="700"
+              type="pararaph"
+              as="p"
+          >
+            {{ userInfo.firstName }} {{ userInfo.lastName }}
+          </Typography>
+          <Typography
+              class="mail-info__addressLine1"
+              color="black"
+              weight="700"
+              type="pararaph"
+              as="p"
+          >
+            {{ userInfo?.hackerApplication?.addressLine1 }}
+          </Typography>
+          <template v-if="userInfo.addressLine2">
+            <Typography
+                class="mail-info__addressLine2"
+                color="black"
+                weight="700"
+                type="pararaph"
+                as="p"
+            >
+              {{ userInfo?.hackerApplication?.addressLine2 }}
+            </Typography>
+          </template>
+          <Typography
+              class="mail-info__area"
+              color="black"
+              weight="700"
+              type="pararaph"
+              as="p"
+          >
+            {{ userInfo?.hackerApplication?.city }}, {{ userInfo?.hackerApplication?.province }} {{ userInfo?.hackerApplication?.postalCode }}
+          </Typography>
+          <Typography
+              class="mail-info__country"
+              color="black"
+              transform="uppercase"
+              weight="700"
+              type="pararaph"
+              as="p"
+          >
+            {{ userInfo?.hackerApplication?.country }}
           </Typography>
         </template>
-        <Typography
-          class="mail-info__area"
-          color="black"
-          weight="700"
-          type="pararaph"
-          as="p"
-        > 
-          {{ userInfo.city }}, {{ userInfo.province }} {{ userInfo.postalCode }}
-        </Typography> 
-        <Typography
-          class="mail-info__country"
-          color="black"
-          transform="uppercase"
-          weight="700"
-          type="pararaph"
-          as="p"
-        > 
-          {{ userInfo.country }}
-        </Typography>    
+        <template v-else>
+
+          <Typography
+              class="mail-info__description"
+              color="black"
+              type="paragraph"
+              as="p"
+          >
+            You have indicated that you are either not located in Canada, or do not want swag. If you believe this is a mistake,
+            please send us an email at <a class="mail-info__link" href="mailto:hello@hackthe6ix.com">hello@hackthe6ix.com</a>.
+          </Typography>
+        </template>
+
       </div>
     </div>
 </template>
@@ -110,6 +127,19 @@ export default ({
 
   &__description {
     margin-bottom: units.spacing(10);
+  }
+
+  &__link {
+    color: colors.css-color(teal);
+
+    &:hover,
+    &:focus {
+      color: colors.css-color(teal, $modifier: hover);
+    }
+
+    &:active {
+      color: colors.css-color(teal, $modifier: active);
+    }
   }
 }
 </style>

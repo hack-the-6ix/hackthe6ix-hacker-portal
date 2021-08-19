@@ -43,39 +43,29 @@ export default {
     checkStatus(userInfo.value);
     watch(userInfo, checkStatus);
 
-    var tabs = [
+
+    let tabs = [
       {
         component: HackerInfo,
         label:
-          '<i class="dashboard__tab-icon fas fa-info-circle"></i><span class="dashboard__tab-text">Hacker Info</span>',
+            '<i class="dashboard__tab-icon fas fa-info-circle"></i><span class="dashboard__tab-text">Hacker Info</span>',
       },
       {
         component: Schedule,
         label:
-          '<i class="dashboard__tab-icon fas fa-calendar-alt"></i><span class="dashboard__tab-text">Schedule</span>',
+            '<i class="dashboard__tab-icon fas fa-calendar-alt"></i><span class="dashboard__tab-text">Schedule</span>',
       },
       {
         component: Resources,
         label:
-          '<i class="dashboard__tab-icon fas fa-book"></i><span class="dashboard__tab-text">Resources</span>',
+            '<i class="dashboard__tab-icon fas fa-book"></i><span class="dashboard__tab-text">Resources</span>',
       },
-    ];
-
-    const mail = {
-      component: MailInfo,
+      {
+        component: MailInfo,
         label:
-          '<i class="dashboard__tab-icon fas fa-envelope"></i><span class="dashboard__tab-text">Mailing Address</span>',
-    };
-
-    const add = (value) => {
-      if (value?.wantSwag) {
-        tabs.push(mail);
-        return tabs;
+            '<i class="dashboard__tab-icon fas fa-envelope"></i><span class="dashboard__tab-text">Mailing Address</span>',
       }
-    }
-
-    add(userInfo.value);
-    watch(userInfo, add);
+    ];
 
     return {
       selected: ref(0),
