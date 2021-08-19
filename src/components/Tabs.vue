@@ -68,7 +68,7 @@ export default {
   }
 
   &__nav-btn {
-    padding: units.spacing(5) units.spacing(14) units.spacing(10);
+    padding: units.spacing(5) units.spacing(10) units.spacing(10);
     border-top-right-radius: units.spacing(5);
     border-top-left-radius: units.spacing(5);
     background: transparent;
