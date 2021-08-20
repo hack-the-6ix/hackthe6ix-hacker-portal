@@ -161,13 +161,11 @@
         </Typography>
       </div>
       <Typography
-        ref="noopener noreferrer"
         class="calendar__button"
-        :href="calendarLink"
         color="dark-navy"
-        target="_blank"
+        disabled
         type="small"
-        as="a"
+        as="button"
       >
         <i class="fas fa-download" /> Download
       </Typography>
