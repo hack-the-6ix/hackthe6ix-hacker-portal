@@ -65,6 +65,11 @@ $font-config: (
     font-size: spacing(3),
     line-height: spacing(6),
   ),
+  xxsmall: (
+    font-weight: 400,
+    font-size: spacing(2.5),
+    line-height: spacing(5),
+  ),
 );
 
 $page-width: 1280px;
