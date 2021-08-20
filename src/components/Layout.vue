@@ -45,6 +45,8 @@
 <script>
 import Typography from '@/components/Typography';
 import Button from '@/components/Button';
+import swal from 'sweetalert';
+import { runLogout } from "../utils/SessionController";
 
 export default {
   name: 'Layout',
@@ -56,6 +58,21 @@ export default {
     title: String,
     description: String,
     loading: Boolean,
+  },
+  methods: {
+    confirmRunLogout() {
+      swal({
+        title: 'Confirm Sign Out',
+        text: 'Are you sure you want to sign out?',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+      }).then(async (confirm) => {
+        if (confirm) {
+          await runLogout();
+        }
+      });
+    },
   },
 };
 </script>
