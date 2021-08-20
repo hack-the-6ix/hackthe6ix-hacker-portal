@@ -411,7 +411,7 @@ export default {
       }
 
       return {
-        '--col': this.getDatePosition(this.now) + 2,
+        '--col': this.getDatePosition(this.now) + 3,
         '--offset': (this.now.getMinutes() % 30) / 30,
         '--span': 1,
       };
@@ -436,7 +436,6 @@ export default {
       )?.[0];
 
       if (element) {
-        console.log('REEEE');
         return element.scrollIntoView({ behavior: 'smooth', inline: 'center' });
       }
     },
@@ -483,7 +482,7 @@ export default {
       const minute = date.getMinutes();
       const hour = date.getHours();
 
-      return dateIndex * 48 + parseInt(hour) * 2 + (parseInt(minute) !== 0);
+      return dateIndex * 48 + parseInt(hour) * 2 + (parseInt(minute) >= 30);
     },
     getEventSpan(event) {
       const start = event.get('Start');
