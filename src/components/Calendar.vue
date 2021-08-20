@@ -173,7 +173,7 @@
       </Typography>
     </div>
     <Typography
-      type='xsmall'
+      type='small'
       color='dark-grey'
     >
       The calendar is in {{ new Date().toTimeString().slice(9) }} time
@@ -405,6 +405,8 @@ export default {
       const { dates: _dates } = this.scheduleInfo;
       const [start, ...dates] = [..._dates];
       const end = dates.slice(-1)[0];
+      
+      console.log(start, end, this.now);
 
       if (this.now < new Date(start) || this.now > new Date(end)) {
         return;
