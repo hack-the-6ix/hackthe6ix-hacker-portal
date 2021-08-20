@@ -351,21 +351,11 @@ export default {
           });
         }
 
-        serializedDate = event.get('End').toLocaleDateString();
-        if (!dates.has(serializedDate)) {
-          dates.add(serializedDate);
-          timeInfo.set(serializedDate, {
-            offset: 0,
-            start: 23,
-            end: 0,
-          });
-        }
-
         byType[type].push(event);
       });
 
       this.events.forEach((event) => {
-        const serializedDate = event.get('Start').toLocaleDateString();
+        let serializedDate = event.get('Start').toLocaleDateString();
 
         const _start = new Date(event.get('Start'));
         const _end = new Date(event.get('End'));
@@ -377,6 +367,16 @@ export default {
 
         // Different date, add offset to next day
         if (_end.getDate() !== _start.getDate()) {
+          serializedDate = event.get('End').toLocaleDateString();
+          if (!dates.has(serializedDate)) {
+            dates.add(serializedDate);
+            timeInfo.set(serializedDate, {
+              offset: 0,
+              start: 23,
+              end: 0,
+            });
+          }
+
           const tmrInfo = timeInfo.get(event.get('End').toLocaleDateString());
           tmrInfo.offset = Math.max(tmrInfo.offset, _end.getHours());
         }
