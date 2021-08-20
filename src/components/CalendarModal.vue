@@ -72,7 +72,7 @@ export default {
       ];
     },
     eventDateTime() {
-      const s = new Date(this.modelValue?.get('Start'));
+      const s = this.modelValue?.get('Start');
       const date = new Intl.DateTimeFormat('en-US', {
         weekday: 'short',
         month: 'short',
@@ -93,9 +93,8 @@ export default {
       }
 
       const processTime = (time) => {
-        const dt = new Date(time.split('Z')[0]);
-        const m = dt.getMinutes();
-        const h = dt.getHours();
+        const m = time.getMinutes();
+        const h = time.getHours();
 
         return `${h % 12 || 12}${m ? ':30' : ''}${h < 12 ? 'am' : 'pm'}`;
       };
