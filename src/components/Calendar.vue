@@ -172,6 +172,12 @@
         <i class="fas fa-download" /> Download
       </Typography>
     </div>
+    <Typography
+      type='xsmall'
+      color='dark-grey'
+    >
+      The calendar is in {{ new Date().toTimeString().slice(9) }} time
+    </Typography>
     <CalendarModal
       v-model="currentEvent"
       v-if="currentEvent"
@@ -405,7 +411,7 @@ export default {
       }
 
       return {
-        '--col': this.getDatePosition(this.now) + 3,
+        '--col': this.getDatePosition(this.now) + 2,
         '--offset': (this.now.getMinutes() % 30) / 30,
         '--span': 1,
       };
@@ -685,7 +691,7 @@ $_col-width: units.spacing(30);
 
   &__controls {
     justify-content: space-between;
-    padding-top: units.spacing(6);
+    padding: units.spacing(6) 0 units.spacing(3);
     display: flex;
 
     @include mixins.media(phone) {
