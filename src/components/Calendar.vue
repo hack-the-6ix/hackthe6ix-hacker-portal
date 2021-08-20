@@ -87,10 +87,10 @@
           :style="{
             ...getEventPosition(event, i + 3),
             '--max-span':
-              j + 1 === scheduleInfo.byType[id].length
-                ? 999
-                : getDatePosition(scheduleInfo.byType[id][j + 1].get('Start')) -
-                  getDatePosition(event.get('Start')),
+              (j + 1 !== scheduleInfo.byType[id].length
+                ? getDatePosition(scheduleInfo.byType[id][j + 1].get('Start'))
+                : getDatePosition(event.get('End'))) -
+              getDatePosition(event.get('Start')),
             '--background-color': getEventSpan(event)
               ? info.BackgroundColor
               : 'transparent',
@@ -111,15 +111,10 @@
               <Typography
                 class="calendar__info"
                 color="disabled"
-                type="xsmall"
+                type="xxsmall"
                 as="p"
               >
-                <span>
-                  {{ getDateRange(event) }}
-                </span>
-                <span class="calendar__info-platform">
-                  &nbsp;| {{ event.get('Platform') ?? 'N/A' }}
-                </span>
+                {{ getDateRange(event) }} | {{ event.get('Platform') ?? 'N/A' }}
               </Typography>
             </div>
           </button>
@@ -244,6 +239,17 @@ export default {
         .then((data) => (this.types = mapRecords(data, this.transformType))),
     ]);
 
+    this.events = this.events
+      .filter((event) => {
+        const type = event.get('Type of Event')?.[0];
+        return type && this.types.get(type);
+      })
+      .map((event) => {
+        event.set('Start', new Date(event.get('Start')));
+        event.set('End', new Date(event.get('End')));
+        return event;
+      });
+
     const now = new Date(this.currentDate);
     const dates = [...this.scheduleInfo.dates];
     this.currentDate =
@@ -328,10 +334,17 @@ export default {
       // Sort events and infer info in a single loop for SPEED *Plays running in the 90s*
       this.events.forEach((event) => {
         const type = event.get('Type of Event')?.[0];
-        if (!type || !byType[type]) return;
+        let serializedDate = event.get('Start').toLocaleDateString();
+        if (!dates.has(serializedDate)) {
+          dates.add(serializedDate);
+          timeInfo.set(serializedDate, {
+            offset: 0,
+            start: 23,
+            end: 0,
+          });
+        }
 
-        const date = event.get('Start').split('T')[0];
-        const serializedDate = `${date}T00:00:00`;
+        serializedDate = event.get('End').toLocaleDateString();
         if (!dates.has(serializedDate)) {
           dates.add(serializedDate);
           timeInfo.set(serializedDate, {
@@ -345,11 +358,7 @@ export default {
       });
 
       this.events.forEach((event) => {
-        const type = event.get('Type of Event')?.[0];
-        if (!type) return;
-
-        const date = event.get('Start').split('T')[0];
-        const serializedDate = `${date}T00:00:00`;
+        const serializedDate = event.get('Start').toLocaleDateString();
 
         const _start = new Date(event.get('Start'));
         const _end = new Date(event.get('End'));
@@ -361,7 +370,7 @@ export default {
 
         // Different date, add offset to next day
         if (_end.getDate() !== _start.getDate()) {
-          const tmrInfo = timeInfo.get(`${_end.toISOString().split('T')[0]}T00:00:00`);
+          const tmrInfo = timeInfo.get(event.get('End').toLocaleDateString());
           tmrInfo.offset = Math.max(tmrInfo.offset, _end.getHours());
         }
       });
@@ -457,9 +466,11 @@ export default {
       };
     },
     getDatePosition(date) {
-      const [day, time] = date.split('T');
-      const dateIndex = [...this.scheduleInfo.dates].indexOf(`${day}T00:00:00`);
-      const [hour, minute] = time.split(':');
+      const dateIndex = [...this.scheduleInfo.dates].indexOf(
+        date.toLocaleDateString(),
+      );
+      const minute = date.getMinutes();
+      const hour = date.getHours();
 
       return dateIndex * 48 + parseInt(hour) * 2 + (parseInt(minute) !== 0);
     },
@@ -484,18 +495,12 @@ export default {
     },
     getDateRange(event) {
       let startTime = this.displayHour(
-        ...event
-          .get('Start')
-          .split('T')[1]
-          .split(':')
-          .map((_) => parseInt(_)),
+        event.get('Start').getHours(),
+        event.get('Start').getMinutes(),
       );
       const endTime = this.displayHour(
-        ...event
-          .get('End')
-          .split('T')[1]
-          .split(':')
-          .map((_) => parseInt(_)),
+        event.get('End').getHours(),
+        event.get('End').getMinutes(),
       );
 
       const span = this.getEventSpan(event);
@@ -514,7 +519,7 @@ export default {
 @use '@/styles/colors';
 @use '@/styles/units';
 
-$_col-width: units.spacing(25);
+$_col-width: units.spacing(30);
 
 .calendar {
   &__body {
@@ -638,7 +643,6 @@ $_col-width: units.spacing(25);
     border-bottom-right-radius: units.spacing(2);
     border-top-right-radius: units.spacing(2);
     background-color: var(--background-color);
-    padding: units.spacing(3) units.spacing(2);
     text-align: start;
     cursor: pointer;
     height: 100%;
@@ -646,17 +650,13 @@ $_col-width: units.spacing(25);
   }
 
   &__col-content {
-    --owo: min(var(--max-span), max(var(--span), 2));
-    min-width: calc(var(--owo) * #{$_col-width - units.spacing(4)});
+    min-width: calc(var(--max-span) * #{$_col-width - units.spacing(4)});
+    padding: units.spacing(3) units.spacing(2);
     box-sizing: border-box;
   }
 
   &__info {
     display: flex;
-
-    &-platform {
-      flex-shrink: 0;
-    }
   }
 
   &__text {

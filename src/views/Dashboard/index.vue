@@ -43,35 +43,34 @@ export default {
     checkStatus(userInfo.value);
     watch(userInfo, checkStatus);
 
-
     let tabs = [
       {
         component: HackerInfo,
         label:
-            '<i class="dashboard__tab-icon fas fa-info-circle"></i><span class="dashboard__tab-text">Hacker Info</span>',
+          '<i class="dashboard__tab-icon fas fa-info-circle"></i><span class="dashboard__tab-text">Hacker Info</span>',
       },
       {
         component: Schedule,
         label:
-            '<i class="dashboard__tab-icon fas fa-calendar-alt"></i><span class="dashboard__tab-text">Schedule</span>',
+          '<i class="dashboard__tab-icon fas fa-calendar-alt"></i><span class="dashboard__tab-text">Schedule</span>',
       },
       {
         component: Resources,
         label:
-            '<i class="dashboard__tab-icon fas fa-book"></i><span class="dashboard__tab-text">Resources</span>',
+          '<i class="dashboard__tab-icon fas fa-book"></i><span class="dashboard__tab-text">Resources</span>',
       },
       {
         component: MailInfo,
         label:
-            '<i class="dashboard__tab-icon fas fa-envelope"></i><span class="dashboard__tab-text">Mailing Address</span>',
-      }
+          '<i class="dashboard__tab-icon fas fa-envelope"></i><span class="dashboard__tab-text">Mailing Address</span>',
+      },
     ];
 
     return {
       selected: ref(0),
       userInfo,
       loaded,
-      tabs
+      tabs,
     };
   },
 };
