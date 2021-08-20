@@ -39,11 +39,7 @@
         >
           {{ userInfo?.hackerApplication?.addressLine1 }}
         </Typography>
-<<<<<<< HEAD
-        <template v-if="userInfo?.hackerApplication?.addressLine2">
-=======
         <template v-if="userInfo.addressLine2">
->>>>>>> feature/schedule
           <Typography
             class="mail-info__addressLine2"
             color="black"
