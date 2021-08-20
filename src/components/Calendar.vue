@@ -153,7 +153,7 @@
           class="calendar__button"
           color="dark-navy"
           @click="toNow"
-          v-if="hasNow"
+          v-if="setNow"
           type="small"
           as="button"
         >
@@ -245,8 +245,12 @@ export default {
         return type && this.types.get(type);
       })
       .map((event) => {
-        event.set('Start', new Date(event.get('Start')));
-        event.set('End', new Date(event.get('End')));
+        const start = new Date(event.get('Start'));
+        start.setHours(start.getHours() + 4);
+        const end = new Date(event.get('End'));
+        end.setHours(end.getHours() + 4);
+        event.set('Start', start);
+        event.set('End', end);
         return event;
       });
 
@@ -258,14 +262,16 @@ export default {
       ) ?? (now < new Date(dates[0]) ? dates[0] : dates.slice(-1));
     this.loading = false;
   },
-  mounted() {
-    setTimeout(() => (this.now = new Date()), 60000);
-    this.now = new Date();
-  },
   watch: {
     loading(val) {
       if (!val) {
+        setTimeout(() => (this.now = new Date()), 60000);
+        this.now = new Date();
+
         this.$nextTick(() => {
+          if (this.setNow) {
+            this.toNow();
+          }
           const observer = new IntersectionObserver(
             ([event]) => {
               const idx = event.target.getAttribute('data-idx');
@@ -316,11 +322,6 @@ export default {
     },
     hasNext() {
       return this.currentDate !== [...this.scheduleInfo.dates].slice(-1)[0];
-    },
-    hasNow() {
-      return this.$refs.body?.getElementsByClassName(
-        '.calendar__col--line',
-      )?.[0];
     },
     scheduleInfo() {
       if (!this.events || !this.hosts || !this.types) return {};
@@ -404,7 +405,7 @@ export default {
       }
 
       return {
-        '--col': this.getDatePosition(this.now.toISOString()),
+        '--col': this.getDatePosition(this.now) + 3,
         '--offset': (this.now.getMinutes() % 30) / 30,
         '--span': 1,
       };
@@ -424,9 +425,13 @@ export default {
       this.awaitDate = dates[idx - 1];
     },
     toNow() {
-      const element = this.hasNow();
+      const element = this.$refs.body?.getElementsByClassName(
+        'calendar__col--line',
+      )?.[0];
+
       if (element) {
-        return element.scrollIntoView({ behavior: 'smooth' });
+        console.log('REEEE');
+        return element.scrollIntoView({ behavior: 'smooth', inline: 'center' });
       }
     },
     formatDate(_date) {
