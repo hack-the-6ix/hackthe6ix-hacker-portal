@@ -217,6 +217,7 @@ export default {
       events: null,
       hosts: null,
       types: null,
+      isNow: true,
     };
   },
   async beforeMount() {
@@ -271,7 +272,12 @@ export default {
   watch: {
     loading(val) {
       if (!val) {
-        setTimeout(() => (this.now = new Date()), 60000);
+        setInterval(() => {
+          this.now = new Date();
+          if (this.isNow) {
+            this.toNow();
+          }
+        }, 60000);
         this.now = new Date();
 
         this.$nextTick(() => {
@@ -290,11 +296,10 @@ export default {
             },
             [1],
           );
+          this.$refs.body.addEventListener('scroll', () => this.isNow = false);
           this.$refs.body
             .getElementsByClassName('calendar__col--date')
-            .forEach((el) => {
-              observer.observe(el);
-            });
+            .forEach((el) => observer.observe(el));
         });
       }
     },
@@ -405,8 +410,6 @@ export default {
       const { dates: _dates } = this.scheduleInfo;
       const [start, ...dates] = [..._dates];
       const end = dates.slice(-1)[0];
-      
-      console.log(start, end, this.now);
 
       if (this.now < new Date(start) || this.now > new Date(end)) {
         return;
@@ -420,17 +423,34 @@ export default {
     },
   },
   methods: {
+    _setNow() {
+      const { dates: _dates } = this.scheduleInfo;
+      const [start, ...dates] = [..._dates];
+      const end = dates.slice(-1)[0];
+
+      if (this.now < new Date(start) || this.now > new Date(end)) {
+        return;
+      }
+
+      return {
+        '--col': this.getDatePosition(this.now) + 3,
+        '--offset': (this.now.getMinutes() % 30) / 30,
+        '--span': 1,
+      };
+    },
     next() {
       if (this.awaitDate) return;
       const dates = [...this.scheduleInfo.dates];
       const idx = dates.indexOf(this.currentDate);
       this.awaitDate = dates[idx + 1];
+      this.isNow = false;
     },
     prev() {
       if (this.awaitDate) return;
       const dates = [...this.scheduleInfo.dates];
       const idx = dates.indexOf(this.currentDate);
       this.awaitDate = dates[idx - 1];
+      this.isNow = false;
     },
     toNow() {
       const element = this.$refs.body?.getElementsByClassName(
@@ -438,6 +458,7 @@ export default {
       )?.[0];
 
       if (element) {
+        this.isNow = true;
         return element.scrollIntoView({ behavior: 'smooth', inline: 'center' });
       }
     },
