@@ -71,6 +71,18 @@
         >
           {{ userInfo?.hackerApplication?.country }}
         </Typography>
+        <Typography
+          class="mail-info__email"
+          color="black"
+          type="paragraph"
+          as="p"
+        >
+          If you would like to make an amendment, please send us an
+          email at
+          <a class="mail-info__link" href="mailto:hello@hackthe6ix.com"
+            >hello@hackthe6ix.com</a
+          > by <b>August 31, 2021 11:59 PM EDT</b>. We will <b>NOT</b> be processing additional requests after this time!
+        </Typography>
       </template>
       <template v-else>
         <Typography
@@ -84,7 +96,7 @@
           email at
           <a class="mail-info__link" href="mailto:hello@hackthe6ix.com"
             >hello@hackthe6ix.com</a
-          >.
+          > by <b>August 31, 2021 11:59 PM EDT</b>. We will <b>NOT</b> be processing additional requests after this time!
         </Typography>
       </template>
     </div>
