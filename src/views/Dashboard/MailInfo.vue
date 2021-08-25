@@ -92,7 +92,11 @@
           as="p"
         >
           You have indicated that you are either not located in Canada, or do
-          not want swag. If you believe this is a mistake, please send us an
+          not want swag.
+          <br/><br/>
+          <b>Only participants with a mailing address in Canada 🇨🇦 are eligible for swag!</b>
+          <br/><br/>
+          If you believe this is a mistake, please send us an
           email at
           <a class="mail-info__link" href="mailto:hello@hackthe6ix.com"
             >hello@hackthe6ix.com</a
