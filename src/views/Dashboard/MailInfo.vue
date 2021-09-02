@@ -10,7 +10,7 @@
         Mailing Address
       </Typography>
 
-      <template v-if="userInfo?.hackerApplication?.wantSwag">
+      <template v-if="userInfo?.hackerApplication?.wantSwag && userInfo?.status?.checkedIn && userInfo?.status?.confirmed">
         <Typography
           class="mail-info__description"
           color="black"
@@ -77,19 +77,16 @@
           type="paragraph"
           as="p"
         >
-          If you would like to make an amendment, please send us an
-          email at
-          <a class="mail-info__link" href="mailto:hello@hackthe6ix.com"
-            >hello@hackthe6ix.com</a
-          > by <b>August 31, 2021 11:59 PM EDT</b>. We will <b>NOT</b> be processing additional requests after this time!
+          If you have any questions, please send an email to <a class="mail-info__link" href="mailto:hello@hackthe6ix.com">hello@hackthe6ix.com</a>.
         </Typography>
       </template>
-      <template v-else>
+      <!-- People not in Canadaa -->
+      <template v-else-if="!userInfo?.hackerApplication?.wantSwag">
         <Typography
-          class="mail-info__description"
-          color="black"
-          type="paragraph"
-          as="p"
+            class="mail-info__description"
+            color="black"
+            type="paragraph"
+            as="p"
         >
           You have indicated that you are either not located in Canada, or do
           not want swag.
@@ -99,8 +96,26 @@
           If you believe this is a mistake, please send us an
           email at
           <a class="mail-info__link" href="mailto:hello@hackthe6ix.com"
-            >hello@hackthe6ix.com</a
+          >hello@hackthe6ix.com</a
           > by <b>August 31, 2021 11:59 PM EDT</b>. We will <b>NOT</b> be processing additional requests after this time!
+        </Typography>
+      </template>
+      <!-- Didn't check in or confirm -->
+      <template v-else>
+        <Typography
+          class="mail-info__description"
+          color="black"
+          type="paragraph"
+          as="p"
+        >
+          <b>Only participants who have confirmed and checked into Discord with a mailing address in Canada 🇨🇦 are eligible for swag!</b>
+          <br/><br/>
+          According to our records, you do not meet this criteria.
+          If you believe this is a mistake, please send us an
+          email at
+          <a class="mail-info__link" href="mailto:hello@hackthe6ix.com"
+            >hello@hackthe6ix.com</a
+          >.
         </Typography>
       </template>
     </div>
