@@ -77,6 +77,8 @@
           type="paragraph"
           as="p"
         >
+          Remember to fill in <a href="https://go.hackthe6ix.com/swag" target="_blank">this form</a> by Friday September 17, 2021 at 11:59 PM EDT to
+          confirm your shirt size and make any final mailing address amendments.<br/><br/>
           If you have any questions, please send an email to <a class="mail-info__link" href="mailto:hello@hackthe6ix.com">hello@hackthe6ix.com</a>.
         </Typography>
       </template>
