@@ -66,7 +66,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   ['phoneNumber', 'gender', 'ethnicity', 'timezone', 'pronouns', 'country']
     .concat(
       about_you.wantSwag
-        ? ['addressLine1', 'city', 'province', 'postalCode']
+        ? ['addressLine1', 'city', 'province', 'postalCode', 'shirtSize']
         : [],
     )
     .forEach(requiredValidator(about_you, errors.about_you));
@@ -78,7 +78,7 @@ export default function validateForm(about_you, your_experience, at_ht6) {
     'hackathonsAttended',
     'projectEssay',
   ].forEach(requiredValidator(your_experience, errors.your_experience));
-  ['accomplishEssay', 'mlhCOC', 'preEventWorkshops', 'mlhData'].forEach(
+  ['whyHT6Essay','techInnovationEssay', 'mlhCOC', 'mlhData'].forEach(
     requiredValidator(at_ht6, errors.at_ht6),
   );
 
@@ -133,11 +133,19 @@ export default function validateForm(about_you, your_experience, at_ht6) {
   }
 
   // Validate at_ht6
-  if (!errors.at_ht6.accomplishEssay) {
+  if (!errors.at_ht6.whyHT6Essay) {
     const count =
-      at_ht6.accomplishEssay?.split(' ').filter(Boolean).length ?? 0;
+      at_ht6.whyHT6Essay?.split(' ').filter(Boolean).length ?? 0;
     if (count !== 0 && count < 50) {
-      errors.at_ht6.accomplishEssay = `Accomplish Essay must be at least 50 words`;
+      errors.at_ht6.whyHT6Essay = `Why HT6 Essay must be at least 50 words`;
+    }
+  }
+
+  if (!errors.at_ht6.techInnovationEssay) {
+    const count =
+        at_ht6.techInnovationEssay?.split(' ').filter(Boolean).length ?? 0;
+    if (count !== 0 && count < 50) {
+      errors.at_ht6.techInnovationEssay = `Tech Innovation Essay must be at least 50 words`;
     }
   }
 

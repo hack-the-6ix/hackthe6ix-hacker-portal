@@ -104,7 +104,7 @@
       />
     </div>
     <Textarea
-      label="Tell us about a project that you are proud of. What tools did you use and what was the outcome?"
+      label="Describe a project that you are proud of and explain the impact it had."
       class="your-experience__full"
       v-bind="bindField('projectEssay', errors)"
       v-model="projectEssay"
@@ -294,7 +294,7 @@ export default {
         githubLink: '',
         portfolioLink: '',
         linkedinLink: '',
-        projectEssay: '',
+        projectEssay: ''
       }),
       tabSelected: computed({
         set: (value) => emit('update:modelTabSelected', value),

@@ -173,6 +173,15 @@
         :maxlength="6"
         required
       />
+      <Select
+          label="Shirt Size (Unisex)"
+          placeholder="Select"
+          v-bind="bindField('shirtSize', errors)"
+          v-model="shirtSize"
+          :options="shirtSizes"
+          :disabled="!canEdit"
+          required
+      />
     </template>
 
     <div class="about-you__full">
@@ -302,6 +311,12 @@ export default {
         value: x,
       }));*/
     },
+    shirtSizes() {
+      return (this.enums?.shirt || []).map((x) => ({
+        label: x,
+        value: x,
+      }));
+    },
   },
   props: {
     modelTabSelected: String,
@@ -338,6 +353,7 @@ export default {
         province: '',
         postalCode: '',
         country: '',
+        shirtSize: ''
       }),
       tabSelected: computed({
         set: (value) => emit('update:modelTabSelected', value),
