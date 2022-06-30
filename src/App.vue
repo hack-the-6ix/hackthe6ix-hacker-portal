@@ -43,7 +43,7 @@ export default {
 @include colors.init();
 
 html {
-  background: linear-gradient(88.96deg, #002c37 1.77%, #004d57 95.9%);
+  background: url('assets/background.png');
   font-family: units.$font;
 
   @include mixins.media(tablet) {
