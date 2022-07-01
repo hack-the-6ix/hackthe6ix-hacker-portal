@@ -2,8 +2,10 @@
   <FormSection :disclaimer="disclaimer" class="at-ht6" label="At HT6">
     <MultiCheckbox
       label="Which panels or workshops are you most interested in seeing at Hack the 6ix?"
+      class="at-ht6__full"
       v-bind="bindField('requestedWorkshops', errors)"
       v-model="requestedWorkshops"
+      :limit="3"
       :disabled="!canEdit"
       :options="requestedWorkshopsOptions"
     />
@@ -19,13 +21,13 @@
 
     <Textarea
         label="Why would you like to attend Hackthe6ix?"
-        class="your-experience__full"
+        class="at-ht6__full"
         v-bind="bindField('whyHT6Essay', errors)"
         v-model="whyHT6Essay"
         :rows="8"
         :maxLength="2056"
         :disabled="!canEdit"
-        :lowerCaption="`Minimum 50 Words (Current count: ${
+        :lowerCaption="`Minimum 50 Words. Maximum 200 Words. (Current count: ${
         whyHT6Essay?.split(' ').filter(Boolean).length ?? 0
       })`"
         required
@@ -33,13 +35,13 @@
 
     <Textarea
         label="Describe a technology/innovation that you are excited to explore in the future."
-        class="your-experience__full"
+        class="at-ht6__full"
         v-bind="bindField('techInnovationEssay', errors)"
         v-model="techInnovationEssay"
         :rows="8"
         :maxLength="2056"
         :disabled="!canEdit"
-        :lowerCaption="`Minimum 50 Words (Current count: ${
+        :lowerCaption="`Minimum 50 Words. Maximum 200 Words. (Current count: ${
         techInnovationEssay?.split(' ').filter(Boolean).length ?? 0
       })`"
         required
@@ -198,7 +200,7 @@ export default {
   setup(props, { emit }) {
     return {
       ...useFormSection(props, {
-        requestedWorkshops: 'you mom',
+        requestedWorkshops: '',
         whyHT6Essay: '',
         techInnovationEssay: '',
         mlhCOC: false,

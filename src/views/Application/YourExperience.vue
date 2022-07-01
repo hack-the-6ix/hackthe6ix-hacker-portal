@@ -111,7 +111,7 @@
       :rows="8"
       :maxLength="2056"
       :disabled="!canEdit"
-      :lowerCaption="`Minimum 50 Words (Current count: ${
+      :lowerCaption="`Minimum 50 Words. Maximum 200 Words. (Current count: ${
         projectEssay?.split(' ').filter(Boolean).length ?? 0
       })`"
       required

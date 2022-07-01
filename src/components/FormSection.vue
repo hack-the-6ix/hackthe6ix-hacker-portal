@@ -67,5 +67,7 @@ export default {
   &__disclaimer {
     margin-bottom: units.spacing(6);
   }
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
 }
 </style>

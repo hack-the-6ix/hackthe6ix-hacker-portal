@@ -87,6 +87,10 @@ export default {
     border: none;
     width: 100%;
     margin: 0;
+
+    &:disabled {
+      color: var(--field-layout__color);
+    }
   }
 }
 </style>

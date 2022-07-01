@@ -87,5 +87,6 @@ export default {
     background-color: colors.css-color(white);
     border-radius: units.spacing(3);
   }
+
 }
 </style>

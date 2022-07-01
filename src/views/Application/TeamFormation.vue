@@ -65,9 +65,10 @@
           <Button
             @click="triggerJoinTeam"
             style="margin-top: auto"
+            type="secondary"
             :disabled="!canAmendTeam"
           >
-            Join
+            Join Team
           </Button>
         </div>
 

@@ -43,7 +43,10 @@ export default {
 @include colors.init();
 
 html {
-  background: linear-gradient(88.96deg, #002c37 1.77%, #004d57 95.9%);
+  background-image: url('./assets/backdrop.png');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
   font-family: units.$font;
 
   @include mixins.media(tablet) {
@@ -53,6 +56,8 @@ html {
   @include mixins.media(phone) {
     font-size: 12px;
   }
+
+  min-height: 100%;
 }
 
 body {
