@@ -3,29 +3,21 @@
     <Logo width="24" class="app__logo" />
     <span>
       <Typography color="teal" type="heading3" as="span" transform="uppercase">
-        HT6
-      </Typography>
-      <Typography
-        color="yellow"
-        type="heading3"
-        as="span"
-        transform="uppercase"
-      >
-        Digital
+        HACK THE 6IX
       </Typography>
     </span>
     <span style="margin-left: auto">
-      <Button color="black" @click="confirmRunLogout">Sign Out</Button>
+      <Button color="teal" @click="confirmRunLogout">Sign Out</Button>
     </span>
   </div>
   <main class="layout">
     <div class="layout__content">
       <template v-if="!loading">
         <header class="layout__header" v-if="title || description">
-          <Typography type="heading1" v-if="title">
+          <Typography type="heading1" v-if="title" color="dark-navy">
             {{ title }}
           </Typography>
-          <Typography type="heading4" as="p" weight="400" v-if="description">
+          <Typography type="heading4" as="p" weight="400" v-if="description" color="dark-nary">
             {{ description }}
           </Typography>
         </header>
@@ -33,7 +25,7 @@
       </template>
       <slot v-else name="fallback">
         <header class="layout__header">
-          <Typography class="layout__loading" type="heading2">
+          <Typography class="layout__loading" type="heading2" color="dark-navy">
             Loading...
           </Typography>
         </header>
@@ -46,6 +38,7 @@
 import Typography from '@/components/Typography';
 import Button from '@/components/Button';
 import swal from 'sweetalert';
+import Logo from '@/assets/icon.svg';
 import { runLogout } from "../utils/SessionController";
 
 export default {
@@ -53,6 +46,7 @@ export default {
   components: {
     Typography,
     Button,
+    Logo
   },
   props: {
     title: String,
@@ -112,5 +106,9 @@ export default {
       }
     }
   }
+}
+
+.app {
+  background-color: white;
 }
 </style>

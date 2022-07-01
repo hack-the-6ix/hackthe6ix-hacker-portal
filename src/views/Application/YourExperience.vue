@@ -104,14 +104,14 @@
       />
     </div>
     <Textarea
-      label="Tell us about a project that you are proud of. What tools did you use and what was the outcome?"
+      label="Describe a project that you are proud of and explain the impact it had."
       class="your-experience__full"
       v-bind="bindField('projectEssay', errors)"
       v-model="projectEssay"
       :rows="8"
       :maxLength="2056"
       :disabled="!canEdit"
-      :lowerCaption="`Minimum 50 Words (Current count: ${
+      :lowerCaption="`Minimum 50 Words. Maximum 200 Words. (Current count: ${
         projectEssay?.split(' ').filter(Boolean).length ?? 0
       })`"
       required
@@ -294,7 +294,7 @@ export default {
         githubLink: '',
         portfolioLink: '',
         linkedinLink: '',
-        projectEssay: '',
+        projectEssay: ''
       }),
       tabSelected: computed({
         set: (value) => emit('update:modelTabSelected', value),

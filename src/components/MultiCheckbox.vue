@@ -11,10 +11,10 @@
     <ul class="multicheck__options">
       <li v-for="option in options" :key="option.value">
         <Checkbox
-          @update:modelValue="selected[option.value] = !selected[option.value]"
-          :modelValue="selected[option.value]"
+          @update:modelValue="selected(option.value, $event)"
+          :modelValue="selectedArray.includes(option.value)"
           :label="option.label"
-          :disabled="disabled || (isMaxed && !selected[option.value])"
+          :disabled="disabled || (isMaxed && !selectedArray.includes(option.value))"
         />
       </li>
     </ul>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { computed } from 'vue';
+// import { computed } from 'vue';
 import Typography from '@/components/Typography';
 import Checkbox from '@/components/Checkbox';
 
@@ -33,16 +33,18 @@ export default {
   },
   data() {
     return {
-      selected: {},
     };
   },
   computed: {
     isMaxed() {
-      return Object.keys(this.selected).length === this.limit;
+      return this.selectedArray.length >= this.limit;
     },
+    selectedArray() {
+      return !this.modelValue ? [] :  this.modelValue.split(",").sort()
+    }
   },
   props: {
-    modelValue: Array,
+    modelValue: String,
     required: Boolean,
     disabled: Boolean,
     options: Array,
@@ -57,14 +59,32 @@ export default {
     },
   },
   emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    return {
-      value: computed({
-        set: (value) => emit('update:modelValue', value),
-        get: () => props.modelValue,
-      }),
+  setup(props, context) {
+    const selected = (optionId, checked) => {
+      let updatedValue = !props.modelValue ? [] : props.modelValue.split(",");
+      if (checked) {
+        updatedValue.push(optionId);
+      } else {
+        updatedValue.splice(updatedValue.indexOf(optionId), 1);
+      }
+      context.emit("update:modelValue", updatedValue.sort().join(","));
     };
-  },
+
+    return {
+      selected,
+    };
+  }
+  // setup(props) {
+  //   const selected = {};
+  //   for (const ele of props.modelValue.split(",")){
+  //     if(ele !== ""){
+  //       selected[ele] = true;
+  //     }
+  //   }
+  //   return {
+  //     selected
+  //   }
+  // },
 };
 </script>
 
@@ -82,7 +102,7 @@ export default {
   }
 
   &__options {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-gap: units.spacing(6.5);
     margin: units.spacing(3) 0 0;
     list-style-type: none;

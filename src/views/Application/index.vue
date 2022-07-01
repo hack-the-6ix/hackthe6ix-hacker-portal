@@ -24,6 +24,7 @@
               align="center"
               :key="tab.id"
               as="a"
+              color="dark-navy"
             >
               {{ index + 1
               }}<span class="home__nav-text">. {{ tab.label }}</span>
@@ -379,8 +380,8 @@ export default {
         ],
         at_ht6: [
           'requestedWorkshops',
-          'preEventWorkshops',
-          'accomplishEssay',
+          'whyHT6Essay',
+          'techInnovationEssay',
           'mlhCOC',
           'mlhEmail',
           'mlhData',
@@ -516,6 +517,8 @@ export default {
   &__nav {
     margin-bottom: units.spacing(-2);
     display: flex;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
   }
 
   &__nav-item {

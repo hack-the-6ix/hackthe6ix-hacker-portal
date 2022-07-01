@@ -1,36 +1,60 @@
 <template>
   <FormSection :disclaimer="disclaimer" class="at-ht6" label="At HT6">
-    <Textarea
+    <MultiCheckbox
       label="Which panels or workshops are you most interested in seeing at Hack the 6ix?"
       class="at-ht6__full"
       v-bind="bindField('requestedWorkshops', errors)"
       v-model="requestedWorkshops"
+      :limit="3"
       :disabled="!canEdit"
-      :rows="8"
-      :maxLength="2056"
+      :options="requestedWorkshopsOptions"
     />
+<!--    <Textarea-->
+<!--      label="Which panels or workshops are you most interested in seeing at Hack the 6ix?"-->
+<!--      class="at-ht6__full"-->
+<!--      v-bind="bindField('requestedWorkshops', errors)"-->
+<!--      v-model="requestedWorkshops"-->
+<!--      :disabled="!canEdit"-->
+<!--      :rows="8"-->
+<!--      :maxLength="2056"-->
+<!--    />-->
+
     <Textarea
-      label="What do you hope to accomplish by attending Hack the 6ix?"
-      class="at-ht6__full"
-      v-bind="bindField('accomplishEssay', errors)"
-      v-model="accomplishEssay"
-      :disabled="!canEdit"
-      :rows="8"
-      :maxLength="2056"
-      required
-      :lowerCaption="`Minimum 50 Words (Current count: ${
-        accomplishEssay?.split(' ').filter(Boolean).length ?? 0
+        label="Why would you like to attend Hackthe6ix?"
+        class="at-ht6__full"
+        v-bind="bindField('whyHT6Essay', errors)"
+        v-model="whyHT6Essay"
+        :rows="8"
+        :maxLength="2056"
+        :disabled="!canEdit"
+        :lowerCaption="`Minimum 50 Words. Maximum 200 Words. (Current count: ${
+        whyHT6Essay?.split(' ').filter(Boolean).length ?? 0
       })`"
+        required
     />
-    <Select
-      label="Would you be interested in attending introductory workshops the week prior to the hackathon?"
-      placeholder="Select"
-      v-bind="bindField('preEventWorkshops', errors)"
-      v-model="preEventWorkshops"
-      :options="preEventWorkshopsOptions"
-      :disabled="!canEdit"
-      required
+
+    <Textarea
+        label="Describe a technology/innovation that you are excited to explore in the future."
+        class="at-ht6__full"
+        v-bind="bindField('techInnovationEssay', errors)"
+        v-model="techInnovationEssay"
+        :rows="8"
+        :maxLength="2056"
+        :disabled="!canEdit"
+        :lowerCaption="`Minimum 50 Words. Maximum 200 Words. (Current count: ${
+        techInnovationEssay?.split(' ').filter(Boolean).length ?? 0
+      })`"
+        required
     />
+<!--    <Select-->
+<!--      label="Would you be interested in attending introductory workshops the week prior to the hackathon?"-->
+<!--      placeholder="Select"-->
+<!--      v-bind="bindField('preEventWorkshops', errors)"-->
+<!--      v-model="preEventWorkshops"-->
+<!--      :options="preEventWorkshopsOptions"-->
+<!--      :disabled="!canEdit"-->
+<!--      required-->
+<!--    />-->
     <Checkbox
       label='I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
       target="_blank" rel="noreferrer noopener" class="at-ht6__link">MLH Code of Conduct</a>.'
@@ -99,19 +123,21 @@ import useFormSection from '@/utils/useFormSection';
 import FormSection from '@/components/FormSection';
 import Checkbox from '@/components/Checkbox';
 import Textarea from '@/components/Textarea';
-import Select from '@/components/Select';
+// import Select from '@/components/Select';
 import Button from '@/components/Button';
 import swal from 'sweetalert';
 import { computePageLabel } from '../../utils/validateForm';
+import MultiCheckbox from "@/components/MultiCheckbox";
 
 export default {
   name: 'AtHT6',
   components: {
+    MultiCheckbox,
     FormSection,
     Checkbox,
     Textarea,
     Button,
-    Select,
+    // Select,
   },
   props: {
     form: Object,
@@ -152,8 +178,8 @@ export default {
 
       return disclaimerSections;
     },
-    preEventWorkshopsOptions() {
-      return (this.enums?.preEventWorkshops || []).map((x) => ({
+    requestedWorkshopsOptions() {
+      return (this.enums?.requestedWorkshops || []).map((x) => ({
         label: x,
         value: x,
       }));
@@ -175,8 +201,8 @@ export default {
     return {
       ...useFormSection(props, {
         requestedWorkshops: '',
-        accomplishEssay: '',
-        preEventWorkshops: '',
+        whyHT6Essay: '',
+        techInnovationEssay: '',
         mlhCOC: false,
         mlhEmail: false,
         mlhData: false,

@@ -10,7 +10,7 @@
     :htmlType="htmlType"
     type="heading4"
     align="center"
-    color="white"
+    :color="type === 'primary' ? 'white' : 'teal'"
     :as="as"
   >
     <FontAwesomeIcon
@@ -51,7 +51,7 @@ export default {
     },
     color: {
       type: String,
-      default: () => 'dark-navy',
+      default: () => 'teal',
     },
     as: {
       type: String,
@@ -70,7 +70,7 @@ export default {
   @include mixins.transition(background-color);
   padding: calc(#{units.spacing(2)} - 1px) calc(#{units.spacing(4)} - 1px);
   letter-spacing: units.spacing(0.5);
-  border-radius: units.spacing(0.5);
+  border-radius: 6px;
   text-decoration: none;
   justify-content: center;
   display: inline-flex;
@@ -84,28 +84,32 @@ export default {
   text-transform: uppercase;
 
   &:hover,
-  &:focus,
+  &:focus {
+    background-color: colors.css-color('dark-teal');
+  }
+
+
   &--type--secondary {
     background-color: colors.css-color(white);
-    color: colors.css-color('dark-navy');
+    color: colors.css-color('teal');
   }
 
   &:active {
-    background-color: colors.css-color('dark-navy', $alpha: 0.04);
-    color: colors.css-color('dark-navy');
+    background-color: colors.css-color('dark-teal');
+    //color: colors.css-color('dark-teal');
   }
 
   &--type {
     &--secondary {
       &:hover,
       &:focus {
-        background-color: colors.css-color('dark-navy', $alpha: 0.04);
-        color: colors.css-color('dark-navy');
+        background-color: colors.css-color('dark-teal');
+        color: colors.css-color(white);
       }
 
       &:active {
-        background-color: colors.css-color('dark-navy', $alpha: 0.08);
-        color: colors.css-color('dark-navy');
+        background-color: colors.css-color('dark-teal');
+        color: colors.css-color(white);
       }
     }
   }
