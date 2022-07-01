@@ -365,6 +365,7 @@ export default {
           'city',
           'province',
           'postalCode',
+          'shirtSize'
         ],
         your_experience: [
           'school',
