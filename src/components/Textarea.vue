@@ -15,7 +15,7 @@
       :required="required"
       :id="id"
       :rows="rows"
-      :maxLength="maxLength"
+      :maxLength="trueMaxLength"
     />
   </FieldLayout>
 </template>
@@ -46,10 +46,27 @@ export default {
     },
     rows: Number,
     maxLength: Number,
+    maxWords: Number,
     required: Boolean,
     disabled: Boolean,
     success: Boolean,
-    error: String,
+    error: String
+  },
+  computed: {
+    trueMaxLength() {
+      if(this.maxWords){
+        const curWords = this.modelValue.split(' ').filter(Boolean).length ?? 0;
+        if(curWords >= this.maxWords + 1){
+          return this.modelValue.length;
+        }
+        else {
+          return this.maxLength || 2056;
+        }
+      }
+      else {
+        return this.maxLength;
+      }
+    }
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {

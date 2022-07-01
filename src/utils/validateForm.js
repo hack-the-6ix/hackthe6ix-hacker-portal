@@ -4,6 +4,7 @@ const fieldNameLookup = {
   GitHub: 'GitHub',
   LinkedIn: 'LinkedIn',
   at_ht6: 'At HT6',
+  whyHT6Essay: 'Why Hack the 6ix Essay'
 };
 
 function displayKey(key) {

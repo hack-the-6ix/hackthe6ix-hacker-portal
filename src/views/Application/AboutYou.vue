@@ -119,7 +119,7 @@
           Shipping Address
         </Typography>
         <Typography type="paragraphy" color="black">
-          We will ship your Hack The 6ix swag to this address if you live in
+          We will ship your Hack the 6ix swag to this address if you live in
           Canada and submit a project on Devpost at the event.
         </Typography>
       </div>

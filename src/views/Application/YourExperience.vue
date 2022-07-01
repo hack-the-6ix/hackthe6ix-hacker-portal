@@ -110,6 +110,7 @@
       v-model="projectEssay"
       :rows="8"
       :maxLength="2056"
+      :maxWords="200"
       :disabled="!canEdit"
       :lowerCaption="`Minimum 50 Words. Maximum 200 Words. (Current count: ${
         projectEssay?.split(' ').filter(Boolean).length ?? 0

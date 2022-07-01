@@ -159,9 +159,12 @@ export default {
         this.$router.replace('/prompt');
       }
     },
-    async selected() {
+    async selected(newSelected) {
       if (this.user?.status?.canApply && this.unsavedChanges && this.loaded) {
         await this.runUpdateApplication(false);
+      }
+      if(newSelected === ""){
+        this.selected = "team-formation";
       }
     },
     your_experience() {

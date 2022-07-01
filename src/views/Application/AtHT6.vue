@@ -20,12 +20,13 @@
 <!--    />-->
 
     <Textarea
-        label="Why would you like to attend Hackthe6ix?"
+        label="Why would you like to attend Hack the 6ix?"
         class="at-ht6__full"
         v-bind="bindField('whyHT6Essay', errors)"
         v-model="whyHT6Essay"
         :rows="8"
         :maxLength="2056"
+        :maxWords="200"
         :disabled="!canEdit"
         :lowerCaption="`Minimum 50 Words. Maximum 200 Words. (Current count: ${
         whyHT6Essay?.split(' ').filter(Boolean).length ?? 0
@@ -40,6 +41,7 @@
         v-model="techInnovationEssay"
         :rows="8"
         :maxLength="2056"
+        :maxWords="200"
         :disabled="!canEdit"
         :lowerCaption="`Minimum 50 Words. Maximum 200 Words. (Current count: ${
         techInnovationEssay?.split(' ').filter(Boolean).length ?? 0
