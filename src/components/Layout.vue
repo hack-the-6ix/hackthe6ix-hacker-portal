@@ -1,10 +1,12 @@
 <template>
   <div class="app">
-    <Logo width="24" class="app__logo" />
+    <a href="https://hackthe6ix.com" class="link-no-decoration"><Logo width="24" class="app__logo" /></a>
     <span>
-      <Typography color="teal" type="heading3" as="span" transform="uppercase">
-        HACK THE 6IX
-      </Typography>
+      <a href="https://hackthe6ix.com" class="link-no-decoration">
+        <Typography color="teal" type="heading3" as="span" transform="uppercase">
+          HACK THE 6IX
+        </Typography>
+      </a>
     </span>
     <span style="margin-left: auto">
       <Button color="teal" @click="confirmRunLogout">Sign Out</Button>
@@ -73,6 +75,10 @@ export default {
 
 <style lang="scss">
 @use '@/styles/units';
+
+.link-no-decoration {
+  text-decoration: none;
+}
 
 .layout {
   padding: units.spacing(18) units.spacing(12);
