@@ -20,7 +20,7 @@
           {{
             applied
               ? 'Thank you for applying to Hack the 6ix! Your application is currently being reviewed by our HT6 team. Keep an eye on your inbox within the next few weeks for your application results.'
-              : "Thank you for your interest in applying for Hack the 6ix 2021. Unfortunately, we are not taking any more hacker applications for the year. Stay up to date with our socials and we'll look forward to seeing you at Hack the 6ix 2022!"
+              : "Thank you for your interest in applying for Hack the 6ix. Unfortunately, we are not taking any more hacker applications for the year. Stay up to date with our socials and we look forward to seeing you next year!"
           }}
         </Typography>
       </FormSection>
